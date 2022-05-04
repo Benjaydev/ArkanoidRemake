@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Arkanoid", "Arkanoid\Arkanoid.vcxproj", "{F09746AB-F011-45FC-B9C7-787FC429C783}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F09746AB-F011-45FC-B9C7-787FC429C783}.Debug|x64.ActiveCfg = Debug|x64
+		{F09746AB-F011-45FC-B9C7-787FC429C783}.Debug|x64.Build.0 = Debug|x64
+		{F09746AB-F011-45FC-B9C7-787FC429C783}.Debug|x86.ActiveCfg = Debug|Win32
+		{F09746AB-F011-45FC-B9C7-787FC429C783}.Debug|x86.Build.0 = Debug|Win32
+		{F09746AB-F011-45FC-B9C7-787FC429C783}.Release|x64.ActiveCfg = Release|x64
+		{F09746AB-F011-45FC-B9C7-787FC429C783}.Release|x64.Build.0 = Release|x64
+		{F09746AB-F011-45FC-B9C7-787FC429C783}.Release|x86.ActiveCfg = Release|Win32
+		{F09746AB-F011-45FC-B9C7-787FC429C783}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F464CA81-2D18-4101-A36C-149F442F49F7}
+	EndGlobalSection
+EndGlobal
