@@ -12,9 +12,11 @@ public:
 	float maxSpeed = 200.0f;
 	float moveSpeed = 100.0f;
 
-	Vector3 velocity;
-	Vector3 acceleration;
+	Vector3* velocity = new Vector3();
+	Vector3* acceleration = new Vector3();
 	float deceleration = 0.99f;
+
+
 
 
 };

@@ -3,9 +3,17 @@
 #include "raylib.h"
 #include <iostream>
 #include <string>
+#include "SpriteObject.h"
+#include "Object.h"
+
+
+std::list<Object> Game::objects = std::list<Object>();
 
 
 Game::Game() {
+
+
+
     // Initialization
     int screenWidth = 800;
     int screenHeight = 450;
@@ -14,6 +22,10 @@ Game::Game() {
     //SetTargetFPS(60);
 
     
+    SpriteObject* test = new SpriteObject();
+    test->Load((char*)"TestImage.png");
+
+    test->AddToGameWorld();
 
     // Main game loop
     // Detect window close button or ESC key
@@ -53,9 +65,13 @@ void Game::Draw()
 
     ClearBackground(RAYWHITE);
 
-
-
     DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 10, 10, 20, BLUE);
+
+
+    for (Object obj : objects) {
+        ((SpriteObject*)&obj)->Draw();
+    }
+
 
     EndDrawing();
 }
