@@ -3,11 +3,11 @@
 #include "raylib.h"
 #include <iostream>
 #include <string>
-#include "SpriteObject.h"
+#include "SpriteComponent.h"
 #include "Object.h"
 
 
-std::list<Object> Game::objects = std::list<Object>();
+std::vector<Object*> Game::objects = std::vector<Object*>();
 
 
 Game::Game() {
@@ -21,11 +21,12 @@ Game::Game() {
 
     //SetTargetFPS(60);
 
-    
-    SpriteObject* test = new SpriteObject();
-    test->Load((char*)"TestImage.png");
+    // Test sprite functionality
+    Object* ob = new Object();
+    ob->LoadSprite((char*)"TestImage.png");
+    ob->sprite->textureScale = 0.5;
+    ob->AddToGameWorld();
 
-    test->AddToGameWorld();
 
     // Main game loop
     // Detect window close button or ESC key
@@ -67,9 +68,12 @@ void Game::Draw()
 
     DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 10, 10, 20, BLUE);
 
-
-    for (Object obj : objects) {
-        ((SpriteObject*)&obj)->Draw();
+    // Draw each object that has a sprite
+    for (int i = 0; i < objects.size(); i++) {
+        if (objects[i]->hasSprite) {
+            objects[i]->Draw();
+        }
+        
     }
 
 

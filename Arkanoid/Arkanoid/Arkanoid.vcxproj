@@ -155,14 +155,14 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
-    <ClCompile Include="SpriteObject.cpp" />
+    <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PhysicsComponent.h" />
-    <ClInclude Include="SpriteObject.h" />
+    <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

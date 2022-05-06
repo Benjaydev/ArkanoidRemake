@@ -2,7 +2,7 @@
 #include "Timer.h"
 #include "Object.h"
 #include <iostream>
-#include <list>
+#include <vector>
 
 class Game
 {
@@ -19,7 +19,7 @@ public:
 	Timer* timer = new Timer();
 	float DeltaTime = 0;
 
-	static std::list<Object> objects;
+	static std::vector<Object*> objects;
 
 };
 

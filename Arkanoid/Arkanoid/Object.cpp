@@ -10,35 +10,42 @@ Object::~Object()
 {
 	// Unparent this object
 	if(parent != nullptr){
-		DeleteChild(*this);
+		DeleteChild(this);
 	}
 
 
 	// Unparent all children frokm this object
-	for (Object child : children) {
-		child.parent = nullptr;
+	for (Object *child : children) {
+		child->parent = nullptr;
 	}
 
-	Game::objects.remove(*this);
+	RemoveFromGameWorld();
 }
 
+void Object::RemoveFromGameWorld() {
+	Game::objects.erase(std::remove(Game::objects.begin(), Game::objects.end(), this), Game::objects.end());
+}
 
 void Object::AddToGameWorld() {
-	for (Object child : children) {
-		child.isWaitingDestroy = true;
-	}
-	Game::objects.push_back(*this);
+	Game::objects.push_back(this);
 }
 
-void Object::DeleteChild(Object child) {
+void Object::DeleteChild(Object* child) {
 	// Remove child from this object
-	children.remove(child);
+	children.erase(std::remove(children.begin(), children.end(), child), children.end());
 	// Remove parent from child
-	child.parent = nullptr;
+	child->parent = nullptr;
 	// Remove from game
-	Game::objects.remove(child);
+	child->RemoveFromGameWorld();
 
 	delete &child;
+}
+
+
+void Object::LoadSprite(char* filename) {
+	sprite = new SpriteComponent();
+	sprite->Load(filename);
+	hasSprite = true;
 }
 
 
@@ -59,4 +66,13 @@ void Object::OnDraw()
 void Object::Draw()
 {
 	OnDraw();
+
+	float rotation = (float)atan2(globalTransform->m1, globalTransform->m0);
+
+	if (!WindowShouldClose()) {
+		Vector2 position = { globalTransform->m8, globalTransform->m9 };
+		// Draw sprite to screen
+		DrawTextureEx(*sprite->texture, position, rotation * RAD2DEG, sprite->textureScale, sprite->colour);
+	}
+
 }

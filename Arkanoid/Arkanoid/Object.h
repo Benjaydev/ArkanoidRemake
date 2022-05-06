@@ -1,8 +1,9 @@
 #pragma once
 #include "PhysicsComponent.h"
 #include <iostream>
-#include <list>
+#include <vector>
 #include "raylib.h"
+#include "SpriteComponent.h"
 
 class Object
 {
@@ -12,14 +13,18 @@ public:
 	~Object();
 
 	int id;
+	bool hasSprite = false;
+	SpriteComponent* sprite = new SpriteComponent;
 
-	Object* parent = new Object();
-	std::list<Object> children = {};
+
+	Object* parent;
+	std::vector<Object*> children;
 
 	bool isWaitingDestroy = false;
 
 	void AddToGameWorld();
-	void DeleteChild(Object child);
+	void RemoveFromGameWorld();
+	void DeleteChild(Object* child);
 
 	virtual void OnUpdate(float DeltaTime);
 	virtual void Update(float DeltaTime);
@@ -27,11 +32,15 @@ public:
 	virtual void OnDraw();
 	virtual void Draw();
 
+	void LoadSprite(char* filename);
+
+
+
 	PhysicsComponent* physics = new PhysicsComponent();
 
 
-	bool operator== (const Object& other) const { return id == other.id; }
-	bool operator!= (const Object& other) const { return !operator==(other); }
+	bool operator== (const Object* other) const { return id == other->id; }
+	bool operator!= (const Object* other) const { return !operator==(other); }
 
 protected:
 	Matrix* localTransform = new Matrix();

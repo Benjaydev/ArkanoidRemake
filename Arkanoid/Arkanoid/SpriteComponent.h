@@ -1,12 +1,9 @@
 #pragma once
-#include "Object.h"
 #include "raylib.h"
-class SpriteObject :
-    public Object
-{
+class SpriteComponent {
 public:
-    SpriteObject();
-    ~SpriteObject();
+    SpriteComponent() {}
+    ~SpriteComponent();
 
     Texture2D* texture = new Texture2D();
     Image* image = new Image();
@@ -14,7 +11,6 @@ public:
     float textureScale = 1.0f;
 
     Color colour = WHITE;
-
 
     float GetWidth() { return texture->width; }
 
@@ -25,7 +21,7 @@ public:
 
     void Load(char* filename);
 
-    void OnDraw() override;
+
 
 };
 
