@@ -8,8 +8,6 @@ public:
     Texture2D* texture = new Texture2D();
     Image* image = new Image();
 
-    float textureScale = 1.0f;
-
     Color colour = WHITE;
 
     float GetWidth() { return texture->width; }
@@ -21,7 +19,10 @@ public:
 
     void Load(char* filename);
 
+    void SetScale(float scale);
+    float GetScale() { return textureScale; }
 
-
+private:
+    float textureScale = 1.0f;
 };
 

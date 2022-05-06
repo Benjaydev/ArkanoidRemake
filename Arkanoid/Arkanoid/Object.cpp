@@ -16,7 +16,7 @@ Object::~Object()
 	}
 
 
-	// Unparent all children frokm this object
+	// Unparent all children from this object
 	for (Object *child : children) {
 		child->UnParent();
 	}
@@ -29,7 +29,12 @@ void Object::RemoveFromGameWorld() {
 }
 
 void Object::AddToGameWorld() {
-	Game::objects.push_back(this);
+	id = Game::AddObjectToGame(this);
+
+	// Add all children to game world
+	for (int i = 0; i < children.size(); i++) {
+		children[i]->AddToGameWorld();
+	}
 }
 
 void Object::AddChild(Object* child) {
@@ -59,16 +64,24 @@ void Object::ParentTo(Object* p) {
 
 	// Add to children vector
 	parent->children.push_back(this);
+
+	// Flag parent to update physics children list
+	parent->shouldReinstantiatePhysicsChildren = true;
 }
 
 void Object::UnParent() {
 	
 	// Remove child from this object
 	parent->children.erase(std::remove(children.begin(), children.end(), this), children.end());
+
+	// Flag parent to update physics children list
+	parent->shouldReinstantiatePhysicsChildren = true;
+
 	// Unparent
 	parent = nullptr;
 	// Unparent physics
 	physics->parentPhysics = nullptr;
+	
 }
 
 
@@ -88,6 +101,20 @@ void Object::Update(float DeltaTime)
 {
 	OnUpdate(DeltaTime);
 	physics->Update(DeltaTime);
+
+	// If the physics needs to update children (Called when the children in this object change)
+	if (shouldReinstantiatePhysicsChildren) {
+		// Reset children physics list
+		physics->childrenPhysics.clear();
+		// Re-add all current children physics
+		for (int i = 0; i < children.size(); i++) {
+			physics->childrenPhysics.push_back(children[i]->physics);
+		}
+		shouldReinstantiatePhysicsChildren = false;
+	}
+	
+
+
 }
 
 
@@ -100,12 +127,14 @@ void Object::Draw()
 {
 	OnDraw();
 
+	// Sprite Draw
 	float rotation = (float)atan2(physics->globalTransform->m1, physics->globalTransform->m0);
-
 	if (!WindowShouldClose()) {
 		Vector2 position = { physics->globalTransform->m8, physics->globalTransform->m9 };
+		
 		// Draw sprite to screen
-		DrawTextureEx(*sprite->texture, position, rotation * RAD2DEG, sprite->textureScale, sprite->colour);
+		DrawTextureEx(*sprite->texture, position, rotation * RAD2DEG, 1, CLITERAL(Color){ 255, 255, 255, 128 });
 	}
 
+	DrawCircle(physics->globalTransform->m8, physics->globalTransform->m9, 10, RED);
 }

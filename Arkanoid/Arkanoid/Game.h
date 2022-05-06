@@ -21,5 +21,14 @@ public:
 
 	static std::vector<Object*> objects;
 
+	static int lifetimeObjectCount;
+
+	static int AddObjectToGame(Object* obj) {
+		objects.push_back(obj);
+		lifetimeObjectCount++;
+		// Return count for object id
+		return lifetimeObjectCount;
+	}
+
 };
 

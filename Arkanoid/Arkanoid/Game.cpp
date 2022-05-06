@@ -5,15 +5,12 @@
 #include <string>
 #include "SpriteComponent.h"
 #include "Object.h"
-
+using namespace std;
 
 std::vector<Object*> Game::objects = std::vector<Object*>();
-
+int Game::lifetimeObjectCount = 0;
 
 Game::Game() {
-
-
-
     // Initialization
     int screenWidth = 800;
     int screenHeight = 450;
@@ -22,11 +19,28 @@ Game::Game() {
     //SetTargetFPS(60);
 
     // Test sprite functionality
-    Object* ob = new Object();
-    ob->LoadSprite((char*)"TestImage.png");
-    ob->sprite->textureScale = 0.5;
-    ob->AddToGameWorld();
+    Object* parent = new Object();
+    parent->LoadSprite((char*)"TestImage.png");
+    parent->sprite->SetScale(0.25);
 
+    parent->physics->SetPosition(300, 200);
+
+    Object* child = new Object();
+    child->LoadSprite((char*)"TestImage.png");
+    child->sprite->SetScale(0.5);
+    std::cout << child->sprite->GetWidth() << std::endl;
+
+    
+    //child->physics->SetPosition(100, 100);
+
+    parent->AddChild(child);
+    child->physics->SetPosition(-(child->sprite->GetWidth() / 2), -(child->sprite->GetHeight() / 2));
+    parent->AddToGameWorld();
+
+
+    //parent->physics->SetRotation(0 * DEG2RAD);
+
+    
 
     // Main game loop
     // Detect window close button or ESC key
@@ -34,9 +48,11 @@ Game::Game() {
     {
         DeltaTime = timer->RecordNewTime();
 
-        ob->physics->Accelerate(1);
-
+        
         Update(DeltaTime);
+
+        //parent->physics->Accelerate(1);
+        parent->physics->Rotate(0.0005 * DEG2RAD);
 
         Draw();
     }

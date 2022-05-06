@@ -16,3 +16,8 @@ void SpriteComponent::Load(char* filename)
 }
 
 
+void SpriteComponent::SetScale(float scale) {
+	textureScale = scale;
+	texture->width *= scale;
+	texture->height *= scale;
+}

@@ -22,11 +22,16 @@ void PhysicsComponent::UpdateTransform()
 {
 	// Calculate global transform if this object has parent transform
 	if (parentPhysics != nullptr) {
-		*globalTransform = MatrixMultiply(*parentPhysics->globalTransform, *localTransform);
+		*globalTransform = MatrixMultiply(*localTransform, *parentPhysics->globalTransform);
 	}
 	// Default to using local transform
 	else {
 		globalTransform = localTransform;
+	}
+
+	// Update transform for every child physics component
+	for (int i = 0; i < childrenPhysics.size(); i++) {
+		childrenPhysics[i]->UpdateTransform();
 	}
 	
 }
@@ -64,22 +69,41 @@ void PhysicsComponent::Move(float DeltaTime)
 		float speed = fminf(mag, maxSpeed);
 		// Set velocity to the speed
 		*velocity = Vector3FloatMultiply(norm, speed);
+
+		Translate(velocity->x * DeltaTime, velocity->y * DeltaTime);
 	}
 	acceleration = new Vector3();
 
-	//std::cout << velocity->x << std::endl;
-	Translate(velocity->x * DeltaTime, velocity->y * DeltaTime);
-	UpdateTransform();
 }
 
 
 void PhysicsComponent::Translate(float x, float y) {
 	localTransform->m8 += x;
 	localTransform->m9 += y;
-	
-	*localTransform = MatrixMultiply(*localTransform, MatrixRotateZ(-0.005 * DEG2RAD));
+	UpdateTransform();
 }
 
+
+
+
+void PhysicsComponent::SetPosition(float x, float y)
+{
+	localTransform->m8 = x;
+	localTransform->m9 = y;
+	UpdateTransform();
+}
+
+void PhysicsComponent::SetRotation(float zRad)
+{
+	Matrix m = MatrixMultiply(MatrixIdentity(), MatrixRotateZ(zRad));
+	*localTransform = m;
+	UpdateTransform();
+}
+
+void PhysicsComponent::Rotate(float rad) {
+	*localTransform = MatrixMultiply(MatrixRotateZ(rad), *localTransform);
+	UpdateTransform();
+}
 
 
 Vector3 PhysicsComponent::Vector3FloatMultiply(Vector3 v1, float f){

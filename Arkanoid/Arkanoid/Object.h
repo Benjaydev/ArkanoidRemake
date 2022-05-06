@@ -12,6 +12,9 @@ public:
 	Object();
 	~Object();
 
+	// Flags
+	bool shouldReinstantiatePhysicsChildren = false;
+
 	int id;
 	bool hasSprite = false;
 	SpriteComponent* sprite = new SpriteComponent();

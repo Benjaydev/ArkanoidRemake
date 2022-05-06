@@ -1,6 +1,7 @@
 #pragma once
 #include "PhysicsComponent.h"
 #include <iostream>
+#include <vector>
 #include "raylib.h"
 
 class PhysicsComponent
@@ -19,6 +20,7 @@ public:
 	Matrix* localTransform = new Matrix();
 	Matrix* globalTransform = new Matrix();
 	PhysicsComponent* parentPhysics;
+	std::vector<PhysicsComponent*> childrenPhysics;
 
 
 	void Update(float DeltaTime);
@@ -29,9 +31,13 @@ public:
 	void Decelerate();
 	void Move(float DeltaTime);
 
+	void SetPosition(float x, float y);
+	void SetRotation(float zRad);
+	void Rotate(float rad);
 
 
 	Vector3 Vector3FloatMultiply(Vector3 v1, float f);
 	Vector3 Vector3FloatDivision(Vector3 v1, float f);
+
 };
 
