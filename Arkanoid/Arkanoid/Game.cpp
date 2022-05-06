@@ -34,6 +34,8 @@ Game::Game() {
     {
         DeltaTime = timer->RecordNewTime();
 
+        ob->physics->Accelerate(1);
+
         Update(DeltaTime);
 
         Draw();
@@ -47,6 +49,13 @@ Game::Game() {
 
 
 void Game::Update(float DeltaTime) {
+
+    // Update objects in world
+    for (int i = 0; i < objects.size(); i++) {
+        objects[i]->Update(DeltaTime);
+
+    }
+
     // Update
     if (IsKeyPressed(KEY_LEFT))
     {

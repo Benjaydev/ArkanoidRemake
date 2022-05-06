@@ -14,7 +14,7 @@ public:
 
 	int id;
 	bool hasSprite = false;
-	SpriteComponent* sprite = new SpriteComponent;
+	SpriteComponent* sprite = new SpriteComponent();
 
 
 	Object* parent;
@@ -25,6 +25,12 @@ public:
 	void AddToGameWorld();
 	void RemoveFromGameWorld();
 	void DeleteChild(Object* child);
+	void AddChild(Object* child);
+	void RemoveChild(Object* child);
+
+	void ParentTo(Object* p);
+	void UnParent();
+
 
 	virtual void OnUpdate(float DeltaTime);
 	virtual void Update(float DeltaTime);
@@ -43,8 +49,6 @@ public:
 	bool operator!= (const Object* other) const { return !operator==(other); }
 
 protected:
-	Matrix* localTransform = new Matrix();
-	Matrix* globalTransform = new Matrix();
 
 
 
