@@ -3,8 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-# Un-ignore raylib
-!raylib/
+
 
 # User-specific files
 *.rsuser
@@ -34,6 +33,12 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+
+# Un-ignore raylib
+!**/raylib/
+!**/raylib/*
+!**/raylib/**/*
+
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
