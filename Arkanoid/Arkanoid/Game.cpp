@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include "SpriteComponent.h"
-#include "Object.h"
+#include "TestObject.h"
 using namespace std;
 
 std::vector<Object*> Game::objects = std::vector<Object*>();
@@ -19,26 +19,9 @@ Game::Game() {
     //SetTargetFPS(60);
 
     // Test sprite functionality
-    Object* parent = new Object();
-    parent->LoadSprite((char*)"TestImage.png");
-    parent->sprite->SetScale(0.25);
+    TestObject* to = new TestObject(100, 100);
+    TestObject* to2 = new TestObject(500, 100);
 
-    parent->physics->SetPosition(300, 200);
-
-    Object* child = new Object();
-    child->LoadSprite((char*)"TestImage.png");
-    child->sprite->SetScale(0.5);
-    std::cout << child->sprite->GetWidth() << std::endl;
-
-    
-    //child->physics->SetPosition(100, 100);
-
-    parent->AddChild(child);
-    child->physics->SetPosition(-(child->sprite->GetWidth() / 2), -(child->sprite->GetHeight() / 2));
-    parent->AddToGameWorld();
-
-
-    //parent->physics->SetRotation(0 * DEG2RAD);
 
     
 
@@ -51,13 +34,17 @@ Game::Game() {
         
         Update(DeltaTime);
 
-        //parent->physics->Accelerate(1);
-        parent->physics->Rotate(0.0005 * DEG2RAD);
+        to->parent->physics->Accelerate(1);
+        to2->parent->physics->Accelerate(-1);
+
+        PhysicsComponent::GlobalCollisionCheck();
 
         Draw();
     }
 
     delete timer;
+    delete to;
+    delete to2;
 
     // De-Initialization 
     CloseWindow();

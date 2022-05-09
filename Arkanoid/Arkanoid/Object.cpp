@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Game.h"
 #include "raymath.h"
+#include "rlgl.h"
 using namespace std;
 
 Object::Object()
@@ -10,15 +11,20 @@ Object::Object()
 
 Object::~Object()
 {
+	if (sprite != nullptr) {
+		delete sprite;
+	}
+	
+
 	// Unparent this object
 	if(parent != nullptr){
-		DeleteChild(this);
+		UnParent();
 	}
 
 
 	// Unparent all children from this object
-	for (Object *child : children) {
-		child->UnParent();
+	for (int i = 0; i < children.size(); i++) {
+		children[i]->UnParent();
 	}
 
 	RemoveFromGameWorld();
@@ -62,6 +68,7 @@ void Object::ParentTo(Object* p) {
 	// Parent physics
 	physics->parentPhysics = parent->physics;
 
+
 	// Add to children vector
 	parent->children.push_back(this);
 
@@ -72,10 +79,11 @@ void Object::ParentTo(Object* p) {
 void Object::UnParent() {
 	
 	// Remove child from this object
-	parent->children.erase(std::remove(children.begin(), children.end(), this), children.end());
+	parent->children.erase(std::remove(parent->children.begin(), parent->children.end(), this), parent->children.end());
 
 	// Flag parent to update physics children list
 	parent->shouldReinstantiatePhysicsChildren = true;
+
 
 	// Unparent
 	parent = nullptr;
@@ -90,7 +98,10 @@ void Object::LoadSprite(char* filename) {
 	sprite = new SpriteComponent();
 	sprite->Load(filename);
 	hasSprite = true;
+	
 }
+
+
 
 
 void Object::OnUpdate(float DeltaTime)
@@ -131,10 +142,15 @@ void Object::Draw()
 	float rotation = (float)atan2(physics->globalTransform->m1, physics->globalTransform->m0);
 	if (!WindowShouldClose()) {
 		Vector2 position = { physics->globalTransform->m8, physics->globalTransform->m9 };
-		
-		// Draw sprite to screen
+	
 		DrawTextureEx(*sprite->texture, position, rotation * RAD2DEG, 1, CLITERAL(Color){ 255, 255, 255, 128 });
+		
 	}
+
+	if (physics->collider != nullptr) {
+		physics->collider->DrawDebug();
+	}
+	
 
 	DrawCircle(physics->globalTransform->m8, physics->globalTransform->m9, 10, RED);
 }

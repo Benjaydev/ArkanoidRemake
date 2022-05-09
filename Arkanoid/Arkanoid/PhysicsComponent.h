@@ -1,8 +1,10 @@
 #pragma once
 #include "PhysicsComponent.h"
+#include "SpriteComponent.h"
 #include <iostream>
 #include <vector>
 #include "raylib.h"
+#include "Collider.h"
 
 class PhysicsComponent
 {
@@ -22,22 +24,34 @@ public:
 	PhysicsComponent* parentPhysics;
 	std::vector<PhysicsComponent*> childrenPhysics;
 
+	Collider* collider;
+
+	void SetCollider(cType type);
+	void FitColliderWH(float width, float height);
+
 
 	void Update(float DeltaTime);
 	void UpdateTransform();
 	void Translate(float x, float y);
+	void Translate(Vector2 v);
 
 	void Accelerate(float direction);
 	void Decelerate();
-	void Move(float DeltaTime);
+	void CalculateVelocity(float DeltaTime);
+	void Move();
 
 	void SetPosition(float x, float y);
+	void SetPosition(Vector2 v);
 	void SetRotation(float zRad);
 	void Rotate(float rad);
 
 
 	Vector3 Vector3FloatMultiply(Vector3 v1, float f);
 	Vector3 Vector3FloatDivision(Vector3 v1, float f);
+
+
+	static void GlobalCollisionCheck();
+
 
 };
 

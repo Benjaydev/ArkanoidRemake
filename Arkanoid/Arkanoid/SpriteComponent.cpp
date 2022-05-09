@@ -4,6 +4,8 @@
 
 SpriteComponent::~SpriteComponent()
 {
+	delete image;
+	delete texture;
 }
 
 void SpriteComponent::Load(char* filename)

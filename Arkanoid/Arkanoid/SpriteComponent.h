@@ -22,6 +22,8 @@ public:
     void SetScale(float scale);
     float GetScale() { return textureScale; }
 
+    Vector2 GetCentreOffset() { return { -(texture->width / 2.0f), -(texture->height / 2.0f) }; }
+
 private:
     float textureScale = 1.0f;
 };

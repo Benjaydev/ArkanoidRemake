@@ -17,7 +17,7 @@ public:
 
 	int id;
 	bool hasSprite = false;
-	SpriteComponent* sprite = new SpriteComponent();
+	SpriteComponent* sprite;
 
 
 	Object* parent;
@@ -42,7 +42,6 @@ public:
 	virtual void Draw();
 
 	void LoadSprite(char* filename);
-
 
 
 	PhysicsComponent* physics = new PhysicsComponent();
