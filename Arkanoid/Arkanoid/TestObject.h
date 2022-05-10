@@ -3,7 +3,7 @@
 class TestObject
 {
 public:
-	TestObject(float x, float y);
+	TestObject(float x, float y, cType type);
 	~TestObject();
 
 	Object* parent = new Object();

@@ -151,6 +151,4 @@ void Object::Draw()
 		physics->collider->DrawDebug();
 	}
 	
-
-	DrawCircle(physics->globalTransform->m8, physics->globalTransform->m9, 10, RED);
 }

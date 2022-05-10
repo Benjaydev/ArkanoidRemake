@@ -24,6 +24,7 @@ CircleCollider::~CircleCollider()
 
 void CircleCollider::DrawDebug()
 {
+	DrawCircleLines(center.x, center.y, radius, RED);
 }
 
 bool CircleCollider::IsEmpty()
@@ -37,10 +38,40 @@ void CircleCollider::Empty()
 
 void CircleCollider::Fit(std::vector<Vector3> points)
 {
+	// Invalidate extents 
+	Vector3 min = Vector3({ FLT_MAX, FLT_MAX, FLT_MAX });
+	Vector3 max = Vector3({FLT_MIN, FLT_MIN, FLT_MIN});
+
+	// Find min and max of the points 
+	for (int i = 0; i < points.size(); ++i)
+	{
+		min = Vector3Min(min, points[i]);
+		max = Vector3Max(max, points[i]);
+	}
+
+	// Put a circle around the min/max box 
+	Vector3 add = Vector3Add(min, max);
+	center = {add.x*0.5f, add.y*0.5f};
+	radius = Vector3Length(Vector3Subtract(max, { center.x, center.y }));
 }
 
 void CircleCollider::Fit(Vector3 points[])
 {
+	// Invalidate extents 
+	Vector3 min = Vector3({ FLT_MAX, FLT_MAX, FLT_MAX });
+	Vector3 max = Vector3({ FLT_MIN, FLT_MIN, FLT_MIN });
+
+	// Find min and max of the points 
+	for (int i = 0; i < sizeof(points)/sizeof(Vector3); ++i)
+	{
+		min = Vector3Min(min, points[i]);
+		max = Vector3Max(max, points[i]);
+	}
+
+	// Put a circle around the min/max box 
+	Vector3 add = Vector3Add(min, max);
+	center = { add.x * 0.5f, add.y * 0.5f };
+	radius = Vector3Length(Vector3Subtract(max, { center.x, center.y }));
 }
 
 bool CircleCollider::Overlaps(Vector2 point)
@@ -49,7 +80,7 @@ bool CircleCollider::Overlaps(Vector2 point)
 	return Vector2DotProduct(p, p) <= (radius * radius);;
 }
 
-bool CircleCollider::Overlaps(Collider* other, Vector3* thisVel, Vector3* otherVel)
+bool CircleCollider::Overlaps(Collider* other, Vector3* thisVel, Hit& result)
 {
 	if (other->type == cType::Rectangle) {
 		RectangleCollider* rec = (RectangleCollider*)other;
@@ -66,10 +97,25 @@ bool CircleCollider::Overlaps(Collider* other, Vector3* thisVel, Vector3* otherV
 	
 }
 
+void CircleCollider::Inflate(Collider* other)
+{
+
+	if (other->type == cType::Circle) {
+		CircleCollider* cir = (CircleCollider*)other;
+
+		radius += cir->radius;
+	}
+}
+
 void CircleCollider::Translate(float x, float y)
 {
 
 	center.x += x;
 	center.y += y;
+}
+
+Vector2 CircleCollider::ClosestPoint(Vector2 point)
+{
+	return Vector2();
 }
 

@@ -25,6 +25,7 @@ public:
 	std::vector<PhysicsComponent*> childrenPhysics;
 
 	Collider* collider;
+	bool isColliding = false;
 
 	void SetCollider(cType type);
 	void FitColliderWH(float width, float height);
@@ -46,8 +47,8 @@ public:
 	void Rotate(float rad);
 
 
-	Vector3 Vector3FloatMultiply(Vector3 v1, float f);
-	Vector3 Vector3FloatDivision(Vector3 v1, float f);
+	static Vector3 Vector3FloatMultiply(Vector3 v1, float f);
+	static Vector3 Vector3FloatDivision(Vector3 v1, float f);
 
 
 	static void GlobalCollisionCheck();

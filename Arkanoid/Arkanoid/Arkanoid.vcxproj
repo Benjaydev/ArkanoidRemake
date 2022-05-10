@@ -157,6 +157,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="RayCollider.cpp" />
     <ClCompile Include="RectangleCollider.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="TestObject.cpp" />

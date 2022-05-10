@@ -16,15 +16,23 @@ Game::Game() {
     int screenHeight = 450;
     InitWindow(screenWidth, screenHeight, "Arkanoid - Ben Wharton");
 
-    //SetTargetFPS(60);
+    //SetTargetFPS(2);
 
     // Test sprite functionality
-    TestObject* to = new TestObject(100, 100);
-    TestObject* to2 = new TestObject(500, 100);
+    TestObject* to = new TestObject(100, 100, cType::Rectangle);
+    TestObject* to2 = new TestObject(500, 125, cType::Rectangle); 
+    TestObject* to3 = new TestObject(300, 125, cType::Rectangle); 
+
+    
+    //TestObject* to3 = new TestObject(100, 200, cType::Circle);
+   // TestObject* to4 = new TestObject(500, 225, cType::Circle);
+    
+    //TestObject* to5 = new TestObject(100, 300, cType::Rectangle);
+    //TestObject* to6 = new TestObject(500, 325, cType::Rectangle);
 
 
     
-
+    
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose())    
@@ -36,6 +44,13 @@ Game::Game() {
 
         to->parent->physics->Accelerate(1);
         to2->parent->physics->Accelerate(-1);
+        to3->parent->physics->Accelerate(-1);
+
+       // to3->parent->physics->Accelerate(1);
+       // to4->parent->physics->Accelerate(-1);
+
+       // to5->parent->physics->Accelerate(1);
+       // to6->parent->physics->Accelerate(-1);
 
         PhysicsComponent::GlobalCollisionCheck();
 
@@ -45,6 +60,10 @@ Game::Game() {
     delete timer;
     delete to;
     delete to2;
+    delete to3;
+   // delete to4;
+   // delete to5;
+   // delete to6;
 
     // De-Initialization 
     CloseWindow();

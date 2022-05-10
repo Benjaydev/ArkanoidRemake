@@ -115,8 +115,10 @@ void PhysicsComponent::Move()
 void PhysicsComponent::Translate(float x, float y) {
 	localTransform->m8 += x;
 	localTransform->m9 += y;
-	collider->Translate(x, y);
-
+	// Update collider position
+	if (collider != nullptr) {
+		collider->Translate(x, y);
+	}
 	
 
 	UpdateTransform();
@@ -130,9 +132,9 @@ void PhysicsComponent::Translate(Vector2 v)
 
 void PhysicsComponent::SetPosition(float x, float y)
 {
-	localTransform->m8 = x;
-	localTransform->m9 = y;
-	UpdateTransform();
+	float diffx = x - localTransform->m8;
+	float diffy = y - localTransform->m9;
+	Translate(diffx, diffy);
 }
 
 void PhysicsComponent::SetPosition(Vector2 v)
@@ -174,20 +176,81 @@ Vector3 PhysicsComponent::Vector3FloatDivision(Vector3 v1, float f){
 void PhysicsComponent::GlobalCollisionCheck()
 {
 	for (int i = 0; i < Game::objects.size(); i++) {
-		Object* object1 = Game::objects[i];
+		Object* check = Game::objects[i];
 		for (int j = i + 1; j < Game::objects.size(); j++) {
-			Object* object2 = Game::objects[j];
+			Object* against = Game::objects[j];
 			// Don't check collision if object is child of other object
-			if (object2->parent == object1 || object1->physics->collider == nullptr || object2->physics->collider == nullptr) {
+			if (against->parent == check || check->physics->collider == nullptr || against->physics->collider == nullptr || ((check->physics->velocity->x==0.0f && check->physics->velocity->y == 0.0f) && (against->physics->velocity->x == 0.0f && against->physics->velocity->y == 0.0f)) ) {
 				continue;
 			}
-			
-			bool collided = object1->physics->collider->Overlaps(object2->physics->collider, object1->physics->velocity, object2->physics->velocity);
-			if (!collided) {
-				object1->physics->Move();
-				object2->physics->Move();
+
+			// Do base collision check
+			Collider::Hit result;
+			bool collided = check->physics->collider->Overlaps(against->physics->collider, check->physics->velocity, result);
+
+			if (collided) {
+				check->physics->velocity->x = result.OutVel.x;
+				check->physics->velocity->y = result.OutVel.y;
+
+				against->physics->velocity->x = -result.OutVel.x;
+				against->physics->velocity->y = -result.OutVel.y;
+				
+				
 			}
+			
+			/*
+			if (!collided) {
+				// If no collision is found, use a ray check.
+				//// This check will allow collision to be detected even if the objects next frame position has passed through
+				// to the other side of the oter object. 
+				// In the rare case that the object is travelling fast enough or each frame is slow enough for the object to move through another object,
+				// a raycast can be used to check for any collision in between this frame and the next frame
+
+				// First, an "inflated" version of the other object collider needs to be made
+				// Create a copy of the other objeccts collider
+				Collider* inflatedCol = new Collider();
+				inflatedCol = inflatedCol->Copy(against->physics->collider);
+				// This basically just adds the size of our check object collider to the against object collider
+				inflatedCol->Inflate(check->physics->collider);
+				inflatedCol->DrawDebug(); // TEMPORARY DEBUG
+
+				// Get the future position of the check object
+				Vector3 ForwardPosition = { check->physics->globalTransform->m8 + check->physics->velocity->x, check->physics->globalTransform->m9 + check->physics->velocity->y, 0 };
+				// Current position
+				Vector3 CurrentPosition = { check->physics->globalTransform->m8, check->physics->globalTransform->m9, 0 };
+
+				// Get the direction between the current position and the future position
+				Vector3 dir = Vector3Subtract(ForwardPosition, CurrentPosition);
+				// Get the distance for how far the ray should travel
+				float dist = Vector3Length(dir);
+
+				// Create new ray that goes from the current position to the future position in order to check for collisions inbetween
+				RayCollider ray = RayCollider(CurrentPosition, Vector3Normalize(dir), dist);
+
+				// Check for collision against the inflated collider
+				Vector3 result = Vector3();
+				bool rayCollided = ray.Intersects(inflatedCol, result);
+				
+				collided = rayCollided;
+
+				// If this ray has intersected, return object to the hit location
+				if (rayCollided) {
+					check->physics->SetPosition(result.x, result.y);
+
+				}
+
+				delete inflatedCol;
+			}*/
+
+			
+
+			// Set colliding if has collided atleast once
+			check->physics->isColliding = check->physics->isColliding ? true : collided;
+			against->physics->isColliding = against->physics->isColliding ? true : collided;
 		}
+
+		check->physics->Move();
+		
 	}
 
 }
