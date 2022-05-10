@@ -138,14 +138,17 @@ void Object::Draw()
 {
 	OnDraw();
 
-	// Sprite Draw
-	float rotation = (float)atan2(physics->globalTransform->m1, physics->globalTransform->m0);
-	if (!WindowShouldClose()) {
-		Vector2 position = { physics->globalTransform->m8, physics->globalTransform->m9 };
-	
-		DrawTextureEx(*sprite->texture, position, rotation * RAD2DEG, 1, CLITERAL(Color){ 255, 255, 255, 128 });
-		
+	if (hasSprite) {
+		// Sprite Draw
+		float rotation = (float)atan2(physics->globalTransform->m1, physics->globalTransform->m0);
+		if (!WindowShouldClose()) {
+			Vector2 position = { physics->globalTransform->m8, physics->globalTransform->m9 };
+
+			DrawTextureEx(*sprite->texture, position, rotation * RAD2DEG, 1, sprite->colour);
+
+		}
 	}
+	
 
 	if (physics->collider != nullptr) {
 		physics->collider->DrawDebug();

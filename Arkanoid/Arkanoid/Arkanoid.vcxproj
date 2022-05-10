@@ -157,6 +157,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="RayCollider.cpp" />
     <ClCompile Include="RectangleCollider.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
@@ -168,11 +169,21 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="CenterSegment.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="LeftEnd.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="RightEnd.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="TestImage.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>

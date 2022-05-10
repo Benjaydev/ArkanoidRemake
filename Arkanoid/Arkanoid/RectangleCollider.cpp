@@ -109,7 +109,7 @@ bool RectangleCollider::Overlaps(Vector2 point)
 }
 
 
-bool RectangleCollider::Overlaps(Collider* other, Vector3* thisVel, Hit& result)
+bool RectangleCollider::Overlaps(Collider* other, Vector3 thisVel, Hit& result)
 {
 	if (other->type == cType::Rectangle) {
 		RectangleCollider* rec = (RectangleCollider*)other;
@@ -118,10 +118,8 @@ bool RectangleCollider::Overlaps(Collider* other, Vector3* thisVel, Hit& result)
 		if (!(max.x < rec->min.x || max.y < rec->min.y || min.x > rec->max.x || min.y > rec->max.y)) {
 			return true;
 		}
-		//return !(max.x + thisVel->x < rec->min.x + otherVel->x || max.y + thisVel->y < rec->min.y + otherVel->y || min.x + thisVel->x > rec->max.x + otherVel->x || min.y + thisVel->y > rec->max.y + otherVel->y);
 
-
-		Vector3 relV = Vector3Negate(*thisVel);
+		Vector3 relV = Vector3Negate(thisVel);
 
 		float hitTime = 0.0f;
 		float outTime = 1.0f;

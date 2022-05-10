@@ -48,6 +48,9 @@
     <ClCompile Include="RayCollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -71,9 +74,21 @@
     <ClInclude Include="TestObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="TestImage.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="CenterSegment.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="LeftEnd.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RightEnd.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

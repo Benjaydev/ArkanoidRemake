@@ -16,6 +16,9 @@ public:
 	float moveSpeed = 100.0f;
 
 	Vector3* velocity = new Vector3();
+	Vector3 deltaVelocity(float DeltaTime) {
+		return { velocity->x * DeltaTime, velocity->y * DeltaTime, velocity->z * DeltaTime };
+	}
 	Vector3* acceleration = new Vector3();
 	float deceleration = 0.99f;
 
@@ -39,7 +42,7 @@ public:
 	void Accelerate(float direction);
 	void Decelerate();
 	void CalculateVelocity(float DeltaTime);
-	void Move();
+	void Move(float DeltaTime);
 
 	void SetPosition(float x, float y);
 	void SetPosition(Vector2 v);
@@ -51,7 +54,7 @@ public:
 	static Vector3 Vector3FloatDivision(Vector3 v1, float f);
 
 
-	static void GlobalCollisionCheck();
+	static void GlobalCollisionCheck(float DeltaTime);
 
 
 };

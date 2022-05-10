@@ -12,58 +12,45 @@ int Game::lifetimeObjectCount = 0;
 
 Game::Game() {
     // Initialization
-    int screenWidth = 800;
-    int screenHeight = 450;
+    int screenWidth = 858;
+    int screenHeight = 850;
     InitWindow(screenWidth, screenHeight, "Arkanoid - Ben Wharton");
 
     //SetTargetFPS(2);
 
     // Test sprite functionality
-    TestObject* to = new TestObject(100, 100, cType::Rectangle);
-    TestObject* to2 = new TestObject(500, 125, cType::Rectangle); 
-    TestObject* to3 = new TestObject(300, 125, cType::Rectangle); 
+    TestObject* to = new TestObject(700, GetScreenHeight() - 100, cType::Circle);
+    TestObject* to2 = new TestObject(100, GetScreenHeight() - 100, cType::Circle);
+    TestObject* to3 = new TestObject(GetScreenWidth() / 2, 100, cType::Circle);
 
-    
     //TestObject* to3 = new TestObject(100, 200, cType::Circle);
    // TestObject* to4 = new TestObject(500, 225, cType::Circle);
     
     //TestObject* to5 = new TestObject(100, 300, cType::Rectangle);
     //TestObject* to6 = new TestObject(500, 325, cType::Rectangle);
-
-
     
-    
+
+    player = new Player(GetScreenWidth()/2, GetScreenHeight() - 100);
+
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose())    
     {
         DeltaTime = timer->RecordNewTime();
 
-        
+        to3->parent->physics->velocity->y = 100;
         Update(DeltaTime);
 
-        to->parent->physics->Accelerate(1);
-        to2->parent->physics->Accelerate(-1);
-        to3->parent->physics->Accelerate(-1);
-
-       // to3->parent->physics->Accelerate(1);
-       // to4->parent->physics->Accelerate(-1);
-
-       // to5->parent->physics->Accelerate(1);
-       // to6->parent->physics->Accelerate(-1);
-
-        PhysicsComponent::GlobalCollisionCheck();
+        PhysicsComponent::GlobalCollisionCheck(DeltaTime);
 
         Draw();
     }
 
     delete timer;
+    delete player;
     delete to;
     delete to2;
     delete to3;
-   // delete to4;
-   // delete to5;
-   // delete to6;
 
     // De-Initialization 
     CloseWindow();
@@ -78,15 +65,13 @@ void Game::Update(float DeltaTime) {
 
     }
 
-    // Update
-    if (IsKeyPressed(KEY_LEFT))
+    if (IsKeyDown(KEY_A))
     {
-        DrawText("LEFT", 100, 50, 20, BLUE);
+        player->physics->Accelerate(-1);
     }
-
-    if (IsKeyPressed(KEY_RIGHT))
+    if (IsKeyDown(KEY_D))
     {
-        DrawText("RIGHT", 100, 120, 20, BLUE);
+        player->physics->Accelerate(1);
     }
 }
 
@@ -101,9 +86,7 @@ void Game::Draw()
 
     // Draw each object that has a sprite
     for (int i = 0; i < objects.size(); i++) {
-        if (objects[i]->hasSprite) {
-            objects[i]->Draw();
-        }
+        objects[i]->Draw();
         
     }
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "Timer.h"
-#include "Object.h"
+#include "Player.h"
 #include <iostream>
 #include <vector>
 
@@ -18,6 +18,8 @@ public:
 
 	Timer* timer = new Timer();
 	float DeltaTime = 0;
+
+	Player* player;
 
 	static std::vector<Object*> objects;
 

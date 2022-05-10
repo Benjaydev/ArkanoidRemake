@@ -1,4 +1,6 @@
 #include "Collider.h"
+#include <iostream>
+using namespace std;
 
 CircleCollider::CircleCollider()
 {
@@ -80,12 +82,44 @@ bool CircleCollider::Overlaps(Vector2 point)
 	return Vector2DotProduct(p, p) <= (radius * radius);;
 }
 
-bool CircleCollider::Overlaps(Collider* other, Vector3* thisVel, Hit& result)
+bool CircleCollider::Overlaps(Collider* other, Vector3 thisVel, Hit& result)
 {
 	if (other->type == cType::Rectangle) {
 		RectangleCollider* rec = (RectangleCollider*)other;
-		Vector2 closest = rec->ClosestPoint(center);
-		return Overlaps(closest);
+		Vector2 closest = rec->ClosestPoint({ center.x+thisVel.x, center.y + thisVel.y });
+		if (Overlaps(closest)) {
+			// Find the intersection depth
+			result.OutVel = thisVel;
+			Vector2 diff = Vector2Subtract(closest, { center.x + thisVel.x, center.y + thisVel.y });
+			Vector2 normDiff = Vector2Normalize(diff);
+			float dist = Vector2Length(diff);
+
+			float rCheck = radius - dist;
+
+
+			result.OutVel.x = -(normDiff.x*rCheck);
+			result.OutVel.y = -(normDiff.y * rCheck);
+
+
+			// Calculate the normal
+			if (closest.x == rec->min.x) {
+				result.HitNormal.x = -1;
+			}
+			if (closest.y == rec->min.y) {
+				result.HitNormal.y = -1;
+			}
+
+			if (closest.x == rec->max.x) {
+				result.HitNormal.x = 1;
+			}
+			if (closest.y == rec->max.y) {
+				result.HitNormal.y = 1;
+			}
+
+
+			return true;
+		}
+		return false;
 	}
 	else if (other->type == cType::Circle) {
 		CircleCollider* cir = (CircleCollider*)other;
