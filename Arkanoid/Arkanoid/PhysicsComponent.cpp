@@ -33,10 +33,10 @@ void PhysicsComponent::SetCollider(cType type)
 	}
 }
 
-void PhysicsComponent::FitColliderWH(float width, float height)
+void PhysicsComponent::FitColliderWH(float width, float height, Vector2 pos)
 {
 	if (collider != nullptr) {
-		std::vector<Vector3> points = { {globalTransform->m8 - (width / 2), globalTransform->m9 - (height / 2), 0 }, {globalTransform->m8 + (width / 2), globalTransform->m9 + (height / 2), 0 } };
+		std::vector<Vector3> points = { {pos.x - (width / 2), pos.y - (height / 2), 0 }, {pos.x + (width / 2), pos.y + (height / 2), 0 } };
 		collider->Fit(points);
 	}
 	
@@ -49,6 +49,8 @@ void PhysicsComponent::Update(float DeltaTime)
 
 void PhysicsComponent::UpdateTransform()
 {
+	Vector2 lastpos = { globalTransform->m8, globalTransform->m9 };
+
 	// Calculate global transform if this object has parent transform
 	if (parentPhysics != nullptr) {
 		*globalTransform = MatrixMultiply(*localTransform, *parentPhysics->globalTransform);
@@ -178,43 +180,75 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 	for (int i = 0; i < Game::objects.size(); i++) {
 		Object* check = Game::objects[i];
 		if (check->physics->collider == nullptr) {
+			check->physics->Move(DeltaTime);
 			continue;
 		}
-
 		
-		Collider::Hit wallResult;
-		
+		Hit wallResult;
 		if (check->physics->collider->OverlapsScreen(check->physics->deltaVelocity(DeltaTime), wallResult)) {
 			check->physics->velocity->x = wallResult.OutVel.x / DeltaTime;
 			check->physics->velocity->y = wallResult.OutVel.y / DeltaTime;
+
+			if (check->tag == "Ball") {
+				wallResult.otherTag = "Wall";
+				check->CollideEvent(wallResult);
+			}
 		}
-		
 
 		for (int j = i+1; j < Game::objects.size(); j++) {
 			Object* against = Game::objects[j];
 
 			// Don't check collision if object is child of the other object, if other objecct is null, or if both objects have no velocity
-			if (against->parent == check || against->physics->collider == nullptr || ((check->physics->velocity->x == 0.0f && check->physics->velocity->y == 0.0f) && (against->physics->velocity->x == 0.0f && against->physics->velocity->y == 0.0f)) ) {
+			if ( check == against || against->parent == check || against->physics->collider == nullptr || ((check->physics->velocity->x == 0.0f && check->physics->velocity->y == 0.0f) && (against->physics->velocity->x == 0.0f && against->physics->velocity->y == 0.0f))) {
 				continue;
 			}
 
 			// Do base collision check
-			Collider::Hit result;
+			Hit result;
 
+
+			
 			//*check->physics->velocity = check->physics->deltaVelocity(DeltaTime);
-			bool collided = check->physics->collider->Overlaps(against->physics->collider, check->physics->deltaVelocity(DeltaTime), result);
-
-			if (collided) {
-				check->physics->velocity->x = result.OutVel.x / DeltaTime;
-				check->physics->velocity->y = result.OutVel.y / DeltaTime;
-				
-				against->physics->velocity->x = -result.OutVel.x;
-				against->physics->velocity->y = -result.OutVel.y;
-				
-			}
+			bool collided = check->physics->collider->Overlaps(against->physics->collider, check->physics->deltaVelocity(DeltaTime), against->physics->deltaVelocity(DeltaTime), result);
 
 			
 
+
+			if (collided) {
+				if (check->tag == "Ball" && (against->tag == "Player" || against->tag == "Brick")) {
+					result.otherTag = against->tag;
+
+					check->physics->velocity->x = result.OutVel.x / DeltaTime;
+					check->physics->velocity->y = result.OutVel.y / DeltaTime;
+
+
+					check->CollideEvent(result);
+					//check->physics->Move(DeltaTime);
+
+				}
+				if (against->tag == "Ball" && (check->tag == "Player" || check->tag == "Brick")) {
+					result.otherTag = check->tag;
+
+					against->physics->velocity->x = result.OutVel.x / DeltaTime;
+					against->physics->velocity->y = result.OutVel.y / DeltaTime;
+
+					against->CollideEvent(result);
+					//against->physics->Move(DeltaTime);
+				}
+			
+				if (check->tag == "Ball" && against->tag == "Ball") {
+					result.otherTag = "Ball";
+					check->CollideEvent(result);
+
+					Hit newHit = Hit({ result.OutVel, Vector2Negate(result.HitNormal), result.percentDistanceAlongHitFace, result.otherTag });
+					against->CollideEvent(newHit);
+
+					//against->physics->Move(DeltaTime);
+				}
+
+				break;
+			}
+			
 			// Set colliding if has collided atleast once
 			check->physics->isColliding = check->physics->isColliding ? true : collided;
 			against->physics->isColliding = against->physics->isColliding ? true : collided;

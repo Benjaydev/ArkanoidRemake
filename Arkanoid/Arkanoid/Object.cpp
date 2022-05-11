@@ -1,5 +1,5 @@
 #pragma once
-#include "Object.h"
+#include "Ball.h"
 #include "Game.h"
 #include "raymath.h"
 #include "rlgl.h"
@@ -71,6 +71,7 @@ void Object::ParentTo(Object* p) {
 
 	// Add to children vector
 	parent->children.push_back(this);
+	
 
 	// Flag parent to update physics children list
 	parent->shouldReinstantiatePhysicsChildren = true;
@@ -150,7 +151,7 @@ void Object::Draw()
 	}
 	
 
-	if (physics->collider != nullptr) {
+	if (physics->collider != nullptr && Game::DebugActive) {
 		physics->collider->DrawDebug();
 	}
 	

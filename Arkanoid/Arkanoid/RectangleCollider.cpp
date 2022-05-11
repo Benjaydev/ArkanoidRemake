@@ -109,7 +109,7 @@ bool RectangleCollider::Overlaps(Vector2 point)
 }
 
 
-bool RectangleCollider::Overlaps(Collider* other, Vector3 thisVel, Hit& result)
+bool RectangleCollider::Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result)
 {
 	if (other->type == cType::Rectangle) {
 		RectangleCollider* rec = (RectangleCollider*)other;
@@ -212,7 +212,7 @@ bool RectangleCollider::Overlaps(Collider* other, Vector3 thisVel, Hit& result)
 	}
 	else if (other->type == cType::Circle) {
 		CircleCollider* cir = (CircleCollider*)other;
-		cir->Overlaps(this, thisVel, result);
+		cir->Overlaps(this, otherVel, thisVel, result);
 	}
 
 }

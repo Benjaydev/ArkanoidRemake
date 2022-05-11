@@ -9,6 +9,7 @@ class Object
 {
 public:
 
+
 	Object();
 	~Object();
 
@@ -16,6 +17,7 @@ public:
 	bool shouldReinstantiatePhysicsChildren = false;
 
 	int id;
+	std::string tag = "";
 	bool hasSprite = false;
 	SpriteComponent* sprite;
 
@@ -37,6 +39,8 @@ public:
 
 	virtual void OnUpdate(float DeltaTime);
 	virtual void Update(float DeltaTime);
+
+	virtual void CollideEvent(Hit hit){};
 
 	virtual void OnDraw();
 	virtual void Draw();

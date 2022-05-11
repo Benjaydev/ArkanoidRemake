@@ -2,11 +2,17 @@
 
 Player::Player(float x, float y)
 {
+    tag = "Player";
+
     physics->SetPosition(x, y);
 
     float scale = 4;
     centerSegment->LoadSprite((char*)"CenterSegment.png");
     centerSegment->sprite->SetScale(scale);
+    
+    //centerSegmentRight->LoadSprite((char*)"CenterSegment.png");
+    //centerSegmentRight->sprite->SetScale(scale);
+   //centerSegmentRight->sprite->texture->width /= 2;
 
     leftEnd->LoadSprite((char*)"LeftEnd.png");
     leftEnd->sprite->SetScale(scale);
@@ -15,21 +21,24 @@ Player::Player(float x, float y)
     rightEnd->sprite->SetScale(scale);
 
 
+    Vector2 playerPos = { physics->globalTransform->m8,physics->globalTransform->m9 };
 
 
     physics->SetCollider(cType::Rectangle);
-    physics->FitColliderWH(centerSegment->sprite->GetWidth() + leftEnd->sprite->GetWidth() + rightEnd->sprite->GetWidth(), centerSegment->sprite->GetHeight());
+    physics->FitColliderWH(centerSegment->sprite->GetWidth() + leftEnd->sprite->GetWidth() + rightEnd->sprite->GetWidth(), centerSegment->sprite->GetHeight(), playerPos);
 
+  
+    
     AddChild(centerSegment);
+    //AddChild(centerSegmentRight);
     AddChild(leftEnd);
     AddChild(rightEnd);
 
-    Vector2 pos = centerSegment->sprite->GetCentreOffset();
-    centerSegment->physics->SetPosition(pos);
-    leftEnd->physics->SetPosition({ pos.x + pos.x, pos.y});
-    rightEnd->physics->SetPosition({ pos.x - pos.x*2, pos.y });
+    Vector2 offset = centerSegment->sprite->GetCentreOffset();
 
-
+    centerSegment->physics->SetPosition({ offset.x, offset.y});
+    leftEnd->physics->SetPosition({ -(centerSegment->sprite->GetWidth()), offset.y });
+    rightEnd->physics->SetPosition({ rightEnd->sprite->GetWidth(), offset.y });
 
 
     AddToGameWorld();

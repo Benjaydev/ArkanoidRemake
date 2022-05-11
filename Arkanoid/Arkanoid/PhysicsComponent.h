@@ -31,7 +31,7 @@ public:
 	bool isColliding = false;
 
 	void SetCollider(cType type);
-	void FitColliderWH(float width, float height);
+	void FitColliderWH(float width, float height, Vector2 pos);
 
 
 	void Update(float DeltaTime);

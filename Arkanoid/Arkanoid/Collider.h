@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include <vector>
+#include "Hit.h"
 enum class cType { None, Rectangle, Circle, Ray };
 
 
@@ -15,21 +16,14 @@ public:
 	Collider* Copy(Collider* copy);
 
 	cType type = cType::None;
-	struct Hit {
-		Vector3 OutVel = Vector3();
-		Vector2 HitNormal = Vector2();
-	};
 
 
-	virtual bool Overlaps(Collider* other, Vector3 thisVel, Hit& result) { return false;  };
+
+	virtual bool Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result) { return false;  };
 	virtual bool Overlaps(Vector2 point) { return false; };
 	bool OverlapsScreen(Vector3 velocity, Hit& result);;
 
 	virtual void DrawDebug() {};
-
-	//virtual Vector3 CalculateNormal(Vector3 point) = 0;
-	//virtual Vector3 CalculateNormal(Vector3 point) = 0;
-	//virtual Vector3 CalculateNormal(Vector3 point) = 0;
 
 	virtual bool IsEmpty() { return false; };
 
@@ -79,7 +73,7 @@ public:
 	void Fit(Vector3 points[]);
 
 	bool Overlaps(Vector2 point) override;
-	bool Overlaps(Collider* other, Vector3 thisVel, Hit& result) override;
+	bool Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result) override;
 
 	void Inflate(Collider* other) override;
 
@@ -113,7 +107,7 @@ public:
 	void Fit(Vector3 points[]);
 
 	bool Overlaps(Vector2 point) override;
-	bool Overlaps(Collider* other, Vector3 thisVel, Hit& result) override;
+	bool Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result) override;
 
 	void Inflate(Collider* other) override;
 

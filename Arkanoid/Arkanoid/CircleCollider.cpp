@@ -82,7 +82,7 @@ bool CircleCollider::Overlaps(Vector2 point)
 	return Vector2DotProduct(p, p) <= (radius * radius);;
 }
 
-bool CircleCollider::Overlaps(Collider* other, Vector3 thisVel, Hit& result)
+bool CircleCollider::Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result)
 {
 	if (other->type == cType::Rectangle) {
 		RectangleCollider* rec = (RectangleCollider*)other;
@@ -116,6 +116,20 @@ bool CircleCollider::Overlaps(Collider* other, Vector3 thisVel, Hit& result)
 				result.HitNormal.y = 1;
 			}
 
+		
+
+			// Get at what percentage on the face is the collision (Left to right, 0 to 1)
+			// Top and bottom face
+			if ((result.HitNormal.x == 0 && result.HitNormal.y == -1) || (result.HitNormal.x == 0 && result.HitNormal.y == 1)) {
+				result.percentDistanceAlongHitFace = ( ((closest.x - rec->min.x) * 100) / (rec->max.x - rec->min.x))/100;
+			}
+			// Right and left face
+			else if ((result.HitNormal.x == 1 && result.HitNormal.y == 0) || (result.HitNormal.x == -1 && result.HitNormal.y == 0)) {
+				result.percentDistanceAlongHitFace = (((closest.y - rec->min.y) * 100) / (rec->max.y - rec->min.y)) / 100;
+			}
+
+
+			
 
 			return true;
 		}
@@ -124,6 +138,7 @@ bool CircleCollider::Overlaps(Collider* other, Vector3 thisVel, Hit& result)
 	else if (other->type == cType::Circle) {
 		CircleCollider* cir = (CircleCollider*)other;
 		Vector2 diff = Vector2Subtract(cir->center, center);
+		result.HitNormal = Vector2Normalize(diff);
 
 		float r = radius + cir->radius;
 		return Vector2DotProduct(diff, diff) <= (r * r);

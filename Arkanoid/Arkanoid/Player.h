@@ -7,6 +7,7 @@ public:
 	~Player();
 
 
+	Object* centerSegmentRight = new Object();
 	Object* centerSegment = new Object();
 	Object* rightEnd = new Object();
 	Object* leftEnd = new Object();

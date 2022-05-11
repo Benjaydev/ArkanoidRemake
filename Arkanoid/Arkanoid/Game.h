@@ -32,5 +32,8 @@ public:
 		return lifetimeObjectCount;
 	}
 
+	static bool DebugActive;
+
+
 };
 

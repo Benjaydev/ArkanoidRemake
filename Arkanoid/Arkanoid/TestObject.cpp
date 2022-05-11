@@ -12,7 +12,7 @@ TestObject::TestObject(float x, float y, cType type) {
     child->sprite->SetScale(0.2);
 
     parent->physics->SetCollider(type);
-    parent->physics->FitColliderWH(child->sprite->GetWidth(), child->sprite->GetHeight());
+    parent->physics->FitColliderWH(child->sprite->GetWidth(), child->sprite->GetHeight(), { parent->physics->globalTransform->m8, parent->physics->globalTransform->m9 });
 
     parent->AddChild(child);
     child->physics->SetPosition(child->sprite->GetCentreOffset());

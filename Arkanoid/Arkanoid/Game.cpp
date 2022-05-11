@@ -4,11 +4,13 @@
 #include <iostream>
 #include <string>
 #include "SpriteComponent.h"
-#include "TestObject.h"
+#include "Ball.h"
+#include "Brick.h"
 using namespace std;
 
 std::vector<Object*> Game::objects = std::vector<Object*>();
 int Game::lifetimeObjectCount = 0;
+bool Game::DebugActive = true;
 
 Game::Game() {
     // Initialization
@@ -16,21 +18,27 @@ Game::Game() {
     int screenHeight = 850;
     InitWindow(screenWidth, screenHeight, "Arkanoid - Ben Wharton");
 
-    //SetTargetFPS(2);
+    SetTargetFPS(200);
 
     // Test sprite functionality
-    TestObject* to = new TestObject(700, GetScreenHeight() - 100, cType::Circle);
-    TestObject* to2 = new TestObject(100, GetScreenHeight() - 100, cType::Circle);
-    TestObject* to3 = new TestObject(GetScreenWidth() / 2, 100, cType::Circle);
+    
+    
 
-    //TestObject* to3 = new TestObject(100, 200, cType::Circle);
-   // TestObject* to4 = new TestObject(500, 225, cType::Circle);
+   
+   
     
-    //TestObject* to5 = new TestObject(100, 300, cType::Rectangle);
-    //TestObject* to6 = new TestObject(500, 325, cType::Rectangle);
-    
+
+    Brick* brick = new Brick(100, 100);
 
     player = new Player(GetScreenWidth()/2, GetScreenHeight() - 100);
+
+    
+    Ball* ball = new Ball(100, 100);
+
+    Ball* ball3 = new Ball(300, 100);
+    Ball* ball4 = new Ball(400, 100);
+
+
 
     // Main game loop
     // Detect window close button or ESC key
@@ -38,7 +46,11 @@ Game::Game() {
     {
         DeltaTime = timer->RecordNewTime();
 
-        to3->parent->physics->velocity->y = 100;
+        if (DeltaTime == 0) {
+            std::cout << DeltaTime << std::endl;
+        }
+        
+
         Update(DeltaTime);
 
         PhysicsComponent::GlobalCollisionCheck(DeltaTime);
@@ -48,9 +60,11 @@ Game::Game() {
 
     delete timer;
     delete player;
-    delete to;
-    delete to2;
-    delete to3;
+    delete ball;
+    delete brick;
+    delete ball3;
+    delete ball4;
+
 
     // De-Initialization 
     CloseWindow();
