@@ -7,8 +7,8 @@ Ball::Ball(float x, float y)
 
 
     physics->SetPosition(x, y);
-    ballSprite ->LoadSprite((char*)"Ball.png");
-    ballSprite->sprite->SetScale(4);
+    ballSprite ->LoadSprite((char*)"Ball2.png");
+    ballSprite->sprite->SetScale(1.5);
 
     AddChild(ballSprite);
 
@@ -26,6 +26,9 @@ Ball::Ball(float x, float y)
     physics->moveSpeed = 600;
     physics->maxSpeed = 600;
     physics->deceleration = 0.01f;
+
+
+    //ballSprite->sprite->colour = GetColor(0x00A8F3FF);
 }
 
 Ball::~Ball()
@@ -98,8 +101,13 @@ void Ball::CollideEvent(Hit hit, Object* other)
         return;
     }
 
-    hit.HitNormal.x = 0;
-    hit.HitNormal.y = -1;
+
+
+
+    // Else must be the main paddle, so always have normal upwards
+
+    //hit.HitNormal.x = 0;
+    //hit.HitNormal.y = -1;
 
 
     float facePos = hit.percentDistanceAlongHitFace;
@@ -110,7 +118,7 @@ void Ball::CollideEvent(Hit hit, Object* other)
     // If ball is moving left
     if (movementDirection.x < 0) {
         // If ball lands on right side of paddle
-        if (facePos >= 0.5) {
+        if ((facePos >= 0.5 && hit.otherTag == "Player") || hit.otherTag == "RightPlayerEnd") {
             // Get percentage in this half to calculate the speed multiplier the further out the ball hits
             speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (1 - 0.5f)) / 100);
             
@@ -130,7 +138,7 @@ void Ball::CollideEvent(Hit hit, Object* other)
     // If ball is moving right
     else if (movementDirection.x > 0) {
         // If ball lands on left side of paddle
-        if (facePos <= 0.5) {
+        if ((facePos <= 0.5 && hit.otherTag == "Player") || hit.otherTag == "LeftPlayerEnd") {
             speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (0 - 0.5f)) / 100);
             ReturnBall(hit);
         }

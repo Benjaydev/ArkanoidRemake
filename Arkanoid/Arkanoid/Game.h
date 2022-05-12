@@ -19,6 +19,9 @@ public:
 	Timer* timer = new Timer();
 	float DeltaTime = 0;
 
+	Texture2D background;
+
+
 	Player* player;
 
 	static std::vector<Object*> objects;

@@ -13,5 +13,9 @@ public:
 
 
 	void Update(float DeltaTime) override;
+
+	void CalculateSpritesAndColliders();
+
+	void IncreasePlayerSize(float amount);
 };
 

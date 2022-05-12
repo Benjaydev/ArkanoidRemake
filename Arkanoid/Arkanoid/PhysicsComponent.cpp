@@ -63,6 +63,12 @@ void PhysicsComponent::UpdateTransform()
 	for (int i = 0; i < childrenPhysics.size(); i++) {
 		childrenPhysics[i]->UpdateTransform();
 	}
+
+
+	// Update collider position
+	if (collider != nullptr) {
+		collider->Translate(globalTransform.m8- lastpos.x,  globalTransform.m9- lastpos.y);
+	}
 	
 }
 
@@ -106,6 +112,16 @@ void PhysicsComponent::CalculateVelocity(float DeltaTime)
 
 void PhysicsComponent::Move(float DeltaTime)
 {
+	// If collider has a parent, apply the forces to the parent instead
+	if (parentPhysics != nullptr) {
+		parentPhysics->velocity->x += velocity->x;
+		parentPhysics->velocity->y += velocity->y;
+
+		velocity->x = 0;
+		velocity->y = 0;
+		return;
+	}
+
 
 	if (LockAxis.x && LockAxis.y) {
 		return;
@@ -131,10 +147,6 @@ void PhysicsComponent::Move(float DeltaTime)
 void PhysicsComponent::Translate(float x, float y) {
 	localTransform.m8 += x;
 	localTransform.m9 += y;
-	// Update collider position
-	if (collider != nullptr) {
-		collider->Translate(x, y);
-	}
 	
 
 	UpdateTransform();
@@ -232,21 +244,22 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 
 
 			if (collided) {
-				if (check->tag == "Ball" && (against->tag == "Player" || against->tag == "Brick")) {
+				if (check->tag == "Ball" && (against->tag == "Player" || against->tag == "LeftPlayerEnd" || against->tag == "RightPlayerEnd" || against->tag == "Brick")) {
 					result.otherTag = against->tag;
 
 					check->physics->velocity->x = result.OutVel.x / DeltaTime;
 					check->physics->velocity->y = result.OutVel.y / DeltaTime;
-
+					check->physics->Move(DeltaTime);
 
 					check->CollideEvent(result, against);
 
 				}
-				if (against->tag == "Ball" && (check->tag == "Player" || check->tag == "Brick")) {
+				if (against->tag == "Ball" && (check->tag == "Player" || check->tag == "LeftPlayerEnd" || check->tag == "RightPlayerEnd" || check->tag == "Brick")) {
 					result.otherTag = check->tag;
 
 					against->physics->velocity->x = result.OutVel.x / DeltaTime;
 					against->physics->velocity->y = result.OutVel.y / DeltaTime;
+					against->physics->Move(DeltaTime);
 
 					against->CollideEvent(result, check);
 				}

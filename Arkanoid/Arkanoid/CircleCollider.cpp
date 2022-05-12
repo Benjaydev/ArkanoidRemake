@@ -84,6 +84,7 @@ bool CircleCollider::Overlaps(Vector2 point)
 
 bool CircleCollider::Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result)
 {
+	Vector3 relVel = Vector3Subtract(thisVel, otherVel);
 	if (other->type == cType::Rectangle) {
 		RectangleCollider* rec = (RectangleCollider*)other;
 		Vector2 closest = rec->ClosestPoint({ center.x+thisVel.x, center.y + thisVel.y });
@@ -137,11 +138,24 @@ bool CircleCollider::Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel
 	}
 	else if (other->type == cType::Circle) {
 		CircleCollider* cir = (CircleCollider*)other;
-		Vector2 diff = Vector2Subtract(cir->center, center);
+		Vector2 diff = Vector2Subtract(cir->center, { center.x + relVel.x, center.y + relVel.y });
 		result.HitNormal = Vector2Normalize(diff);
 
+		float diffLength = Vector2Length(diff);
+		
 		float r = radius + cir->radius;
+
+		result.OutVel.x = result.HitNormal.x * diffLength;
+		result.OutVel.y = result.HitNormal.y * diffLength;
+
 		return Vector2DotProduct(diff, diff) <= (r * r);
+		if (Vector2DotProduct(diff, diff) <= (r * r)) {
+			
+
+			return true;
+		}
+
+		
 	}
 	
 }

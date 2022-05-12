@@ -23,7 +23,7 @@ Game::Game() {
     // Test sprite functionality
     
     
-
+    background = LoadTexture("Background.png");
    
    
     
@@ -35,11 +35,11 @@ Game::Game() {
     }
 
     player = new Player(GetScreenWidth()/2, GetScreenHeight() - 100);
-
+    player->IncreasePlayerSize(100);
     
-    Ball* ball = new Ball(500, 50);
-    Ball* ball1 = new Ball(600, 100);
-    Ball* ball2 = new Ball(400, 150);
+    Ball* ball = new Ball(100, 100);
+    //Ball* ball1 = new Ball(600, 100);
+    //* ball2 = new Ball(400, 150);
 
 
 
@@ -101,6 +101,9 @@ void Game::Draw()
     BeginDrawing();
 
     ClearBackground(RAYWHITE);
+
+    DrawTexture(background, 0, 0, GetColor(0x333333FF));
+
 
     DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 10, GetScreenHeight()-30, 20, BLUE);
 

@@ -10,35 +10,23 @@ Player::Player(float x, float y)
     centerSegment->LoadSprite((char*)"CenterSegment.png");
     centerSegment->sprite->SetScale(scale);
     
-    //centerSegmentRight->LoadSprite((char*)"CenterSegment.png");
-    //centerSegmentRight->sprite->SetScale(scale);
-   //centerSegmentRight->sprite->texture->width /= 2;
 
     leftEnd->LoadSprite((char*)"LeftEnd.png");
     leftEnd->sprite->SetScale(scale);
+    leftEnd->tag = "LeftPlayerEnd";
 
     rightEnd->LoadSprite((char*)"RightEnd.png");
     rightEnd->sprite->SetScale(scale);
+    rightEnd->tag = "RightPlayerEnd";
 
 
-    Vector2 playerPos = { physics->globalTransform.m8,physics->globalTransform.m9 };
 
-
-    physics->SetCollider(cType::Rectangle);
-    physics->FitColliderWH(centerSegment->sprite->GetWidth() + leftEnd->sprite->GetWidth() + rightEnd->sprite->GetWidth(), centerSegment->sprite->GetHeight(), playerPos);
-
-  
-    
     AddChild(centerSegment);
-    //AddChild(centerSegmentRight);
     AddChild(leftEnd);
     AddChild(rightEnd);
 
-    Vector2 offset = centerSegment->sprite->GetCentreOffset();
-
-    centerSegment->physics->SetPosition({ offset.x, offset.y});
-    leftEnd->physics->SetPosition({ -(centerSegment->sprite->GetWidth()), offset.y });
-    rightEnd->physics->SetPosition({ rightEnd->sprite->GetWidth(), offset.y });
+    
+    CalculateSpritesAndColliders();
 
 
     AddToGameWorld();
@@ -62,3 +50,39 @@ void Player::Update(float DeltaTime)
     Object::Update(DeltaTime);
 
 }
+
+
+void Player::IncreasePlayerSize(float amount)
+{
+    centerSegment->sprite->texture->width += amount;
+    CalculateSpritesAndColliders();
+
+}
+
+void Player::CalculateSpritesAndColliders()
+{
+    Vector2 playerPos = { physics->globalTransform.m8,physics->globalTransform.m9 };
+    physics->SetCollider(cType::Rectangle);
+    physics->FitColliderWH(centerSegment->sprite->GetWidth() + centerSegment->sprite->GetWidth() / 8, centerSegment->sprite->GetHeight(), playerPos);
+
+
+    Vector2 offset = centerSegment->sprite->GetCentreOffset();
+
+    Vector2 leftOffset = leftEnd->sprite->GetCentreOffset();
+    Vector2 rightOffset = rightEnd->sprite->GetCentreOffset();
+
+    centerSegment->physics->SetPosition({ offset.x, offset.y });
+    leftEnd->physics->SetPosition({ offset.x - leftEnd->sprite->GetWidth(), leftOffset.y });
+    rightEnd->physics->SetPosition({ offset.x + centerSegment->sprite->GetWidth(), rightOffset.y });
+
+
+    leftEnd->physics->SetCollider(cType::Circle);
+    leftEnd->physics->FitColliderWH(leftEnd->sprite->GetWidth(), 0, { leftEnd->physics->globalTransform.m8 + leftEnd->sprite->GetWidth() / 2 ,leftEnd->physics->globalTransform.m9 + leftEnd->sprite->GetHeight() / 2 });
+
+
+    rightEnd->physics->SetCollider(cType::Circle);
+    rightEnd->physics->FitColliderWH(rightEnd->sprite->GetWidth(), 0, { rightEnd->physics->globalTransform.m8 + rightEnd->sprite->GetWidth() / 2 ,rightEnd->physics->globalTransform.m9 + rightEnd->sprite->GetHeight() / 2 });
+
+
+}
+
