@@ -4,9 +4,12 @@ class Brick : public Object
 {
 public:
 	Brick(float x, float y);
-	~Brick();
+	virtual ~Brick();
+	
 
-	Object* brickSprite = new Object();
 
+	void DamageBrick();
+
+	void CollideEvent(Hit hit, Object* other) override;
 };
 

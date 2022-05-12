@@ -4,7 +4,7 @@ class Ball : public Object
 {
 public:
 	Ball(float x, float y);
-	~Ball();
+	virtual ~Ball();
 
 	Object* ballSprite = new Object();
 	Vector2 movementDirection = {1, 1};
@@ -17,7 +17,7 @@ public:
 
 	void ReturnBall(Hit hit);
 
-	void CollideEvent(Hit hit) override;
+	void CollideEvent(Hit hit, Object* other) override;
 
 	void CalculateDirection(float speed);
 };

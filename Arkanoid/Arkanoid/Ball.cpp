@@ -12,7 +12,7 @@ Ball::Ball(float x, float y)
 
     AddChild(ballSprite);
 
-    Vector2 ballPos = { physics->globalTransform->m8,physics->globalTransform->m9 };
+    Vector2 ballPos = { physics->globalTransform.m8,physics->globalTransform.m9 };
     physics->SetCollider(cType::Circle);
     physics->FitColliderWH(ballSprite->sprite->GetWidth()/2, ballSprite->sprite->GetHeight()/2, ballPos);
 
@@ -23,14 +23,14 @@ Ball::Ball(float x, float y)
     AddToGameWorld();
 
 
-    physics->moveSpeed = 500;
-    physics->maxSpeed = 500;
-    physics->deceleration = 1;
+    physics->moveSpeed = 600;
+    physics->maxSpeed = 600;
+    physics->deceleration = 0.01f;
 }
 
 Ball::~Ball()
 {
-    delete ballSprite;
+    ballSprite->isWaitingDestroy = true;
 }
 
 void Ball::Update(float DeltaTime)
@@ -48,18 +48,18 @@ void Ball::CalculateDirection(float speed)
 
 void Ball::ReflectBall(Hit hit)
 {
-    Vector2 normalDir = Vector2(movementDirection);
-    normalDir.x *= hit.HitNormal.x;
-    normalDir.y *= hit.HitNormal.y;
+    Vector2 refDir = Vector2(movementDirection);
+    refDir.x *= hit.HitNormal.x;
+    refDir.y *= hit.HitNormal.y;
     
-    normalDir.x *= 2;
-    normalDir.y *= 2;
+    refDir.x *= 2;
+    refDir.y *= 2;
 
-    normalDir.x *= hit.HitNormal.x;
-    normalDir.y *= hit.HitNormal.y;
+    refDir.x *= hit.HitNormal.x;
+    refDir.y *= hit.HitNormal.y;
 
 
-    movementDirection = Vector2Subtract(movementDirection, normalDir);
+    movementDirection = Vector2Subtract(movementDirection, refDir);
 
 }
 
@@ -71,16 +71,19 @@ void Ball::ReturnBall(Hit hit)
 }
 
 
-void Ball::CollideEvent(Hit hit)
+void Ball::CollideEvent(Hit hit, Object* other)
 {
     if (hit.otherTag == "Brick") {
         ReflectBall(hit);
         CalculateDirection(physics->maxSpeed);
+
+        other->CollideEvent(hit, this);
         return;
     }
     if (hit.otherTag == "Wall") {
         // If the ball hits bottom of screen
         if (hit.HitNormal.x == 0 && hit.HitNormal.y == -1) {
+            isWaitingDestroy = true;
             return;
         }
         ReflectBall(hit);
@@ -90,44 +93,54 @@ void Ball::CollideEvent(Hit hit)
     if (hit.otherTag == "Ball") {
         ReflectBall(hit);
         CalculateDirection(physics->maxSpeed);
-        return;
-    }
-    if ((hit.HitNormal.x != 0 && hit.HitNormal.y != -1)) {
+
         
-        ReflectBall(hit);
-        CalculateDirection(physics->maxSpeed*20);
         return;
     }
 
-    std::cout << hit.HitNormal.x << ", " << hit.HitNormal.y << std::endl;
+    hit.HitNormal.x = 0;
+    hit.HitNormal.y = -1;
 
-   
+
     float facePos = hit.percentDistanceAlongHitFace;
+
+
+    float speedMultiplier = 1;
 
     // If ball is moving left
     if (movementDirection.x < 0) {
         // If ball lands on right side of paddle
         if (facePos >= 0.5) {
+            // Get percentage in this half to calculate the speed multiplier the further out the ball hits
+            speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (1 - 0.5f)) / 100);
+            
+
             ReturnBall(hit);
         }
         // If ball lands on left side of paddle
         else {
+            speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (0 - 0.5f)) / 100);
+
             ReflectBall(hit);
         }
-        CalculateDirection(physics->maxSpeed);
+        std::cout << speedMultiplier << std::endl;
+        CalculateDirection(physics->maxSpeed*speedMultiplier);
         return;
     }
     // If ball is moving right
     else if (movementDirection.x > 0) {
         // If ball lands on left side of paddle
         if (facePos <= 0.5) {
+            speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (0 - 0.5f)) / 100);
             ReturnBall(hit);
         }
         // If ball lands on right side of paddle
         else {
+            speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (1 - 0.5f)) / 100);
             ReflectBall(hit);
         }
-        CalculateDirection(physics->maxSpeed);
+        std::cout << speedMultiplier << std::endl;
+        CalculateDirection(physics->maxSpeed * speedMultiplier);
         return;
     }
 

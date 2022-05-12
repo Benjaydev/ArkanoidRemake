@@ -119,16 +119,22 @@ bool RectangleCollider::Overlaps(Collider* other, Vector3 thisVel, Vector3 other
 			return true;
 		}
 
-		Vector3 relV = Vector3Negate(thisVel);
+		// Get the relative velocity between the two
+		Vector3 relV = Vector3Subtract(thisVel, otherVel);
 
 		float hitTime = 0.0f;
 		float outTime = 1.0f;
 		Vector2 overlapTime = Vector2Zero();
 
-		// X axis overlap
+		// X axis overlap going left
 		if (relV.x < 0)
 		{
-			if (rec->max.x < min.x) { return false; }
+			// No overlap
+			if (rec->max.x < min.x) { 
+				return false; 
+			}
+
+
 			if (rec->max.x > min.x) { 
 				outTime = fminf((min.x - rec->max.x) / relV.x, outTime);
 			}
@@ -139,9 +145,15 @@ bool RectangleCollider::Overlaps(Collider* other, Vector3 thisVel, Vector3 other
 				hitTime = fmaxf(overlapTime.x, hitTime);
 			}
 		}
+		// X axis overlap going right
 		else if (relV.x > 0)
 		{
-			if (rec->min.x > max.x) { return false; }
+			// No overlap
+			if (rec->min.x > max.x) { 
+				return false; 
+			}
+
+			
 			if (max.x > rec->min.x) {
 				outTime = fminf((max.x - rec->min.x) / relV.x, outTime);
 			}
@@ -192,13 +204,13 @@ bool RectangleCollider::Overlaps(Collider* other, Vector3 thisVel, Vector3 other
 		}
 
 
-		// Scale resulting velocity by normalized hit time
+		// Scale velocity by normalized hit time
 		result.OutVel = Vector3(relV);
 		result.OutVel.x *= -hitTime;
 		result.OutVel.y *= -hitTime;
 
 		result.HitNormal = Vector2();
-		// Hit normal is along axis with the highest overlap time
+		// Hit normal is on axis with the highest overlap time
 		if (overlapTime.x > overlapTime.y)
 		{
 			result.HitNormal = { relV.x >= 0 ? 1.0f : -1.0f, 0 };

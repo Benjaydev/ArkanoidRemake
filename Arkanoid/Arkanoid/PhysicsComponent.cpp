@@ -6,8 +6,8 @@ using namespace std;
 
 PhysicsComponent::PhysicsComponent()
 {
-	*localTransform = MatrixIdentity();
-	*globalTransform = MatrixIdentity();
+	localTransform = MatrixIdentity();
+	globalTransform = MatrixIdentity();
 }
 
 PhysicsComponent::~PhysicsComponent()
@@ -15,10 +15,9 @@ PhysicsComponent::~PhysicsComponent()
 	if (collider != nullptr) {
 		delete collider;
 	}
-	delete globalTransform;
-	delete localTransform;
 	delete velocity;
 	delete acceleration;
+	childrenPhysics = std::vector<PhysicsComponent*>();
 
 	
 }
@@ -49,11 +48,11 @@ void PhysicsComponent::Update(float DeltaTime)
 
 void PhysicsComponent::UpdateTransform()
 {
-	Vector2 lastpos = { globalTransform->m8, globalTransform->m9 };
+	Vector2 lastpos = { globalTransform.m8, globalTransform.m9 };
 
 	// Calculate global transform if this object has parent transform
 	if (parentPhysics != nullptr) {
-		*globalTransform = MatrixMultiply(*localTransform, *parentPhysics->globalTransform);
+		globalTransform = MatrixMultiply(localTransform, parentPhysics->globalTransform);
 	}
 	// Default to using local transform
 	else {
@@ -72,23 +71,23 @@ void PhysicsComponent::Accelerate(float direction)
 {
 	Vector3 facing;
 	
-	facing.x = localTransform->m0;
-	facing.y = localTransform->m1;
+	facing.x = localTransform.m0;
+	facing.y = localTransform.m1;
 	facing.z = 1;
 	facing = Vector3FloatMultiply(facing, moveSpeed * direction);
 
 	*acceleration = Vector3Add(*acceleration, facing);
 }
 
-void PhysicsComponent::Decelerate()
+void PhysicsComponent::Decelerate(float DeltaTime)
 {
-	*velocity = Vector3FloatMultiply(*velocity, deceleration);
+	*velocity = Vector3FloatMultiply(*velocity, 1-(deceleration * DeltaTime));
 }
 
 void PhysicsComponent::CalculateVelocity(float DeltaTime)
 {
 	*velocity = Vector3Add(*velocity, *acceleration);
-	Decelerate();
+	Decelerate(DeltaTime);
 
 
 	// Keep velocity within max speed
@@ -107,13 +106,31 @@ void PhysicsComponent::CalculateVelocity(float DeltaTime)
 
 void PhysicsComponent::Move(float DeltaTime)
 {
+
+	if (LockAxis.x && LockAxis.y) {
+		return;
+	}
+
+	velocity->x = fminf(velocity->x, maxSpeed);
+	velocity->y = fminf(velocity->y, maxSpeed);
+
+	if (LockAxis.x && !LockAxis.y) {
+		Translate(velocity->x * DeltaTime,0);
+		return;
+	}
+	if (!LockAxis.x && LockAxis.y) {
+		Translate(0, velocity->y * DeltaTime);
+		return;
+	}
+
+
 	Translate(velocity->x * DeltaTime, velocity->y * DeltaTime);
 }
 
 
 void PhysicsComponent::Translate(float x, float y) {
-	localTransform->m8 += x;
-	localTransform->m9 += y;
+	localTransform.m8 += x;
+	localTransform.m9 += y;
 	// Update collider position
 	if (collider != nullptr) {
 		collider->Translate(x, y);
@@ -131,27 +148,27 @@ void PhysicsComponent::Translate(Vector2 v)
 
 void PhysicsComponent::SetPosition(float x, float y)
 {
-	float diffx = x - localTransform->m8;
-	float diffy = y - localTransform->m9;
+	float diffx = x - localTransform.m8;
+	float diffy = y - localTransform.m9;
 	Translate(diffx, diffy);
 }
 
 void PhysicsComponent::SetPosition(Vector2 v)
 {
-	localTransform->m8 = v.x;
-	localTransform->m9 = v.y;
+	localTransform.m8 = v.x;
+	localTransform.m9 = v.y;
 	UpdateTransform();
 }
 
 void PhysicsComponent::SetRotation(float zRad)
 {
 	Matrix m = MatrixMultiply(MatrixIdentity(), MatrixRotateZ(zRad));
-	*localTransform = m;
+	localTransform = m;
 	UpdateTransform();
 }
 
 void PhysicsComponent::Rotate(float rad) {
-	*localTransform = MatrixMultiply(MatrixRotateZ(rad), *localTransform);
+	localTransform = MatrixMultiply(MatrixRotateZ(rad), localTransform);
 	UpdateTransform();
 }
 
@@ -191,7 +208,7 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 
 			if (check->tag == "Ball") {
 				wallResult.otherTag = "Wall";
-				check->CollideEvent(wallResult);
+				check->CollideEvent(wallResult, nullptr);
 			}
 		}
 
@@ -222,8 +239,7 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 					check->physics->velocity->y = result.OutVel.y / DeltaTime;
 
 
-					check->CollideEvent(result);
-					//check->physics->Move(DeltaTime);
+					check->CollideEvent(result, against);
 
 				}
 				if (against->tag == "Ball" && (check->tag == "Player" || check->tag == "Brick")) {
@@ -232,21 +248,19 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 					against->physics->velocity->x = result.OutVel.x / DeltaTime;
 					against->physics->velocity->y = result.OutVel.y / DeltaTime;
 
-					against->CollideEvent(result);
-					//against->physics->Move(DeltaTime);
+					against->CollideEvent(result, check);
 				}
 			
 				if (check->tag == "Ball" && against->tag == "Ball") {
 					result.otherTag = "Ball";
-					check->CollideEvent(result);
+					check->CollideEvent(result, against);
 
 					Hit newHit = Hit({ result.OutVel, Vector2Negate(result.HitNormal), result.percentDistanceAlongHitFace, result.otherTag });
-					against->CollideEvent(newHit);
+					against->CollideEvent(newHit, check);
 
 					//against->physics->Move(DeltaTime);
 				}
 
-				break;
 			}
 			
 			// Set colliding if has collided atleast once

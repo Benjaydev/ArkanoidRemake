@@ -26,6 +26,7 @@ Object::~Object()
 	for (int i = 0; i < children.size(); i++) {
 		children[i]->UnParent();
 	}
+	delete physics;
 
 	RemoveFromGameWorld();
 }
@@ -79,8 +80,12 @@ void Object::ParentTo(Object* p) {
 
 void Object::UnParent() {
 	
-	// Remove child from this object
-	parent->children.erase(std::remove(parent->children.begin(), parent->children.end(), this), parent->children.end());
+	// Contains child
+	if (std::find(children.begin(), children.end(), this) != children.end()) {
+		// Remove child from this object
+		parent->children.erase(std::remove(parent->children.begin(), parent->children.end(), this), parent->children.end());
+	}
+	
 
 	// Flag parent to update physics children list
 	parent->shouldReinstantiatePhysicsChildren = true;
@@ -141,9 +146,9 @@ void Object::Draw()
 
 	if (hasSprite) {
 		// Sprite Draw
-		float rotation = (float)atan2(physics->globalTransform->m1, physics->globalTransform->m0);
+		float rotation = (float)atan2(physics->globalTransform.m1, physics->globalTransform.m0);
 		if (!WindowShouldClose()) {
-			Vector2 position = { physics->globalTransform->m8, physics->globalTransform->m9 };
+			Vector2 position = { physics->globalTransform.m8, physics->globalTransform.m9 };
 
 			DrawTextureEx(*sprite->texture, position, rotation * RAD2DEG, 1, sprite->colour);
 

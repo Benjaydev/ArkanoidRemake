@@ -11,24 +11,24 @@ public:
 
 
 	Object();
-	~Object();
+	virtual ~Object();
 
 	// Flags
 	bool shouldReinstantiatePhysicsChildren = false;
 
-	int id;
+	int id = 0;
 	std::string tag = "";
 	bool hasSprite = false;
-	SpriteComponent* sprite;
+	SpriteComponent* sprite = nullptr;
 
-
-	Object* parent;
+	Object* parent = nullptr;
 	std::vector<Object*> children;
 
 	bool isWaitingDestroy = false;
 
 	void AddToGameWorld();
 	void RemoveFromGameWorld();
+
 	void DeleteChild(Object* child);
 	void AddChild(Object* child);
 	void RemoveChild(Object* child);
@@ -40,7 +40,7 @@ public:
 	virtual void OnUpdate(float DeltaTime);
 	virtual void Update(float DeltaTime);
 
-	virtual void CollideEvent(Hit hit){};
+	virtual void CollideEvent(Hit hit, Object* other){};
 
 	virtual void OnDraw();
 	virtual void Draw();

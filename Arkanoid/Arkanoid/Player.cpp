@@ -21,7 +21,7 @@ Player::Player(float x, float y)
     rightEnd->sprite->SetScale(scale);
 
 
-    Vector2 playerPos = { physics->globalTransform->m8,physics->globalTransform->m9 };
+    Vector2 playerPos = { physics->globalTransform.m8,physics->globalTransform.m9 };
 
 
     physics->SetCollider(cType::Rectangle);
@@ -45,11 +45,14 @@ Player::Player(float x, float y)
 
     physics->moveSpeed = 100;
     physics->maxSpeed = 600;
-    physics->deceleration = 0.99;
+    physics->deceleration = 5;
 }
 
 Player::~Player()
 {
+    centerSegment->isWaitingDestroy = true;
+    leftEnd->isWaitingDestroy = true;
+    rightEnd->isWaitingDestroy = true;
 }
 
 void Player::Update(float DeltaTime)

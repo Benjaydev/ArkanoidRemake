@@ -6,26 +6,30 @@ Brick::Brick(float x, float y)
 
 
     physics->SetPosition(x, y);
-    brickSprite->LoadSprite((char*)"Brick.png");
+    LoadSprite((char*)"Brick.png");
 
-    AddChild(brickSprite);
-
-    Vector2 brickPos = { physics->globalTransform->m8,physics->globalTransform->m9 };
+    Vector2 brickPos = { physics->globalTransform.m8 + sprite->GetWidth()/2,physics->globalTransform.m9 + sprite->GetHeight()/2 };
     physics->SetCollider(cType::Rectangle);
-    physics->FitColliderWH(brickSprite->sprite->GetWidth(), brickSprite->sprite->GetHeight(), brickPos);
-
-
-    Vector2 offset = brickSprite->sprite->GetCentreOffset();
-    brickSprite->physics->SetPosition(offset.x, offset.y);
-
+    physics->FitColliderWH(sprite->GetWidth(), sprite->GetHeight(), brickPos);
 
     AddToGameWorld();
 
-
+    sprite->colour = GetColor(0x00FFFFFF);
+    physics->LockAxis = {1, 1};
 
 }
 
 Brick::~Brick()
 {
-    delete brickSprite;
+}
+
+void Brick::DamageBrick()
+{
+    isWaitingDestroy = true;
+
+}
+
+void Brick::CollideEvent(Hit hit, Object* other)
+{
+    DamageBrick();
 }

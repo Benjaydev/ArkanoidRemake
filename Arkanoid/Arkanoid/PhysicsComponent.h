@@ -20,14 +20,17 @@ public:
 		return { velocity->x * DeltaTime, velocity->y * DeltaTime, velocity->z * DeltaTime };
 	}
 	Vector3* acceleration = new Vector3();
-	float deceleration = 0.99f;
+	float deceleration = 0.01f;
 
-	Matrix* localTransform = new Matrix();
-	Matrix* globalTransform = new Matrix();
-	PhysicsComponent* parentPhysics;
+	Matrix localTransform = Matrix();
+	Matrix globalTransform = Matrix();
+	PhysicsComponent* parentPhysics = nullptr;
 	std::vector<PhysicsComponent*> childrenPhysics;
 
-	Collider* collider;
+	Vector2 LockAxis = { 0, 0 };
+
+	Collider* collider = nullptr;
+
 	bool isColliding = false;
 
 	void SetCollider(cType type);
@@ -40,7 +43,7 @@ public:
 	void Translate(Vector2 v);
 
 	void Accelerate(float direction);
-	void Decelerate();
+	void Decelerate(float DeltaTime);
 	void CalculateVelocity(float DeltaTime);
 	void Move(float DeltaTime);
 

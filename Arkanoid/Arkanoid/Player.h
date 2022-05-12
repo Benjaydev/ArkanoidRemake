@@ -4,10 +4,9 @@ class Player : public Object
 {
 public:
 	Player(float x, float y);
-	~Player();
+	virtual ~Player();
 
 
-	Object* centerSegmentRight = new Object();
 	Object* centerSegment = new Object();
 	Object* rightEnd = new Object();
 	Object* leftEnd = new Object();
