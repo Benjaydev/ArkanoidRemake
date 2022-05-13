@@ -37,6 +37,9 @@ public:
 	void UnParent();
 
 
+	void UpdateChildPhysics();
+
+
 	virtual void OnUpdate(float DeltaTime);
 	virtual void Update(float DeltaTime);
 

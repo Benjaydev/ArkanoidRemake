@@ -1,8 +1,8 @@
 #pragma once
 #include "Ball.h"
-#include "Game.h"
 #include "raymath.h"
 #include "rlgl.h"
+#include "Game.h"
 using namespace std;
 
 Object::Object()
@@ -36,11 +36,18 @@ void Object::RemoveFromGameWorld() {
 }
 
 void Object::AddToGameWorld() {
+	// Remove if already added
+	RemoveFromGameWorld();
+
+	// Add to game
 	id = Game::AddObjectToGame(this);
 
 	// Add all children to game world
 	for (int i = 0; i < children.size(); i++) {
-		children[i]->AddToGameWorld();
+		if (children[i]->id == 0) {
+			children[i]->AddToGameWorld();
+		}
+		
 	}
 }
 
@@ -76,6 +83,7 @@ void Object::ParentTo(Object* p) {
 
 	// Flag parent to update physics children list
 	parent->shouldReinstantiatePhysicsChildren = true;
+	parent->UpdateChildPhysics();
 }
 
 void Object::UnParent() {
@@ -89,7 +97,7 @@ void Object::UnParent() {
 
 	// Flag parent to update physics children list
 	parent->shouldReinstantiatePhysicsChildren = true;
-
+	parent->UpdateChildPhysics();
 
 	// Unparent
 	parent = nullptr;
@@ -119,6 +127,11 @@ void Object::Update(float DeltaTime)
 	OnUpdate(DeltaTime);
 	physics->Update(DeltaTime);
 
+	UpdateChildPhysics();
+
+
+}
+void Object::UpdateChildPhysics() {
 	// If the physics needs to update children (Called when the children in this object change)
 	if (shouldReinstantiatePhysicsChildren) {
 		// Reset children physics list
@@ -129,11 +142,7 @@ void Object::Update(float DeltaTime)
 		}
 		shouldReinstantiatePhysicsChildren = false;
 	}
-	
-
-
 }
-
 
 
 void Object::OnDraw()

@@ -11,7 +11,8 @@ using namespace std;
 
 std::vector<Object*> Game::objects = std::vector<Object*>();
 int Game::lifetimeObjectCount = 0;
-bool Game::DebugActive = false;
+bool Game::DebugActive = true;
+bool Game::IsGamePaused = false;
 
 Game::Game() {
     // Initialization
@@ -21,92 +22,100 @@ Game::Game() {
 
     //SetTargetFPS(200);
 
-    // Test sprite functionality
-    
-    
-    background = LoadTexture("Background.png");
-   
-    Map map = Map();
-    
-    /*
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 13; j++) {
-
-            int index = (i * 13) + j;
-            map.AddBrick(new Brick(j * 66, i * 33, 1, 0x00FFFFFF), index);
-
-        }
-
-    }
-    map.mapName = "Test Level";
-
-    map.SaveMap();*/
-
-    std::cout << map.GetMapCount() << std::endl;
-    std::cout << map.GetMapName(0) << std::endl;
-    map.LoadMap(0);
-    map.GenerateMap();
-
-
-    player = new Player(GetScreenWidth()/2, GetScreenHeight() - 100);
-    //player->IncreasePlayerSize(100);
-    
-    Ball* ball = new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9 - 50);
-
-
-
-
-
+    StartGame(0);
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose())    
     {
         DeltaTime = timer->RecordNewTime();
-
         Update(DeltaTime);
 
-        PhysicsComponent::GlobalCollisionCheck(DeltaTime);
+        
+       
 
         Draw();
     }
 
     delete timer;
+    delete pauseMenu;
+    ResetGameObjects();
     
-    for (int i = 0; i < objects.size(); i++) {
-        delete objects[i];
-    }
 
     // De-Initialization 
     CloseWindow();
 }
+void Game::ResetGameObjects() {
+    // Delete all objects
+    for (int i = 0; i < objects.size(); i++) {
+        delete objects[i];
+    }
+}
+void Game::StartGame(int index) {
+    background = LoadTexture("Background.png");
 
+    Map map = Map();
+
+    //map.LoadMap(index);
+    //map.GenerateMap();
+    
+    player = new Player(GetScreenWidth() / 2, GetScreenHeight() - 100);
+    //player->IncreasePlayerSize(100);
+
+    Ball* ball = new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9 - 50);
+
+
+}
 
 void Game::Update(float DeltaTime) {
 
-    // Update objects in world
-    for (int i = 0; i < objects.size(); i++) {
-        objects[i]->Update(DeltaTime);
-        if (objects[i]->isWaitingDestroy) {
-            delete objects[i];
+
+    if (IsKeyPressed(KEY_Q)) {
+        IsGamePaused = !IsGamePaused;
+
+        delete pauseMenu;
+        pauseMenu = nullptr;
+        if (IsGamePaused) {
+            pauseMenu = new PauseMenu(GetScreenWidth() / 2, GetScreenHeight() / 2);
         }
     }
-    /*for (int i : toDestroy) {
-        delete objects[i];
-    }*/
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        for (int i = 0; i < objects.size(); i++) {
+            if (objects[i]->physics->collider == nullptr || objects[i]->tag != "UI") {
+                continue;
+            }
+
+            if (objects[i]->physics->collider->Overlaps(GetMousePosition())) {
+                ((UIButton*)objects[i])->OnClick();
+            }
+        
+        }
+    }
 
 
+    if (!IsGamePaused) {
+        if (IsKeyDown(KEY_A))
+        {
+            player->physics->Accelerate(-1);
+        }
+        if (IsKeyDown(KEY_D))
+        {
+            player->physics->Accelerate(1);
+        }
+        if (IsKeyPressed(KEY_SPACE)) {
+            Ball* ball = new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9 - 50);
+        }
 
-    if (IsKeyDown(KEY_A))
-    {
-        player->physics->Accelerate(-1);
+        PhysicsComponent::GlobalCollisionCheck(DeltaTime);
+        // Update objects in world
+        for (int i = 0; i < objects.size(); i++) {
+            objects[i]->Update(DeltaTime);
+            if (objects[i]->isWaitingDestroy) {
+                delete objects[i];
+            }
+        }
     }
-    if (IsKeyDown(KEY_D))
-    {
-        player->physics->Accelerate(1);
-    }
-    if (IsKeyPressed(KEY_SPACE)) {
-        Ball* ball = new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9-50);
-    }
+
 
 
 }

@@ -160,6 +160,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RayCollider.cpp" />
@@ -167,6 +168,10 @@
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="TestObject.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="UIObject.cpp" />
+    <ClCompile Include="UIPanel.cpp" />
+    <ClCompile Include="UIText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
@@ -176,11 +181,16 @@
     <ClInclude Include="Hit.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIObject.h" />
+    <ClInclude Include="UIPanel.h" />
+    <ClInclude Include="UIText.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Background.png">
@@ -205,6 +215,9 @@
       <DeploymentContent>true</DeploymentContent>
     </Image>
     <Image Include="TestImage.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="WhitePixel.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
   </ItemGroup>

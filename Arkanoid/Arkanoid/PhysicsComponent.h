@@ -32,6 +32,7 @@ public:
 	Collider* collider = nullptr;
 
 	bool isColliding = false;
+	bool hasPhysicsCheck = true;
 
 	void SetCollider(cType type);
 	void FitColliderWH(float width, float height, Vector2 pos);

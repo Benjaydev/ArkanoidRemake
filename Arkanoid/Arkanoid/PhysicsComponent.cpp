@@ -208,7 +208,7 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 	}
 	for (int i = 0; i < Game::objects.size(); i++) {
 		Object* check = Game::objects[i];
-		if (check->physics->collider == nullptr) {
+		if (check->physics->collider == nullptr || !check->physics->hasPhysicsCheck) {
 			check->physics->Move(DeltaTime);
 			continue;
 		}
@@ -227,8 +227,8 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 		for (int j = i+1; j < Game::objects.size(); j++) {
 			Object* against = Game::objects[j];
 
-			// Don't check collision if object is child of the other object, if other objecct is null, or if both objects have no velocity
-			if ( check == against || against->parent == check || against->physics->collider == nullptr || ((check->physics->velocity->x == 0.0f && check->physics->velocity->y == 0.0f) && (against->physics->velocity->x == 0.0f && against->physics->velocity->y == 0.0f))) {
+			// Don't check collision if object does not have physics checks, is child of the other object, if object is null, or if both objects have no velocity
+			if (!against->physics->hasPhysicsCheck && against->parent == check || against->physics->collider == nullptr || ((check->physics->velocity->x == 0.0f && check->physics->velocity->y == 0.0f) && (against->physics->velocity->x == 0.0f && against->physics->velocity->y == 0.0f))) {
 				continue;
 			}
 

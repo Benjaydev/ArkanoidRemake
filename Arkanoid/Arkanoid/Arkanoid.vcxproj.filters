@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{e59cba81-c134-4652-9994-f51d86c62eea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{e687477a-7b26-40d2-a64a-3075c1125c3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -69,6 +72,21 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIObject.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIPanel.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -107,6 +125,21 @@
     <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UIObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="TestImage.png">
@@ -131,6 +164,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="WhitePixel.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
