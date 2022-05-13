@@ -76,8 +76,6 @@ bool Collider::OverlapsScreen(Vector3 velocity, Hit& result)
 			result.HitNormal.x = -1;
 			
 			result.OutVel.x =  (velocity.x + (screen.x - (cir->center.x + velocity.x))) - (normVelocity.x * cir->radius);
-
-			std::cout << velocity.x << ", " << result.OutVel.x << std::endl;
 		}
 		if ((cir->center.y + velocity.y) + normVelocity.y * cir->radius > screen.y) {
 			result.HitNormal.y = -1;

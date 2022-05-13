@@ -131,7 +131,6 @@ void Ball::CollideEvent(Hit hit, Object* other)
 
             ReflectBall(hit);
         }
-        std::cout << speedMultiplier << std::endl;
         CalculateDirection(physics->maxSpeed*speedMultiplier);
         return;
     }
@@ -147,7 +146,6 @@ void Ball::CollideEvent(Hit hit, Object* other)
             speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (1 - 0.5f)) / 100);
             ReflectBall(hit);
         }
-        std::cout << speedMultiplier << std::endl;
         CalculateDirection(physics->maxSpeed * speedMultiplier);
         return;
     }

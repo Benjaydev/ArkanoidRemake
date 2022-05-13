@@ -6,6 +6,7 @@
 #include "SpriteComponent.h"
 #include "Ball.h"
 #include "Brick.h"
+#include "Map.h"
 using namespace std;
 
 std::vector<Object*> Game::objects = std::vector<Object*>();
@@ -25,21 +26,32 @@ Game::Game() {
     
     background = LoadTexture("Background.png");
    
-   
+    Map map = Map();
     
+    /*
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 13; j++) {
-            Brick* brick = new Brick(j * 66, i * 33);
+
+            int index = (i * 13) + j;
+            map.AddBrick(new Brick(j * 66, i * 33, 1, 0x00FFFFFF), index);
+
         }
-        
+
     }
+    map.mapName = "Test Level";
+
+    map.SaveMap();*/
+
+    std::cout << map.GetMapCount() << std::endl;
+    std::cout << map.GetMapName(0) << std::endl;
+    map.LoadMap(0);
+    map.GenerateMap();
+
 
     player = new Player(GetScreenWidth()/2, GetScreenHeight() - 100);
-    player->IncreasePlayerSize(100);
+    //player->IncreasePlayerSize(100);
     
-    Ball* ball = new Ball(100, 100);
-    //Ball* ball1 = new Ball(600, 100);
-    //* ball2 = new Ball(400, 150);
+    Ball* ball = new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9 - 50);
 
 
 
@@ -50,7 +62,6 @@ Game::Game() {
     while (!WindowShouldClose())    
     {
         DeltaTime = timer->RecordNewTime();
-        
 
         Update(DeltaTime);
 
@@ -93,6 +104,11 @@ void Game::Update(float DeltaTime) {
     {
         player->physics->Accelerate(1);
     }
+    if (IsKeyPressed(KEY_SPACE)) {
+        Ball* ball = new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9-50);
+    }
+
+
 }
 
 void Game::Draw()

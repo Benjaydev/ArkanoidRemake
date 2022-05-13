@@ -7,7 +7,7 @@ public:
 	virtual ~Ball();
 
 	Object* ballSprite = new Object();
-	Vector2 movementDirection = {1, 1};
+	Vector2 movementDirection = {1, -1};
 
 
 	void Update(float DeltaTime) override;

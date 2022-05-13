@@ -1,6 +1,6 @@
 #include "Brick.h"
 
-Brick::Brick(float x, float y)
+Brick::Brick(float x, float y, int Health, int colour)
 {
     tag = "Brick";
 
@@ -14,7 +14,12 @@ Brick::Brick(float x, float y)
 
     AddToGameWorld();
 
-    sprite->colour = GetColor(0x00FFFFFF);
+    maxHealth = Health;
+    health = Health;
+
+    
+
+    sprite->colour = GetColor(colour); 
     physics->LockAxis = {1, 1};
 
 }
@@ -25,7 +30,19 @@ Brick::~Brick()
 
 void Brick::DamageBrick()
 {
-    isWaitingDestroy = true;
+    health--;
+
+    std::cout << health << std::endl;
+
+    if (health <= 0) {
+        isWaitingDestroy = true;
+        return;
+    }
+
+    // Change opacity based on health
+    sprite->colour.a = 255 * ((float)health / (float)maxHealth);
+    
+   
 
 }
 
