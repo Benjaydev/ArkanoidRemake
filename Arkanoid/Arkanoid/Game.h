@@ -19,6 +19,7 @@ public:
 	void StartGame(int mapIndex);
 	void ResetGameObjects();
 
+	void TogglePauseMenu();
 
 	Timer* timer = new Timer();
 	float DeltaTime = 0;
@@ -42,18 +43,12 @@ public:
 		return lifetimeObjectCount;
 	}
 
+	static void TogglePause() { IsGamePaused = !IsGamePaused; }
+
 	static bool DebugActive;
 
 	static bool IsGamePaused;
-	static void TogglePause() {
-		IsGamePaused = !IsGamePaused;
 
-		/*delete pauseMenu;
-		pauseMenu = nullptr;
-		if (IsGamePaused) {
-			pauseMenu = new PauseMenu(GetScreenWidth() / 2, GetScreenHeight() / 2);
-		}*/
-	}
 
 
 

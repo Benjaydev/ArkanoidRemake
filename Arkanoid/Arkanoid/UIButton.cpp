@@ -1,6 +1,6 @@
 #include "UIButton.h"
 
-UIButton::UIButton(float x, float y, float width, float height, int colour, UIText* text, void (*callMethod)())
+UIButton::UIButton(float x, float y, float width, float height, int colour, UIText* text)
 {
 
 	physics->SetPosition(x, y);
@@ -22,8 +22,6 @@ UIButton::UIButton(float x, float y, float width, float height, int colour, UITe
 	buttonText->AddToGameWorld();
 
 	AddToGameWorld();
-
-	callFunction = callMethod;
 }
 
 UIButton::~UIButton()
@@ -33,7 +31,11 @@ UIButton::~UIButton()
 
 }
 
+
 void UIButton::OnClick()
 {
+	
 	callFunction();
 }
+
+

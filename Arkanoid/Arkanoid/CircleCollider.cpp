@@ -149,11 +149,6 @@ bool CircleCollider::Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel
 		result.OutVel.y = result.HitNormal.y * diffLength;
 
 		return Vector2DotProduct(diff, diff) <= (r * r);
-		if (Vector2DotProduct(diff, diff) <= (r * r)) {
-			
-
-			return true;
-		}
 
 		
 	}

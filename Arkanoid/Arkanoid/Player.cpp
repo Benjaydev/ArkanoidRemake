@@ -77,11 +77,11 @@ void Player::CalculateSpritesAndColliders()
 
 
     leftEnd->physics->SetCollider(cType::Circle);
-    leftEnd->physics->FitColliderWH(leftEnd->sprite->GetWidth(), 0, { leftEnd->physics->globalTransform.m8 + leftEnd->sprite->GetWidth() / 2 ,leftEnd->physics->globalTransform.m9 + leftEnd->sprite->GetHeight() / 2 });
+    leftEnd->physics->FitColliderWH(leftEnd->sprite->GetWidth(), 0, { leftEnd->physics->globalTransform.m8 + leftEnd->sprite->GetWidth() / 1.5f ,leftEnd->physics->globalTransform.m9 + leftEnd->sprite->GetHeight() / 2 });
 
 
     rightEnd->physics->SetCollider(cType::Circle);
-    rightEnd->physics->FitColliderWH(rightEnd->sprite->GetWidth(), 0, { rightEnd->physics->globalTransform.m8 + rightEnd->sprite->GetWidth() / 2 ,rightEnd->physics->globalTransform.m9 + rightEnd->sprite->GetHeight() / 2 });
+    rightEnd->physics->FitColliderWH(rightEnd->sprite->GetWidth(), 0, { rightEnd->physics->globalTransform.m8 + rightEnd->sprite->GetWidth() / 2.5f ,rightEnd->physics->globalTransform.m9 + rightEnd->sprite->GetHeight() / 2 });
 
 
 }

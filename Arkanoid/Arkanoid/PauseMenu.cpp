@@ -19,8 +19,7 @@ PauseMenu::PauseMenu(float x, float y)
 
 	
 	// Add resume button
-	void (*callFunction)() = &Game::TogglePause;
-	resumeButton = new UIButton(0, 0, 200, 100, 0x585858FF, new UIText(0, 0, "Resume", 16, 0xFFFFFFFF), callFunction);
+	resumeButton = new UIButton(0, 0, 200, 100, 0x585858FF, new UIText(0, 0, "Resume", 16, 0xFFFFFFFF));
 	AddChild(resumeButton);
 	resumeButton->physics->SetPosition(0, -100);
 

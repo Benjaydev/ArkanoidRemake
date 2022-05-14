@@ -7,7 +7,7 @@ Ball::Ball(float x, float y)
 
 
     physics->SetPosition(x, y);
-    ballSprite ->LoadSprite((char*)"Ball2.png");
+    ballSprite->LoadSprite((char*)"Ball2.png");
     ballSprite->sprite->SetScale(1.5);
 
     AddChild(ballSprite);
@@ -100,15 +100,6 @@ void Ball::CollideEvent(Hit hit, Object* other)
         
         return;
     }
-
-
-
-
-    // Else must be the main paddle, so always have normal upwards
-
-    //hit.HitNormal.x = 0;
-    //hit.HitNormal.y = -1;
-
 
     float facePos = hit.percentDistanceAlongHitFace;
 
