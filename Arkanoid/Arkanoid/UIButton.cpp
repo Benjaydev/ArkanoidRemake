@@ -1,12 +1,14 @@
 #include "UIButton.h"
 
-UIButton::UIButton(float x, float y, float width, float height, int colour, UIText* text)
+UIButton::UIButton(float x, float y, float width, float height, int colour, int hColour, UIText* text)
 {
 
 	physics->SetPosition(x, y);
 	
 
 	buttonSprite = new UIPanel(x, y, width, height, colour);
+	defaultColour = colour;
+	hoverColour = hColour;
 	AddChild(buttonSprite);
 	Vector2 offset = buttonSprite->sprite->GetCentreOffset();
 	buttonSprite->physics->SetPosition(offset.x, offset.y);
@@ -31,10 +33,17 @@ UIButton::~UIButton()
 
 }
 
+void UIButton::Update(float DeltaTime) {
+	buttonSprite->sprite->colour = GetColor(defaultColour);
+}
+
+void UIButton::OnHover()
+{
+	buttonSprite->sprite->colour = GetColor(hoverColour);
+}
 
 void UIButton::OnClick()
 {
-	
 	callFunction();
 }
 

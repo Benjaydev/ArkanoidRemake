@@ -1,4 +1,6 @@
 #include "Brick.h"
+SpriteComponent* Brick::BrickReference;
+
 
 Brick::Brick(float x, float y, int Health, int colour)
 {
@@ -6,7 +8,14 @@ Brick::Brick(float x, float y, int Health, int colour)
 
 
     physics->SetPosition(x, y);
-    LoadSprite((char*)"Brick.png");
+    if (BrickReference == nullptr) {
+        LoadSprite((char*)"Brick.png");
+        BrickReference = sprite;
+    }
+    else {
+        CopySpriteByReference(BrickReference);
+    }
+    
 
     Vector2 brickPos = { physics->globalTransform.m8 + sprite->GetWidth()/2,physics->globalTransform.m9 + sprite->GetHeight()/2 };
     physics->SetCollider(cType::Rectangle);

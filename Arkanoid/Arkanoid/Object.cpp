@@ -11,7 +11,7 @@ Object::Object()
 
 Object::~Object()
 {
-	if (sprite != nullptr) {
+	if (sprite != nullptr && !usesReferencedSprite) {
 		delete sprite;
 	}
 	
@@ -113,6 +113,16 @@ void Object::LoadSprite(char* filename) {
 	sprite->Load(filename);
 	hasSprite = true;
 	
+}
+
+void Object::CopySpriteByReference(SpriteComponent* s)
+{
+	sprite = new SpriteComponent();
+	sprite->texture = s->texture;
+	sprite->defaultWidth = s->defaultWidth;
+	sprite->defaultHeight = s->defaultHeight;
+	hasSprite = true;
+	usesReferencedSprite = true;
 }
 
 

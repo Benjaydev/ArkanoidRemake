@@ -13,5 +13,8 @@ public:
 	void DamageBrick();
 
 	void CollideEvent(Hit hit, Object* other) override;
+
+	static SpriteComponent* BrickReference;
+
 };
 

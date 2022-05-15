@@ -19,6 +19,7 @@ public:
 	int id = 0;
 	std::string tag = "";
 	bool hasSprite = false;
+	bool usesReferencedSprite = false;
 	SpriteComponent* sprite = nullptr;
 
 	Object* parent = nullptr;
@@ -49,6 +50,7 @@ public:
 	virtual void Draw();
 
 	void LoadSprite(char* filename);
+	void CopySpriteByReference(SpriteComponent* s);
 
 
 	PhysicsComponent* physics = new PhysicsComponent();

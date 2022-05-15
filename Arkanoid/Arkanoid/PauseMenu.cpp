@@ -6,7 +6,7 @@ PauseMenu::PauseMenu(float x, float y)
 	physics->SetPosition(x, y);
 
 	// Create main back panel for all elements
-	mainPanel = new UIPanel(0, 0, 500, 600, 0xEEEEEE88);
+	mainPanel = new UIPanel(0, 0, 500, 600, 0xEEEEEECC);
 	AddChild(mainPanel);
 	Vector2 panelOffset = mainPanel->sprite->GetCentreOffset();
 	mainPanel->physics->SetPosition(panelOffset.x, panelOffset.y);
@@ -19,7 +19,7 @@ PauseMenu::PauseMenu(float x, float y)
 
 	
 	// Add resume button
-	resumeButton = new UIButton(0, 0, 200, 100, 0x585858FF, new UIText(0, 0, "Resume", 16, 0xFFFFFFFF));
+	resumeButton = new UIButton(0, 0, 200, 100, 0x585858FF, ColorToInt(BLUE), new UIText(0, 0, "Resume", 16, 0xFFFFFFFF));
 	AddChild(resumeButton);
 	resumeButton->physics->SetPosition(0, -100);
 

@@ -46,19 +46,25 @@ Game::Game() {
     // De-Initialization 
     CloseWindow();
 }
+
+
 void Game::ResetGameObjects() {
     // Delete all objects
     for (int i = 0; i < objects.size(); i++) {
         delete objects[i];
     }
 }
+
+
+
+
 void Game::StartGame(int index) {
     background = LoadTexture("Background.png");
 
     Map map = Map();
 
-    map.LoadMap(index);
-    map.GenerateMap();
+    //map.LoadMap(index);
+    //map.GenerateMap();
     
     player = new Player(GetScreenWidth() / 2, GetScreenHeight() - 100);
 
@@ -81,36 +87,33 @@ void Game::TogglePauseMenu() {
 
 
 void Game::Update(float DeltaTime) {
-
-
-    if (IsKeyPressed(KEY_Q)) {
-        TogglePauseMenu();
-    }
-
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        for (int i = 0; i < objects.size(); i++) {
-            if (objects[i]->physics->collider == nullptr || objects[i]->tag != "UI") {
-                continue;
-            }
-
-            if (objects[i]->physics->collider->Overlaps(GetMousePosition())) {
-                ((UIButton*)objects[i])->OnClick();
-            }
-
+    
+    // Update objects in world
+    for (int i = 0; i < objects.size(); i++) {
+        objects[i]->Update(DeltaTime);
+        if (objects[i]->isWaitingDestroy) {
+            delete objects[i];
+            continue;
         }
-    }
 
+        if (objects[i]->tag == "UI" && objects[i]->physics->collider != nullptr) {
+            if (objects[i]->physics->collider->Overlaps(GetMousePosition())) {
+
+                ((UIButton*)objects[i])->OnHover();
+                // Button Click
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    ((UIButton*)objects[i])->OnClick();
+                }
+            }
+        }
+        
+
+    }
     
 
     if (!IsGamePaused) {
 
-        // Update objects in world
-        for (int i = 0; i < objects.size(); i++) {
-            objects[i]->Update(DeltaTime);
-            if (objects[i]->isWaitingDestroy) {
-                delete objects[i];
-            }
-        }
+        
 
         PhysicsComponent::GlobalCollisionCheck(DeltaTime);
 
@@ -129,10 +132,11 @@ void Game::Update(float DeltaTime) {
     }
 
 
+    if (IsKeyPressed(KEY_Q)) {
+        TogglePauseMenu();
+    }
 
-   
-
-
+  
 }
 
 void Game::Draw()
@@ -146,6 +150,7 @@ void Game::Draw()
 
 
     DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 10, GetScreenHeight()-30, 20, BLUE);
+    DrawText("Pause: Q", GetScreenWidth() - MeasureText("Pause: Q", 20)-10, GetScreenHeight() - 30, 20, BLUE);
 
     // Draw each object that has a sprite
     for (int i = 0; i < objects.size(); i++) {

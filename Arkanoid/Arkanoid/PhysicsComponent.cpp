@@ -106,7 +106,11 @@ void PhysicsComponent::CalculateVelocity(float DeltaTime)
 		// Set velocity to the speed
 		*velocity = Vector3FloatMultiply(norm, speed);
 	}
-	acceleration = new Vector3();
+	
+	// Reset the acceleration
+	acceleration->x = 0;
+	acceleration->y = 0;
+	acceleration->z = 0;
 
 }
 
