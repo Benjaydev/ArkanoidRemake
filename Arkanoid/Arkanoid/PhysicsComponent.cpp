@@ -16,10 +16,13 @@ PhysicsComponent::~PhysicsComponent()
 		delete collider;
 	}
 	delete velocity;
+	velocity = nullptr;
 	delete acceleration;
-	childrenPhysics = std::vector<PhysicsComponent*>();
+	acceleration = nullptr;
 
-	
+	delete parentPhysics;
+
+	childrenPhysics.clear();
 }
 
 void PhysicsComponent::SetCollider(cType type)
@@ -118,12 +121,14 @@ void PhysicsComponent::Move(float DeltaTime)
 {
 	// If collider has a parent, apply the forces to the parent instead
 	if (parentPhysics != nullptr) {
-		parentPhysics->velocity->x += velocity->x;
-		parentPhysics->velocity->y += velocity->y;
+		if (parentPhysics->velocity != nullptr) {
+			parentPhysics->velocity->x += velocity->x;
+			parentPhysics->velocity->y += velocity->y;
 
-		velocity->x = 0;
-		velocity->y = 0;
-		return;
+			velocity->x = 0;
+			velocity->y = 0;
+			return;
+		}
 	}
 
 

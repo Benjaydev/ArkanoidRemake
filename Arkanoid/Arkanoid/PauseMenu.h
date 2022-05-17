@@ -14,5 +14,6 @@ public:
 	UIText* headerText;
 
 	UIButton* resumeButton;
+	UIButton* mainmenuButton;
 
 };

@@ -15,7 +15,7 @@ UIButton::UIButton(float x, float y, float width, float height, int colour, int 
 
 	physics->SetCollider(cType::Rectangle);
 	physics->FitColliderWH(buttonSprite->sprite->GetWidth(), buttonSprite->sprite->GetHeight(), {x,y});
-
+	
 	buttonText = text;
 
 	Vector2 textOffset = text->GetCentreOffset();
@@ -35,6 +35,15 @@ UIButton::~UIButton()
 
 void UIButton::Update(float DeltaTime) {
 	buttonSprite->sprite->colour = GetColor(defaultColour);
+
+	if (physics->collider->Overlaps(GetMousePosition())) {
+
+		OnHover();
+		// Button Click
+		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+			OnClick();
+		}
+	}
 }
 
 void UIButton::OnHover()
@@ -44,7 +53,10 @@ void UIButton::OnHover()
 
 void UIButton::OnClick()
 {
-	callFunction();
+	if (callFunction != nullptr) {
+		callFunction();
+	}
+	
 }
 
 

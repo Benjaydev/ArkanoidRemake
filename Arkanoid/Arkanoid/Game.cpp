@@ -24,7 +24,8 @@ Game::Game() {
 
     //SetTargetFPS(30);
 
-    StartGame(0);
+    StartMainMenu();
+   //StartGame(0);
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose())    
@@ -39,7 +40,6 @@ Game::Game() {
     }
 
     delete timer;
-    delete pauseMenu;
     ResetGameObjects();
     
 
@@ -49,22 +49,70 @@ Game::Game() {
 
 
 void Game::ResetGameObjects() {
+
+    if (mainMenu != nullptr) {
+        delete mainMenu;
+        mainMenu = nullptr;
+    }
+    if (pauseMenu != nullptr) {
+        delete pauseMenu;
+        pauseMenu = nullptr;
+    }
+
     // Delete all objects
     for (int i = 0; i < objects.size(); i++) {
-        delete objects[i];
+        storeDestroy.push_back(std::bind(&Object::DeleteSelf, objects[i]));
     }
+
+    DestroyStoredAwaiting();
+
+    
+}
+void Game::DestroyStoredAwaiting()
+{
+    for (int del = 0; del < storeDestroy.size(); del++) {
+        storeDestroy[del]();
+    }
+    storeDestroy.clear();
+    storeDestroy.shrink_to_fit();
+
+    objects.shrink_to_fit();
 }
 
 
 
 
+void Game::StartMainMenu()
+{
+    ResetGameObjects();
+    IsGamePaused = true;
+
+    mainMenu = new MainMenu();
+    mainMenu->startGameButton->AssignCallMethod(std::bind(&Game::StartGame, this, 0));
+    mainMenu->levelEditButton->AssignCallMethod(std::bind(&Game::StartLevelEditor, this));
+}
+
+void Game::StartLevelEditor()
+{
+    ResetGameObjects();
+    IsGamePaused = true;
+
+    levelEditor = new LevelEditor();
+
+
+}
+
+
+
 void Game::StartGame(int index) {
-    background = LoadTexture("Background.png");
+    IsGamePaused = false;
+    ResetGameObjects();
+    gameBackground = LoadTexture("Background.png");
 
     Map map = Map();
 
-    //map.LoadMap(index);
-    //map.GenerateMap();
+    map.LoadMap(index);
+    map.GenerateMap();
     
     player = new Player(GetScreenWidth() / 2, GetScreenHeight() - 100);
 
@@ -76,15 +124,18 @@ void Game::StartGame(int index) {
 void Game::TogglePauseMenu() {
     IsGamePaused = !IsGamePaused;
 
-    delete pauseMenu;
-    pauseMenu = nullptr;
+    // PROBLEM
+    if (pauseMenu != nullptr) {
+        delete pauseMenu;
+        pauseMenu = nullptr;
+   }
     if (IsGamePaused) {
         pauseMenu = new PauseMenu(GetScreenWidth() / 2, GetScreenHeight() / 2);
 
         pauseMenu->resumeButton->AssignCallMethod(std::bind(&Game::TogglePauseMenu, this));
+        pauseMenu->mainmenuButton->AssignCallMethod(std::bind(&Game::StartMainMenu, this));
     }
 }
-
 
 void Game::Update(float DeltaTime) {
     
@@ -92,29 +143,15 @@ void Game::Update(float DeltaTime) {
     for (int i = 0; i < objects.size(); i++) {
         objects[i]->Update(DeltaTime);
         if (objects[i]->isWaitingDestroy) {
-            delete objects[i];
+            storeDestroy.push_back(std::bind(&Object::DeleteSelf, objects[i]));
             continue;
         }
-
-        if (objects[i]->tag == "UI" && objects[i]->physics->collider != nullptr) {
-            if (objects[i]->physics->collider->Overlaps(GetMousePosition())) {
-
-                ((UIButton*)objects[i])->OnHover();
-                // Button Click
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    ((UIButton*)objects[i])->OnClick();
-                }
-            }
-        }
-        
-
     }
+    DestroyStoredAwaiting();
     
 
+
     if (!IsGamePaused) {
-
-        
-
         PhysicsComponent::GlobalCollisionCheck(DeltaTime);
 
         if (IsKeyDown(KEY_A))
@@ -138,15 +175,14 @@ void Game::Update(float DeltaTime) {
 
   
 }
-
 void Game::Draw()
 {
     // Draw
     BeginDrawing();
 
     ClearBackground(RAYWHITE);
-
-    DrawTexture(background, 0, 0, GetColor(0x333333FF));
+    
+    DrawTexture(gameBackground, 0, 0, GetColor(0x333333FF));
 
 
     DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 10, GetScreenHeight()-30, 20, BLUE);

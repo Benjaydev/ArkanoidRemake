@@ -29,6 +29,8 @@ public:
 
 	void AddToGameWorld();
 	void RemoveFromGameWorld();
+	void DeleteSelf();
+
 
 	void DeleteChild(Object* child);
 	void AddChild(Object* child);

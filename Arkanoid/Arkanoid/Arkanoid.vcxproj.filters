@@ -22,6 +22,21 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{e687477a-7b26-40d2-a64a-3075c1125c3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UI\Menu">
+      <UniqueIdentifier>{7f818856-f8fb-4950-b19e-60c904c24ffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{e8044a71-3494-4ff0-85de-d208c95198d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{cddd04a6-7617-4791-a56a-f3db54fe5431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{bf18b101-8e8c-4c9b-9ff6-8637ca69a402}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\Menu">
+      <UniqueIdentifier>{2b797d0c-0522-456f-bbd7-98e0184408ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -78,24 +93,24 @@
     <ClCompile Include="UIPanel.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="PauseMenu.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="UIButton.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="UIText.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Source Files\UI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files\UI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
@@ -104,40 +119,52 @@
     <ClInclude Include="SpriteComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ball.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Brick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UIObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Ball.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="UIPanel.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Brick.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="PauseMenu.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="UIText.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="TestObject.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="UIButton.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObject.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIText.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Hit.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Header Files\UI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -167,6 +194,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="WhitePixel.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TestBackground2.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

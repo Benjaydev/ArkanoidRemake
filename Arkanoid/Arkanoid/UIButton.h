@@ -8,7 +8,7 @@ class UIButton : public UIObject
 {
 public:
 	UIButton(float x, float y, float width, float height, int colour, int hColour, UIText* text);
-	~UIButton();
+	virtual ~UIButton();
 
 	std::function<void()> callFunction;
 

@@ -96,6 +96,10 @@ int Map::GetMapCount()
 void Map::AddBrick(Brick* brick, int index)
 {
     mapStruct.bricks[index] = BrickStruct({ ColorToInt(brick->sprite->colour), brick->maxHealth, false });
+}
+void Map::AddBrick(BrickStruct brick, int index)
+{
+    mapStruct.bricks[index] = brick;
 
 
 }

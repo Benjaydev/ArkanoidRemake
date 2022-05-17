@@ -1,5 +1,4 @@
 #include "Brick.h"
-SpriteComponent* Brick::BrickReference;
 
 
 Brick::Brick(float x, float y, int Health, int colour)
@@ -8,13 +7,7 @@ Brick::Brick(float x, float y, int Health, int colour)
 
 
     physics->SetPosition(x, y);
-    if (BrickReference == nullptr) {
-        LoadSprite((char*)"Brick.png");
-        BrickReference = sprite;
-    }
-    else {
-        CopySpriteByReference(BrickReference);
-    }
+    LoadSprite((char*)"Brick.png");
     
 
     Vector2 brickPos = { physics->globalTransform.m8 + sprite->GetWidth()/2,physics->globalTransform.m9 + sprite->GetHeight()/2 };
@@ -40,8 +33,6 @@ Brick::~Brick()
 void Brick::DamageBrick()
 {
     health--;
-
-    std::cout << health << std::endl;
 
     if (health <= 0) {
         isWaitingDestroy = true;

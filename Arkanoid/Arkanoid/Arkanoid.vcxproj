@@ -156,8 +156,10 @@
     <ClCompile Include="CircleCollider.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Hit.cpp" />
+    <ClCompile Include="LevelEditor.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
@@ -179,6 +181,8 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Hit.h" />
+    <ClInclude Include="LevelEditor.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PauseMenu.h" />
@@ -212,6 +216,9 @@
       <DeploymentContent>true</DeploymentContent>
     </Image>
     <Image Include="RightEnd.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="TestBackground2.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
     <Image Include="TestImage.png">

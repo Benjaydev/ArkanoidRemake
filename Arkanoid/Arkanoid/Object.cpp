@@ -13,6 +13,7 @@ Object::~Object()
 {
 	if (sprite != nullptr && !usesReferencedSprite) {
 		delete sprite;
+		sprite = nullptr;
 	}
 	
 
@@ -24,15 +25,26 @@ Object::~Object()
 
 	// Unparent all children from this object
 	for (int i = 0; i < children.size(); i++) {
-		children[i]->UnParent();
+		children[i]->parent = nullptr;
+		children[i]->physics->parentPhysics = nullptr;
 	}
+	children.clear();
+	children.shrink_to_fit();
+
+
 	delete physics;
+	physics = nullptr;
 
 	RemoveFromGameWorld();
 }
 
 void Object::RemoveFromGameWorld() {
 	Game::objects.erase(std::remove(Game::objects.begin(), Game::objects.end(), this), Game::objects.end());
+}
+
+void Object::DeleteSelf()
+{
+	delete this;
 }
 
 void Object::AddToGameWorld() {
@@ -87,22 +99,23 @@ void Object::ParentTo(Object* p) {
 }
 
 void Object::UnParent() {
-	
+	// Unparent physics
+	physics->parentPhysics = nullptr;
 	// Contains child
-	if (std::find(children.begin(), children.end(), this) != children.end()) {
-		// Remove child from this object
-		parent->children.erase(std::remove(parent->children.begin(), parent->children.end(), this), parent->children.end());
-	}
-	
+	if (parent->children.size() > 0) {
+		if (std::find(parent->children.begin(), parent->children.end(), this) != parent->children.end()) {
+			// Remove child from this object
+			parent->children.erase(std::remove(parent->children.begin(), parent->children.end(), this), parent->children.end());
+		}
+		// Flag parent to update physics children list
+		parent->shouldReinstantiatePhysicsChildren = true;
+		parent->UpdateChildPhysics();
 
-	// Flag parent to update physics children list
-	parent->shouldReinstantiatePhysicsChildren = true;
-	parent->UpdateChildPhysics();
+	}
 
 	// Unparent
 	parent = nullptr;
-	// Unparent physics
-	physics->parentPhysics = nullptr;
+	
 	
 }
 

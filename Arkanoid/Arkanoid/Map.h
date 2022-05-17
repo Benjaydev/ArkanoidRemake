@@ -13,6 +13,7 @@ struct BrickStruct
 
 struct MapStruct
 {
+	int backgroundColour = (int)0x333333FF;
 	BrickStruct bricks[130] = {};
 };
 
@@ -34,6 +35,7 @@ public:
 	int GetMapCount();
 
 	void AddBrick(Brick* brick, int index);
+	void AddBrick(BrickStruct brick, int index);
 
 };
 

@@ -23,6 +23,11 @@ PauseMenu::PauseMenu(float x, float y)
 	AddChild(resumeButton);
 	resumeButton->physics->SetPosition(0, -100);
 
+	// Add resume button
+	mainmenuButton = new UIButton(0, 0, 200, 100, 0x585858FF, ColorToInt(BLUE), new UIText(0, 0, "Main Menu", 16, 0xFFFFFFFF));
+	AddChild(mainmenuButton);
+	mainmenuButton->physics->SetPosition(0, 100);
+
 
 	AddToGameWorld();
 
@@ -33,4 +38,5 @@ PauseMenu::~PauseMenu()
 	mainPanel->isWaitingDestroy = true;
 	headerText->isWaitingDestroy = true;
 	resumeButton->isWaitingDestroy = true;
+	mainmenuButton->isWaitingDestroy = true;
 }

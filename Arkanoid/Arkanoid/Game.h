@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include "PauseMenu.h"
+#include "MainMenu.h"
+#include "LevelEditor.h"
 class Game
 {
 public:
@@ -16,19 +18,28 @@ public:
 
 	void Update(float DeltaTime);
 
+	void StartMainMenu();
+	void StartLevelEditor();
 	void StartGame(int mapIndex);
 	void ResetGameObjects();
 
 	void TogglePauseMenu();
 
+
+
 	Timer* timer = new Timer();
 	float DeltaTime = 0;
 
-	Texture2D background;
+	Texture2D gameBackground;
 
 	Player* player;
 
 	PauseMenu* pauseMenu;
+	MainMenu* mainMenu;
+	LevelEditor* levelEditor;
+
+	std::vector<std::function<void()>> storeDestroy;
+	void DestroyStoredAwaiting();
 
 
 

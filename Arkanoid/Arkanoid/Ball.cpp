@@ -1,6 +1,5 @@
 #include "Ball.h"
 #include "Hit.h"
-
 Ball::Ball(float x, float y)
 {
     tag = "Ball";
@@ -9,6 +8,7 @@ Ball::Ball(float x, float y)
     physics->SetPosition(x, y);
     ballSprite->LoadSprite((char*)"Ball2.png");
     ballSprite->sprite->SetScale(1.5);
+    
 
     AddChild(ballSprite);
 
