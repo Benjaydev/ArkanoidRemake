@@ -15,6 +15,7 @@ std::vector<Object*> Game::objects = std::vector<Object*>();
 int Game::lifetimeObjectCount = 0;
 bool Game::DebugActive = false;
 bool Game::IsGamePaused = false;
+bool Game::IsEditing = false;
 
 Game::Game() {
     // Initialization
@@ -97,6 +98,7 @@ void Game::StartLevelEditor()
 {
     ResetGameObjects();
     IsGamePaused = true;
+    IsEditing = true;
 
     levelEditor = new LevelEditor();
     backgroundColour = levelEditor->map.mapStruct.backgroundColour;
@@ -154,7 +156,9 @@ void Game::Update(float DeltaTime) {
     }
     DestroyStoredAwaiting();
     
-
+    if (IsEditing) {
+        return;
+    }
 
     if (!IsGamePaused) {
         PhysicsComponent::GlobalCollisionCheck(DeltaTime);

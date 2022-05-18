@@ -5,6 +5,7 @@
 #include "UIText.h"
 #include "UIInputBox.h"
 #include "UIButton.h"
+#include "LevelSelectMenu.h"
 class LevelEditor : public UIObject
 {
 public:
@@ -28,7 +29,7 @@ public:
 	UIText* levelNameText;
 
 	UIButton* saveButton;
-	//UIButton* loadButton;
+	UIButton* loadButton;
 
 
 	// Brick
@@ -45,10 +46,14 @@ public:
 
 	UIObject* bricks[130];
 
+	LevelSelectMenu* levelSelectMenu;
+	bool levelSelectOpen = false;
+
 
 
 	void Update(float DeltaTime) override;
 	void SaveLevel();
+	void LoadLevel();
 
 };
 

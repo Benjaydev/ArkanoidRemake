@@ -60,6 +60,7 @@ public:
 	static bool DebugActive;
 
 	static bool IsGamePaused;
+	static bool IsEditing;
 
 
 

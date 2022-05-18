@@ -16,6 +16,9 @@ LevelEditor::LevelEditor()
 
 	saveButton = new UIButton(75, GetScreenHeight() - 50, 100, 40, 0x585858FF, ColorToInt(BLUE), new UIText(0, 0, "Save", 16, 0xFFFFFFFF));
 	saveButton->AssignCallMethod(std::bind(&LevelEditor::SaveLevel, this));
+	
+	loadButton = new UIButton(200, GetScreenHeight() - 50, 100, 40, 0x585858FF, ColorToInt(BLUE), new UIText(0, 0, "Load", 16, 0xFFFFFFFF));
+	loadButton->AssignCallMethod(std::bind(&LevelEditor::LoadLevel, this));
 
 
 
@@ -93,31 +96,34 @@ LevelEditor::~LevelEditor()
 
 void LevelEditor::Update(float DeltaTime)
 {
-	Vector2 mp = GetMousePosition();
-	Vector2 bp = { fminf(66 * ((int)mp.x / 66), 66 * 12), fminf(33 * ((int)mp.y / 33), 33 * 9) };
-	cursorBrick->physics->SetPosition(bp.x, bp.y);
-
-	//std::cout << ((bp.y / 33) * 13) + (bp.x / 66) << std::endl;
-
-	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-		int index = ((bp.y / 33) * 13) + (bp.x / 66);
+	if (!levelSelectOpen) {
+		Vector2 mp = GetMousePosition();
+		Vector2 bp = { fminf(66 * ((int)mp.x / 66), 66 * 12), fminf(33 * ((int)mp.y / 33), 33 * 9) };
 		if (mp.y < 33 * 10 && mp.y >= 0 && mp.x < 66 * 13 && mp.x >= 0) {
-			map.AddBrick(currentBrickStruct, index);
+			cursorBrick->physics->SetPosition(bp.x, bp.y);
+			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+				int index = ((bp.y / 33) * 13) + (bp.x / 66);
 
-			// Reset display brick
-			delete bricks[index];
-			bricks[index] = nullptr;
+				map.AddBrick(currentBrickStruct, index);
 
-			// Create new dispaly brick
-			UIObject* b = new UIObject();
-			b->physics->SetPosition(bp.x, bp.y);
-			b->CopySpriteByReference(cursorBrick->sprite);
-			b->sprite->colour = GetColor(currentBrickStruct.colour);
-			bricks[index] = b;
+				// Reset display brick
+				delete bricks[index];
+				bricks[index] = nullptr;
+
+				// Create new dispaly brick
+				UIObject* b = new UIObject();
+				b->physics->SetPosition(bp.x, bp.y);
+				b->CopySpriteByReference(cursorBrick->sprite);
+				b->sprite->colour = GetColor(currentBrickStruct.colour);
+				bricks[index] = b;
+			}
 		}
+		// Keep cursor dispaly brick on top
+		cursorBrick->AddToGameWorld();
 	}
-	// Keep cursor dispaly brick on top
-	cursorBrick->AddToGameWorld();
+	
+
+	
 
 	// Get settings values
 	map.mapName = levelNameInput->boxText->text;
@@ -144,4 +150,16 @@ void LevelEditor::SaveLevel()
 
 	map.SaveMap();
 	saveButton->buttonText->text = "Override";
+}
+
+void LevelEditor::LoadLevel() {
+	levelSelectOpen = !levelSelectOpen;
+
+	if (!levelSelectOpen) {
+		levelSelectMenu->isWaitingDestroy = true;
+		return;
+	}
+
+	levelSelectMenu = new LevelSelectMenu(GetScreenWidth()/2, GetScreenHeight()/2);
+
 }
