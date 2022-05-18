@@ -26,10 +26,12 @@ public:
 
 	std::string mapName = "New Level";
 	MapStruct mapStruct;
+	int loadedIndex = -1;
 
 	void GenerateMap();
 	void LoadMap(int index);
 	void SaveMap();
+	void SaveMap(int index);
 
 	std::string GetMapName(int index);
 	int GetMapCount();

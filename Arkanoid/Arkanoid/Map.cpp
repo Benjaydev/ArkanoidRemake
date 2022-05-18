@@ -16,7 +16,7 @@ void Map::GenerateMap()
         for (int j = 0; j < 13; j++) {
 
             int index = (i * 13) + j;
-            if(&mapStruct.bricks[index] == nullptr){
+            if(mapStruct.bricks[index].isEmpty){
                 continue;
             }
             Brick* brick = new Brick(j * 66, i * 33, mapStruct.bricks[index].health, mapStruct.bricks[index].colour);
@@ -28,7 +28,8 @@ void Map::LoadMap(int index)
 {
     std::fstream file("Saves.txt", std::ios::in | std::ios::binary );
     
-    file.seekg(sizeof(MapStruct) * index);
+    file.seekg((20+sizeof(MapStruct)) * index);
+    loadedIndex = index;
 
     // Get map name
     char* name = new char[21];
@@ -47,10 +48,68 @@ void Map::LoadMap(int index)
 void Map::SaveMap()
 {
     std::fstream file("Saves.txt", std::ios::out | std::ios::binary | std::ios::app);
+    loadedIndex = GetMapCount();
 
+    // Write to end of file
     file.write((char*)mapName.c_str(), 20);
     file.write((char*)&mapStruct, sizeof(MapStruct));
 
+    file.close();
+}
+
+void Map::SaveMap(int index)
+{
+    std::fstream file("Saves.txt", std::ios::out | std::ios::binary);
+    std::fstream tFile("tempSaves.txt", std::ios::out | std::ios::binary);
+
+    loadedIndex = index;
+
+    // Create temporary save file with all records and overriden record
+    for (int i = 0; i < GetMapCount(); i++) {
+        file.seekg((20 + sizeof(MapStruct)) * i);
+        tFile.seekp((20 + sizeof(MapStruct)) * i);
+        // Set the wanted index to the updated version
+        if (i = index) {
+            tFile.write((char*)mapName.c_str(), 20);
+            tFile.write((char*)&mapStruct, sizeof(MapStruct));
+            continue;
+        }
+        
+        // Write each record to temp file
+        char* name = new char[20];
+        file.read((char*)name, 20);
+
+        MapStruct* mp = new MapStruct();
+        file.read((char*)&mapStruct, sizeof(MapStruct));
+
+        tFile.write((char*)name, 20);
+        tFile.write((char*)&mp, sizeof(MapStruct));
+        
+        delete mp;
+        delete name;
+    }
+
+    file.seekg(0);
+    tFile.seekp(0);
+
+    // Write the temp file to the save file
+    for (int i = 0; i < GetMapCount(); i++) {
+        file.seekg((20 + sizeof(MapStruct)) * i);
+        tFile.seekp((20 + sizeof(MapStruct)) * i);
+
+        // Take each record from temp file and put it in save file
+        char* name = new char[20];
+        tFile.read((char*)name, 20);
+
+        MapStruct* mp = new MapStruct();
+        tFile.read((char*)&mapStruct, sizeof(MapStruct));
+
+        file.write((char*)name, 20);
+        file.write((char*)&mp, sizeof(MapStruct));
+    }
+    
+    
+    tFile.close();
     file.close();
 }
 

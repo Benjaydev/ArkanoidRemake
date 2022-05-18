@@ -34,8 +34,11 @@ UIButton::~UIButton()
 }
 
 void UIButton::Update(float DeltaTime) {
-	buttonSprite->sprite->colour = GetColor(defaultColour);
 
+	Vector2 offset = buttonText->GetCentreOffset();
+	buttonText->physics->SetPosition(offset.x, offset.y);
+
+	buttonSprite->sprite->colour = GetColor(defaultColour);
 	if (physics->collider->Overlaps(GetMousePosition())) {
 
 		OnHover();
@@ -44,6 +47,9 @@ void UIButton::Update(float DeltaTime) {
 			OnClick();
 		}
 	}
+
+
+	
 }
 
 void UIButton::OnHover()

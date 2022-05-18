@@ -24,6 +24,7 @@ Game::Game() {
 
     //SetTargetFPS(30);
 
+    gameBackground = LoadTexture("Background.png");
     StartMainMenu();
    //StartGame(0);
     // Main game loop
@@ -98,7 +99,7 @@ void Game::StartLevelEditor()
     IsGamePaused = true;
 
     levelEditor = new LevelEditor();
-
+    backgroundColour = levelEditor->map.mapStruct.backgroundColour;
 
 }
 
@@ -107,10 +108,10 @@ void Game::StartLevelEditor()
 void Game::StartGame(int index) {
     IsGamePaused = false;
     ResetGameObjects();
-    gameBackground = LoadTexture("Background.png");
+    
 
     Map map = Map();
-
+    backgroundColour = map.mapStruct.backgroundColour;
     map.LoadMap(index);
     map.GenerateMap();
     
@@ -142,6 +143,10 @@ void Game::Update(float DeltaTime) {
     // Update objects in world
     for (int i = 0; i < objects.size(); i++) {
         objects[i]->Update(DeltaTime);
+        // If the update reslts in a reset in objects
+        if (i >= objects.size()) { break; }
+
+        // Destroy all objects that are awaiting
         if (objects[i]->isWaitingDestroy) {
             storeDestroy.push_back(std::bind(&Object::DeleteSelf, objects[i]));
             continue;
@@ -182,7 +187,7 @@ void Game::Draw()
 
     ClearBackground(RAYWHITE);
     
-    DrawTexture(gameBackground, 0, 0, GetColor(0x333333FF));
+    DrawTexture(gameBackground, 0, 0, GetColor(backgroundColour));
 
 
     DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 10, GetScreenHeight()-30, 20, BLUE);

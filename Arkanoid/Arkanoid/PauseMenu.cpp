@@ -1,6 +1,5 @@
 #pragma once
 #include "PauseMenu.h"
-#include "Game.h"
 PauseMenu::PauseMenu(float x, float y)
 {
 	physics->SetPosition(x, y);

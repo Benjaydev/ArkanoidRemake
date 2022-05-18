@@ -31,7 +31,8 @@ public:
 	float DeltaTime = 0;
 
 	Texture2D gameBackground;
-
+	int backgroundColour = 0x333333FF;
+	
 	Player* player;
 
 	PauseMenu* pauseMenu;

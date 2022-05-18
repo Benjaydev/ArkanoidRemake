@@ -171,6 +171,7 @@
     <ClCompile Include="TestObject.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="UIInputBox.cpp" />
     <ClCompile Include="UIObject.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UIText.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIInputBox.h" />
     <ClInclude Include="UIObject.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UIText.h" />

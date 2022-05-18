@@ -108,6 +108,9 @@
     <ClCompile Include="LevelEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIInputBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="LevelEditor.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIInputBox.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
