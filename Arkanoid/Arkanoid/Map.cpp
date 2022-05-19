@@ -28,6 +28,7 @@ void Map::LoadMap(int index)
 {
     std::fstream file("Saves.txt", std::ios::in | std::ios::binary );
     
+    // Seek location of save
     file.seekg((20+sizeof(MapStruct)) * index);
     loadedIndex = index;
 
@@ -37,11 +38,12 @@ void Map::LoadMap(int index)
     name[20] ='\0';
     mapName = name;
 
+    // Get the map data
     file.read((char*)&mapStruct, sizeof(MapStruct));
 
-    file.close();
-
     delete[] name;
+    // Close file
+    file.close();
 
 }
 
@@ -54,70 +56,30 @@ void Map::SaveMap()
     file.write((char*)mapName.c_str(), 20);
     file.write((char*)&mapStruct, sizeof(MapStruct));
 
+    // Close file
     file.close();
 }
 
 void Map::SaveMap(int index)
 {
-    std::fstream file("Saves.txt", std::ios::out | std::ios::binary);
-    std::fstream tFile("tempSaves.txt", std::ios::out | std::ios::binary);
+    std::fstream file("Saves.txt", std::ios::in | std::ios::out | std::ios::binary);
 
-    loadedIndex = index;
+    file.seekp((20 + sizeof(MapStruct)) * index);
 
-    // Create temporary save file with all records and overriden record
-    for (int i = 0; i < GetMapCount(); i++) {
-        file.seekg((20 + sizeof(MapStruct)) * i);
-        tFile.seekp((20 + sizeof(MapStruct)) * i);
-        // Set the wanted index to the updated version
-        if (i = index) {
-            tFile.write((char*)mapName.c_str(), 20);
-            tFile.write((char*)&mapStruct, sizeof(MapStruct));
-            continue;
-        }
-        
-        // Write each record to temp file
-        char* name = new char[20];
-        file.read((char*)name, 20);
+    // Write to end of file
+    file.write((char*)mapName.c_str(), 20);
+    file.write((char*)&mapStruct, sizeof(MapStruct));
 
-        MapStruct* mp = new MapStruct();
-        file.read((char*)&mapStruct, sizeof(MapStruct));
-
-        tFile.write((char*)name, 20);
-        tFile.write((char*)&mp, sizeof(MapStruct));
-        
-        delete mp;
-        delete name;
-    }
-
-    file.seekg(0);
-    tFile.seekp(0);
-
-    // Write the temp file to the save file
-    for (int i = 0; i < GetMapCount(); i++) {
-        file.seekg((20 + sizeof(MapStruct)) * i);
-        tFile.seekp((20 + sizeof(MapStruct)) * i);
-
-        // Take each record from temp file and put it in save file
-        char* name = new char[20];
-        tFile.read((char*)name, 20);
-
-        MapStruct* mp = new MapStruct();
-        tFile.read((char*)&mapStruct, sizeof(MapStruct));
-
-        file.write((char*)name, 20);
-        file.write((char*)&mp, sizeof(MapStruct));
-    }
-    
-    
-    tFile.close();
+    // Close file
     file.close();
+   
 }
 
 std::string Map::GetMapName(int index)
 {
-
     std::fstream file("Saves.txt", std::ios::in | std::ios::binary);
 
+    // Seek location of save
     file.seekg((sizeof(MapStruct)+20) * index);
 
     // Get map name
@@ -125,10 +87,10 @@ std::string Map::GetMapName(int index)
     file.read((char*)name, 20);
     name[20] = '\0';
 
+    // Close file
     file.close();
 
     std::string stringName = std::string(name);
-
     delete[] name;
 
     return stringName;
@@ -140,13 +102,16 @@ int Map::GetMapCount()
 
     int currentAmount = 0;
     while (true) {
+        // Go to the start of the next save
+        file.seekg((sizeof(MapStruct) + 20) * currentAmount);
+        // If there is nothing at that point, all saves have been read
         if (file.peek() == EOF) {
+            // Close file
             file.close();
             return currentAmount;
         }
 
-        file.seekg((sizeof(MapStruct) + 20) * currentAmount);
-
+        // Add to save count
         currentAmount++;  
     }
 

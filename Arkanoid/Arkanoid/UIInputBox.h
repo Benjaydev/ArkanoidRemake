@@ -7,7 +7,7 @@
 class UIInputBox : public UIObject
 {
 public:
-	UIInputBox(float x, float y, float width, float height, int colour, int hColour, int fColour, UIText* defText, int mSize, bool intOnly = false);
+	UIInputBox(float x, float y, float width, float height, int buttonColour, int hColour, int fColour, UIText* defText, int mSize, bool intOnly = false);
 	virtual ~UIInputBox();
 
 	UIPanel* boxSprite;

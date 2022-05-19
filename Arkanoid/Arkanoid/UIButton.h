@@ -17,6 +17,8 @@ public:
 
 	int defaultColour;
 	int hoverColour;
+	int deactiveColour;
+	bool isActive = true;
 
 
 	void Update(float DeltaTime) override;

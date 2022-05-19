@@ -169,7 +169,6 @@
     <ClCompile Include="RayCollider.cpp" />
     <ClCompile Include="RectangleCollider.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
-    <ClCompile Include="TestObject.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIInputBox.cpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SpriteComponent.h" />
-    <ClInclude Include="TestObject.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIInputBox.h" />

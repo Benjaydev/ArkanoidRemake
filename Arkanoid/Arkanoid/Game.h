@@ -1,15 +1,15 @@
 #pragma once
+
 #include "Timer.h"
 #include "Player.h"
 #include <iostream>
 #include <vector>
 #include "PauseMenu.h"
-#include "MainMenu.h"
 #include "LevelEditor.h"
+#include "MainMenu.h"
 class Game
 {
 public:
-
 
 	Game();
 	~Game();
@@ -43,6 +43,7 @@ public:
 	void DestroyStoredAwaiting();
 
 
+	static Game* ThisGame;
 
 	static std::vector<Object*> objects;
 
@@ -62,8 +63,4 @@ public:
 	static bool IsGamePaused;
 	static bool IsEditing;
 
-
-
-
 };
-

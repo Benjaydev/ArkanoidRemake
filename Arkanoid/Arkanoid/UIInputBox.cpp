@@ -2,18 +2,19 @@
 #include <algorithm>
 #include <string>
 
-UIInputBox::UIInputBox(float x, float y, float width, float height, int colour, int hColour, int fColour, UIText* defText, int mSize, bool intOnly)
+UIInputBox::UIInputBox(float x, float y, float width, float height, int buttonColour, int hColour, int fColour, UIText* defText, int mSize, bool intOnly)
 {
 	defaultText = defText->text;
+	currentText = defText->text;
 	maxSize = mSize;
-	defaultColour = colour;
+	defaultColour = ColorToInt(defText->fontColour);
 	hoverColour = hColour;
 	focusedColour = fColour;
 	isIntOnly = intOnly;
 
 	physics->SetPosition(x, y);
 
-	boxSprite = new UIPanel(0, 0, width, height, colour);
+	boxSprite = new UIPanel(0, 0, width, height, buttonColour);
 	AddChild(boxSprite);
 	Vector2 offset = boxSprite->sprite->GetCentreOffset();
 	boxSprite->physics->SetPosition(offset.x, offset.y);
@@ -43,13 +44,20 @@ UIInputBox::~UIInputBox()
 
 void UIInputBox::Update(float DeltaTime)
 {
-	boxSprite->sprite->colour = GetColor(defaultColour);
+	boxText->fontColour = GetColor(defaultColour);
+	// Set the display text
+	boxText->text = currentText;
+
+	Vector2 offset = boxText->GetCentreOffset();
+	boxText->physics->SetPosition(offset.x, offset.y);
+
+
 	bool overlaps = physics->collider->Overlaps(GetMousePosition());
 	if (overlaps) {
 		OnHover();
 	}
 	if (isFocused) {
-		boxSprite->sprite->colour = GetColor(focusedColour);
+		boxText->fontColour = GetColor(focusedColour);
 	}
 
 	// Button Click
@@ -96,14 +104,11 @@ void UIInputBox::Update(float DeltaTime)
 			currentText = std::to_string(num);
 		}
 
-		// Set the display text
-		boxText->text = currentText;
+		
 	
 	}
-	
 
-	Vector2 offset = boxText->GetCentreOffset();
-	boxText->physics->SetPosition(offset.x, offset.y);
+	
 
 
 	
@@ -112,12 +117,12 @@ void UIInputBox::Update(float DeltaTime)
 void UIInputBox::OnClick()
 {
 	isFocused = true;
-	boxSprite->sprite->colour = GetColor(focusedColour);
+	boxText->fontColour = GetColor(focusedColour);
 }
 
 void UIInputBox::OnHover()
 {
-	boxSprite->sprite->colour = GetColor(hoverColour);
+	boxText->fontColour = GetColor(hoverColour);
 }
 
 std::string UIInputBox::GetKeysPressed()

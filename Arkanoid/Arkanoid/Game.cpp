@@ -16,18 +16,29 @@ int Game::lifetimeObjectCount = 0;
 bool Game::DebugActive = false;
 bool Game::IsGamePaused = false;
 bool Game::IsEditing = false;
+Game* Game::ThisGame = nullptr;
+
+
 
 Game::Game() {
+
     // Initialization
     int screenWidth = 858;
     int screenHeight = 850;
     InitWindow(screenWidth, screenHeight, "Arkanoid - Ben Wharton");
 
     //SetTargetFPS(30);
+    ThisGame = this;
+    SetTraceLogLevel(LOG_NONE);
+    if (DebugActive) {
+        SetTraceLogLevel(LOG_ALL);
+    }
+
 
     gameBackground = LoadTexture("Background.png");
     StartMainMenu();
-   //StartGame(0);
+
+
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose())    
@@ -60,6 +71,10 @@ void Game::ResetGameObjects() {
         delete pauseMenu;
         pauseMenu = nullptr;
     }
+    if (levelEditor != nullptr) {
+        delete levelEditor;
+        levelEditor = nullptr;
+    }
 
     // Delete all objects
     for (int i = 0; i < objects.size(); i++) {
@@ -88,9 +103,10 @@ void Game::StartMainMenu()
 {
     ResetGameObjects();
     IsGamePaused = true;
+    IsEditing = false;
 
+    backgroundColour = 0x333333FF;
     mainMenu = new MainMenu();
-    mainMenu->startGameButton->AssignCallMethod(std::bind(&Game::StartGame, this, 0));
     mainMenu->levelEditButton->AssignCallMethod(std::bind(&Game::StartLevelEditor, this));
 }
 
@@ -101,7 +117,7 @@ void Game::StartLevelEditor()
     IsEditing = true;
 
     levelEditor = new LevelEditor();
-    backgroundColour = levelEditor->map.mapStruct.backgroundColour;
+    levelEditor->mainMenuButton->AssignCallMethod(std::bind(&Game::StartMainMenu, this));
 
 }
 
@@ -109,14 +125,19 @@ void Game::StartLevelEditor()
 
 void Game::StartGame(int index) {
     IsGamePaused = false;
+    IsEditing = false;
+
     ResetGameObjects();
     
 
     Map map = Map();
-    backgroundColour = map.mapStruct.backgroundColour;
+ 
     map.LoadMap(index);
     map.GenerateMap();
-    
+    backgroundColour = map.mapStruct.backgroundColour;
+
+
+
     player = new Player(GetScreenWidth() / 2, GetScreenHeight() - 100);
 
     Ball* ball = new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9 - 50);
@@ -157,6 +178,7 @@ void Game::Update(float DeltaTime) {
     DestroyStoredAwaiting();
     
     if (IsEditing) {
+        backgroundColour = levelEditor->map.mapStruct.backgroundColour;
         return;
     }
 
@@ -212,5 +234,3 @@ void Game::Draw()
 Game::~Game() {
 
 }
-
-

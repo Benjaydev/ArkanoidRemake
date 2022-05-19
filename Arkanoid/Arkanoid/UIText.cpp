@@ -10,10 +10,13 @@ UIText::UIText(float x, float y, std::string strText, int size, int colour)
 	AddToGameWorld();
 }
 
+UIText::~UIText()
+{
+}
+
 
 void UIText::Draw()
 {
-
 	DrawText(text.c_str(), physics->globalTransform.m8, physics->globalTransform.m9, fontSize, fontColour);
 }
 

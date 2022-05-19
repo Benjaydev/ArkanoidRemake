@@ -17,7 +17,7 @@ LevelSelectMenu::LevelSelectMenu(float x, float y)
 	Map map = Map();
 
 	// Add button for each level
-	for (int i = 0; i < map.GetMapCount()-1; i++) {
+	for (int i = 0; i < map.GetMapCount(); i++) {
 		UIButton* b = new UIButton(0,0, 450, 50, 0x585858FF, ColorToInt(BLUE), new UIText(0, 0, map.GetMapName(i), 16, 0xFFFFFFFF));
 		backPanel->AddChild(b);
 		b->AssignCallMethod(std::bind(&LevelSelectMenu::ChooseIndex, this, i));

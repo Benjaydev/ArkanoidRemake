@@ -29,7 +29,21 @@ public:
 	UIText* levelNameText;
 
 	UIButton* saveButton;
+	UIButton* overrideButton;
 	UIButton* loadButton;
+	UIButton* newButton;
+
+	UIButton* mainMenuButton;
+
+	// Background
+	UIText* backgroundChooseText;
+	UIInputBox* redInputBoxBack;
+	UIText* redTextBack;
+	UIInputBox* greenInputBoxBack;
+	UIText* greenTextBack;
+	UIInputBox* blueInputBoxBack;
+	UIText* blueTextBack;
+
 
 
 	// Brick
@@ -49,11 +63,16 @@ public:
 	LevelSelectMenu* levelSelectMenu;
 	bool levelSelectOpen = false;
 
-
+	float cooldown = 0;
+	bool isErasing = false;
 
 	void Update(float DeltaTime) override;
+
 	void SaveLevel();
-	void LoadLevel();
+	void OverrideLevel();
+	void NewLevel();
+	void ToggleLoadMenu();
+	void OpenLevel();
 
 };
 

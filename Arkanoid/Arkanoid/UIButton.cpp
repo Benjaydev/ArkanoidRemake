@@ -9,6 +9,12 @@ UIButton::UIButton(float x, float y, float width, float height, int colour, int 
 	buttonSprite = new UIPanel(x, y, width, height, colour);
 	defaultColour = colour;
 	hoverColour = hColour;
+	Color d = GetColor(defaultColour);
+	d.a = 100;
+	deactiveColour = ColorToInt(d);
+
+
+
 	AddChild(buttonSprite);
 	Vector2 offset = buttonSprite->sprite->GetCentreOffset();
 	buttonSprite->physics->SetPosition(offset.x, offset.y);
@@ -37,6 +43,12 @@ void UIButton::Update(float DeltaTime) {
 
 	Vector2 offset = buttonText->GetCentreOffset();
 	buttonText->physics->SetPosition(offset.x, offset.y);
+
+	if (!isActive) {
+		buttonSprite->sprite->colour = GetColor(deactiveColour);
+		return;
+	}
+
 
 	buttonSprite->sprite->colour = GetColor(defaultColour);
 	if (physics->collider->Overlaps(GetMousePosition())) {

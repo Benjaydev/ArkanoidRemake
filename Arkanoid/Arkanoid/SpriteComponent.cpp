@@ -1,11 +1,15 @@
 #pragma once
 #include "SpriteComponent.h"
 
-
 SpriteComponent::~SpriteComponent()
 {
+	UnloadImage(*image);
 	delete image;
+	image = nullptr;
+
+	UnloadTexture(*texture);
 	delete texture;
+	texture = nullptr;
 }
 
 void SpriteComponent::Load(char* filename)
