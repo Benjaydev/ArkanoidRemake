@@ -154,8 +154,8 @@ void LevelEditor::Update(float DeltaTime)
 	cooldown -= DeltaTime;
 	if (!levelSelectOpen && cooldown <= 0) {
 		Vector2 mp = GetMousePosition();
-		Vector2 bp = { fminf(66 * ((int)mp.x / 66), 66 * 12), fminf(33 * ((int)mp.y / 33), 33 * 9) };
-		if (mp.y < 33 * 10 && mp.y >= 0 && mp.x < 66 * 13 && mp.x >= 0) {
+		Vector2 bp = { fminf(66 * ((int)mp.x / 66), 66 * 12), fminf(33 * ((int)mp.y / 33), 33 * 12) };
+		if (mp.y < 33 * 13 && mp.y >= 0 && mp.x < 66 * 13 && mp.x >= 0) {
 			cursorBrick->hasSprite = true;
 			cursorBrick->physics->SetPosition(bp.x, bp.y);
 			// Create new bricks
@@ -185,6 +185,16 @@ void LevelEditor::Update(float DeltaTime)
 				// Reset display brick
 				delete bricks[index];
 				bricks[index] = nullptr;
+			}
+
+			if (IsMouseButtonDown(MOUSE_MIDDLE_BUTTON)) {
+				cursorBrick->hasSprite = false;
+				int index = ((bp.y / 33) * 13) + (bp.x / 66);
+
+				Color c = GetColor(map.mapStruct.bricks[index].colour);
+				redInputBoxBrick->currentText = std::to_string(c.r);
+				greenInputBoxBrick->currentText = std::to_string(c.g);
+				blueInputBoxBrick->currentText = std::to_string(c.b);
 			}
 
 
@@ -237,14 +247,12 @@ void LevelEditor::OverrideLevel()
 
 void LevelEditor::NewLevel()
 {
-	for (int i = 0; i < 130; i++) {
+	for (int i = 0; i < 169; i++) {
 		// Reset display brick
 		delete bricks[i];
 		bricks[i] = nullptr;
 
-		if (map.mapStruct.bricks[i].isEmpty) {
-			continue;
-		}
+		map.mapStruct.bricks[i] = BrickStruct();
 	}
 
 	levelNameInput->currentText = "New Level";
@@ -270,11 +278,11 @@ void LevelEditor::ToggleLoadMenu() {
 }
 
 void LevelEditor::OpenLevel() {
-	ToggleLoadMenu();
 	// If no level was chosen
 	if (levelSelectMenu->chosenIndex == -1) {
 		return;
 	}
+	ToggleLoadMenu();
 	
 	map.LoadMap(levelSelectMenu->chosenIndex);
 	overrideButton->isActive = true;
@@ -286,7 +294,7 @@ void LevelEditor::OpenLevel() {
 	greenInputBoxBack->currentText = std::to_string(bCol.g);
 	blueInputBoxBack->currentText = std::to_string(bCol.b);
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 13; i++) {
 		for (int j = 0; j < 13; j++) {
 			int index = (i * 13) + j;
 

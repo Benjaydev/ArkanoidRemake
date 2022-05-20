@@ -223,9 +223,6 @@
     <Image Include="TestBackground2.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="TestImage.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
     <Image Include="WhitePixel.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>

@@ -1,6 +1,7 @@
 #include "Map.h"
 #include <fstream>
 
+std::string Map::saveLocation = "Saves.txt";
 
 Map::Map()
 {
@@ -12,7 +13,7 @@ Map::~Map()
 
 void Map::GenerateMap()
 {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 13; i++) {
         for (int j = 0; j < 13; j++) {
 
             int index = (i * 13) + j;
@@ -26,7 +27,7 @@ void Map::GenerateMap()
 
 void Map::LoadMap(int index)
 {
-    std::fstream file("Saves.txt", std::ios::in | std::ios::binary );
+    std::fstream file(saveLocation, std::ios::in | std::ios::binary );
     
     // Seek location of save
     file.seekg((20+sizeof(MapStruct)) * index);
@@ -49,7 +50,7 @@ void Map::LoadMap(int index)
 
 void Map::SaveMap()
 {
-    std::fstream file("Saves.txt", std::ios::out | std::ios::binary | std::ios::app);
+    std::fstream file(saveLocation, std::ios::out | std::ios::binary | std::ios::app);
     loadedIndex = GetMapCount();
 
     // Write to end of file
@@ -62,7 +63,7 @@ void Map::SaveMap()
 
 void Map::SaveMap(int index)
 {
-    std::fstream file("Saves.txt", std::ios::in | std::ios::out | std::ios::binary);
+    std::fstream file(saveLocation, std::ios::in | std::ios::out | std::ios::binary);
 
     file.seekp((20 + sizeof(MapStruct)) * index);
 
@@ -77,7 +78,7 @@ void Map::SaveMap(int index)
 
 std::string Map::GetMapName(int index)
 {
-    std::fstream file("Saves.txt", std::ios::in | std::ios::binary);
+    std::fstream file(saveLocation, std::ios::in | std::ios::binary);
 
     // Seek location of save
     file.seekg((sizeof(MapStruct)+20) * index);
@@ -98,7 +99,7 @@ std::string Map::GetMapName(int index)
 
 int Map::GetMapCount()
 {
-    std::fstream file("Saves.txt", std::ios::in | std::ios::binary);
+    std::fstream file(saveLocation, std::ios::in | std::ios::binary);
 
     int currentAmount = 0;
     while (true) {

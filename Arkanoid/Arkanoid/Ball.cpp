@@ -1,13 +1,14 @@
 #include "Ball.h"
 #include "Hit.h"
+#include "Game.h"
 Ball::Ball(float x, float y)
 {
     tag = "Ball";
-
+    Game::ActiveBalls++;
 
     physics->SetPosition(x, y);
     ballSprite->LoadSprite((char*)"Ball2.png");
-    ballSprite->sprite->SetScale(1.5);
+    ballSprite->sprite->SetScale(1.1);
     
 
     AddChild(ballSprite);
@@ -23,16 +24,15 @@ Ball::Ball(float x, float y)
     AddToGameWorld();
 
 
-    physics->moveSpeed = 600;
-    physics->maxSpeed = 600;
+    physics->moveSpeed = 800;
+    physics->maxSpeed = 800;
     physics->deceleration = 0.01f;
 
-
-    //ballSprite->sprite->colour = GetColor(0x00A8F3FF);
 }
 
 Ball::~Ball()
 {
+    Game::ActiveBalls--;
     ballSprite->isWaitingDestroy = true;
 }
 
@@ -44,9 +44,14 @@ void Ball::Update(float DeltaTime)
 }
 void Ball::CalculateDirection(float speed)
 {
+    if (movementDirection.y < 0.1f && movementDirection.y > -0.1f) {
+        movementDirection.y *= 100;
+    }
     Vector2 normDir = Vector2Normalize(movementDirection);
     physics->velocity->x = normDir.x * speed;
+    
     physics->velocity->y = normDir.y * speed;
+
 }
 
 void Ball::ReflectBall(Hit hit)
@@ -110,16 +115,22 @@ void Ball::CollideEvent(Hit hit, Object* other)
     if (movementDirection.x < 0) {
         // If ball lands on right side of paddle
         if ((facePos >= 0.5 && hit.otherTag == "Player") || hit.otherTag == "RightPlayerEnd") {
-            // Get percentage in this half to calculate the speed multiplier the further out the ball hits
-            speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (1 - 0.5f)) / 100);
+            if (hit.otherTag == "Player") {
+                // Convert facePos range from 0-0.5 to 0.5-1 to use for speed multiplier
+                speedMultiplier = ((facePos - 0.5f) / (1.0f - 0.5f)) * (1.2f - 0.8f) + 0.8f;
+                movementDirection.y *= speedMultiplier;
+            }
             
-
             ReturnBall(hit);
         }
         // If ball lands on left side of paddle
         else {
-            speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (0 - 0.5f)) / 100);
-
+            if (hit.otherTag == "Player") {
+                // Convert facePos range from 0-0.5 to 0.5-1 to use for speed multiplier
+                speedMultiplier = ((facePos - 0) / (0.5f - 0)) * (1.2f - 0.8f) + 0.8f;
+                movementDirection.y *= speedMultiplier;
+            }
+            
             ReflectBall(hit);
         }
         CalculateDirection(physics->maxSpeed*speedMultiplier);
@@ -129,14 +140,25 @@ void Ball::CollideEvent(Hit hit, Object* other)
     else if (movementDirection.x > 0) {
         // If ball lands on left side of paddle
         if ((facePos <= 0.5 && hit.otherTag == "Player") || hit.otherTag == "LeftPlayerEnd") {
-            speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (0 - 0.5f)) / 100);
+            if (hit.otherTag == "Player") {
+                // Convert facePos range from 0-0.5 to 0.5-1 to use for speed multiplier
+                speedMultiplier = ((facePos - 0) / (0.5f - 0)) * (1.2f - 0.8f) + 0.8f;
+                movementDirection.y *= speedMultiplier;
+            }
             ReturnBall(hit);
         }
         // If ball lands on right side of paddle
         else {
-            speedMultiplier = 0.5 + ((((facePos - 0.5f) * 100) / (1 - 0.5f)) / 100);
+            if (hit.otherTag == "Player") {
+                // Convert facePos range from 0-0.5 to 0.5-1 to use for speed multiplier
+                speedMultiplier = ((facePos - 0.5f) / (1.0f - 0.5f)) * (1.2f - 0.8f) + 0.8f;
+
+
+                movementDirection.y *= speedMultiplier;
+            }
             ReflectBall(hit);
         }
+        
         CalculateDirection(physics->maxSpeed * speedMultiplier);
         return;
     }

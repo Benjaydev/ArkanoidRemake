@@ -273,15 +273,14 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 					against->CollideEvent(result, check);
 				}
 			
+				/*
 				if (check->tag == "Ball" && against->tag == "Ball") {
 					result.otherTag = "Ball";
 					check->CollideEvent(result, against);
 
 					Hit newHit = Hit({ result.OutVel, Vector2Negate(result.HitNormal), result.percentDistanceAlongHitFace, result.otherTag });
 					against->CollideEvent(newHit, check);
-
-					//against->physics->Move(DeltaTime);
-				}
+				}*/
 
 			}
 			

@@ -58,7 +58,7 @@ public:
 	UIText* blueTextBrick;
 
 
-	UIObject* bricks[130];
+	UIObject* bricks[169];
 
 	LevelSelectMenu* levelSelectMenu;
 	bool levelSelectOpen = false;

@@ -1,8 +1,10 @@
 #include "Brick.h"
+#include "Game.h"
 
 
 Brick::Brick(float x, float y, int Health, int colour)
 {
+    Game::BrickCount++;
     tag = "Brick";
 
 
@@ -28,6 +30,7 @@ Brick::Brick(float x, float y, int Health, int colour)
 
 Brick::~Brick()
 {
+    Game::BrickCount--;
 }
 
 void Brick::DamageBrick()

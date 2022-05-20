@@ -31,8 +31,8 @@ Player::Player(float x, float y)
 
     AddToGameWorld();
 
-    physics->moveSpeed = 100;
-    physics->maxSpeed = 600;
+    physics->moveSpeed = 200;
+    physics->maxSpeed = 800;
     physics->deceleration = 5;
 }
 

@@ -12,10 +12,13 @@ public:
 
 	UIPanel* backgroundPanel;
 
-	UIText* MenuText;
+	UIText* menuText;
 
 	UIButton* startGameButton;
 	UIButton* loadSaveButton;
+
+	UIButton* storyModeButton;
+
 	UIButton* levelEditButton;
 	UIButton* exitButton;
 

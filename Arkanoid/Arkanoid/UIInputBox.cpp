@@ -128,18 +128,18 @@ void UIInputBox::OnHover()
 std::string UIInputBox::GetKeysPressed()
 {
 	std::string pressedKeys = "";
-
+	if (IsKeyPressed(KEY_ZERO)) pressedKeys += "0";
+	if (IsKeyPressed(KEY_ONE)) pressedKeys += "1";
+	if (IsKeyPressed(KEY_TWO)) pressedKeys += "2";
+	if (IsKeyPressed(KEY_THREE)) pressedKeys += "3";
+	if (IsKeyPressed(KEY_FOUR)) pressedKeys += "4";
+	if (IsKeyPressed(KEY_FIVE)) pressedKeys += "5";
+	if (IsKeyPressed(KEY_SIX)) pressedKeys += "6";
+	if (IsKeyPressed(KEY_SEVEN)) pressedKeys += "7";
+	if (IsKeyPressed(KEY_EIGHT)) pressedKeys += "8";
+	if (IsKeyPressed(KEY_NINE)) pressedKeys += "9";
+	
 	if (isIntOnly) {
-		if (IsKeyPressed(KEY_ZERO)) pressedKeys += "0";
-		if (IsKeyPressed(KEY_ONE)) pressedKeys += "1";
-		if (IsKeyPressed(KEY_TWO)) pressedKeys += "2";
-		if (IsKeyPressed(KEY_THREE)) pressedKeys += "3";
-		if (IsKeyPressed(KEY_FOUR)) pressedKeys += "4";
-		if (IsKeyPressed(KEY_FIVE)) pressedKeys += "5";
-		if (IsKeyPressed(KEY_SIX)) pressedKeys += "6";
-		if (IsKeyPressed(KEY_SEVEN)) pressedKeys += "7";
-		if (IsKeyPressed(KEY_EIGHT)) pressedKeys += "8";
-		if (IsKeyPressed(KEY_NINE)) pressedKeys += "9";
 		if (IsKeyPressed(KEY_BACKSPACE)) return "backspace";
 		return pressedKeys;
 	}
@@ -173,7 +173,8 @@ std::string UIInputBox::GetKeysPressed()
 	if (IsKeyPressed(KEY_X)) pressedKeys += "x";
 	if (IsKeyPressed(KEY_Y)) pressedKeys += "y";
 	if (IsKeyPressed(KEY_Z)) pressedKeys += "z";
-	if (IsKeyPressed(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) { std::transform(pressedKeys.begin(), pressedKeys.end(), pressedKeys.begin(), ::toupper); };
+	if (IsKeyPressed(KEY_SPACE)) pressedKeys += " ";
+	if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) { std::transform(pressedKeys.begin(), pressedKeys.end(), pressedKeys.begin(), ::toupper); };
 	if (IsKeyPressed(KEY_BACKSPACE)) return "backspace";
 
 	return pressedKeys;

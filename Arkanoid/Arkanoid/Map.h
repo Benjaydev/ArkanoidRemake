@@ -14,7 +14,7 @@ struct BrickStruct
 struct MapStruct
 {
 	int backgroundColour = (int)0x333333FF;
-	BrickStruct bricks[130] = {};
+	BrickStruct bricks[169] = {};
 };
 
 
@@ -27,6 +27,8 @@ public:
 	std::string mapName = "New Level";
 	MapStruct mapStruct;
 	int loadedIndex = -1;
+
+	static std::string saveLocation;
 
 	void GenerateMap();
 	void LoadMap(int index);

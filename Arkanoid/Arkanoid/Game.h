@@ -21,6 +21,10 @@ public:
 	void StartMainMenu();
 	void StartLevelEditor();
 	void StartGame(int mapIndex);
+	void StartGameChoice(int mapIndex);
+	void StartGameStory();
+
+
 	void ResetGameObjects();
 
 	void TogglePauseMenu();
@@ -29,6 +33,9 @@ public:
 
 	Timer* timer = new Timer();
 	float DeltaTime = 0;
+
+	int currentMapIndex;
+
 
 	Texture2D gameBackground;
 	int backgroundColour = 0x333333FF;
@@ -56,11 +63,18 @@ public:
 		return lifetimeObjectCount;
 	}
 
+	static int ActiveBalls;
+	static int BrickCount;
+
+
 	static void TogglePause() { IsGamePaused = !IsGamePaused; }
 
 	static bool DebugActive;
-
 	static bool IsGamePaused;
 	static bool IsEditing;
+	static bool HasGameStarted;
+	static bool IsStoryMode;
+
+
 
 };
