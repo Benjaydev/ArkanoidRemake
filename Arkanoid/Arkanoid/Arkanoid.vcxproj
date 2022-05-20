@@ -208,6 +208,9 @@
     <Image Include="Ball2.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
+    <Image Include="Border.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="Brick.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>

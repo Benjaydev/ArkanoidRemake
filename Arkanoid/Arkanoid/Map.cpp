@@ -1,5 +1,6 @@
 #include "Map.h"
 #include <fstream>
+#include "Game.h"
 
 std::string Map::saveLocation = "Saves.txt";
 
@@ -20,7 +21,7 @@ void Map::GenerateMap()
             if(mapStruct.bricks[index].isEmpty){
                 continue;
             }
-            Brick* brick = new Brick(j * 66, i * 33, mapStruct.bricks[index].health, mapStruct.bricks[index].colour);
+            Brick* brick = new Brick( Game::WorldBorders.x + (j * 66), Game::WorldBorders.y + (i * 33), mapStruct.bricks[index].health, mapStruct.bricks[index].colour);
         }
     }
 }

@@ -38,8 +38,13 @@ public:
 
 
 	Texture2D gameBackground;
+	Texture2D gameBorder;
 	int backgroundColour = 0x333333FF;
 	
+	
+
+
+
 	Player* player;
 
 	PauseMenu* pauseMenu;
@@ -51,6 +56,8 @@ public:
 
 
 	static Game* ThisGame;
+
+	static Vector4 WorldBorders;
 
 	static std::vector<Object*> objects;
 

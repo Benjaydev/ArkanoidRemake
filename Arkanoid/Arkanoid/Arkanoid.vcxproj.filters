@@ -202,5 +202,8 @@
     <Image Include="TestBackground2.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Border.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

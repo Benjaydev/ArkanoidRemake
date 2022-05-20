@@ -1,8 +1,10 @@
 #include "LevelEditor.h"
+#include "Game.h"
 LevelEditor::LevelEditor()
 {
 	cursorBrick = new UIObject();
 	LoadSprite((char*)"TestBackground2.png");
+	physics->SetPosition(Game::WorldBorders.x, Game::WorldBorders.y);
 	sprite->colour = GetColor((int)0xFFFFFF66);
 	cursorBrick->LoadSprite((char*)"Brick.png");
 

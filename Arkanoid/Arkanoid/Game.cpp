@@ -22,13 +22,18 @@ bool Game::HasGameStarted = false;
 bool Game::IsStoryMode = false;
 Game* Game::ThisGame = nullptr;
 
+Vector4 Game::WorldBorders = { 33, 33, 891, 883 };
+
 
 
 Game::Game() {
 
     // Initialization
-    int screenWidth = 858;
-    int screenHeight = 850;
+    //int screenWidth = 858;
+    //int screenHeight = 850;
+    
+    int screenWidth = 924;
+    int screenHeight = 883;
     InitWindow(screenWidth, screenHeight, "Arkanoid - Ben Wharton");
 
     //SetTargetFPS(30);
@@ -41,6 +46,7 @@ Game::Game() {
     
 
     gameBackground = LoadTexture("Background.png");
+    gameBorder = LoadTexture("Border.png");
     StartMainMenu();
 
 
@@ -254,9 +260,10 @@ void Game::Draw()
     // Draw
     BeginDrawing();
 
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
     
-    DrawTexture(gameBackground, 0, 0, GetColor(backgroundColour));
+    DrawTexture(gameBackground, 33, 33, GetColor(backgroundColour));
+    DrawTexture(gameBorder, 0, 0, WHITE);
 
     if (!IsGamePaused && !IsEditing) {
         DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 10, GetScreenHeight() - 30, 20, BLUE);
