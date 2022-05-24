@@ -14,6 +14,6 @@ public:
 
 	void CollideEvent(Hit hit, Object* other) override;
 
-
+	
 };
 

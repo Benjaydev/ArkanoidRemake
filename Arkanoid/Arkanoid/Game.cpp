@@ -8,9 +8,11 @@
 #include "Brick.h"
 #include "Map.h"
 #include <functional>
+#include "Powerup.h"
 
 using namespace std;
 
+Player* Game::player;
 std::vector<Object*> Game::objects = std::vector<Object*>();
 int Game::lifetimeObjectCount = 0;
 int Game::ActiveBalls = 0;
@@ -21,8 +23,9 @@ bool Game::IsEditing = false;
 bool Game::HasGameStarted = false;
 bool Game::IsStoryMode = false;
 Game* Game::ThisGame = nullptr;
+bool Game::CloseGame = false;
 
-Vector4 Game::WorldBorders = { 33, 33, 891, 883 };
+Vector4 Game::WorldBorders = { 38, 33, 886, 883 };
 
 
 
@@ -35,6 +38,7 @@ Game::Game() {
     int screenWidth = 924;
     int screenHeight = 883;
     InitWindow(screenWidth, screenHeight, "Arkanoid - Ben Wharton");
+    InitAudioDevice();
 
     //SetTargetFPS(30);
     ThisGame = this;
@@ -47,12 +51,12 @@ Game::Game() {
 
     gameBackground = LoadTexture("Background.png");
     gameBorder = LoadTexture("Border.png");
+    paddleLife = LoadTexture("Paddle.png");
     StartMainMenu();
-
 
     // Main game loop
     // Detect window close button or ESC key
-    while (!WindowShouldClose())    
+    while (!WindowShouldClose() || CloseGame)    
     {
         DeltaTime = timer->RecordNewTime();
         
@@ -61,9 +65,13 @@ Game::Game() {
     }
 
     delete timer;
+    
+    UnloadTexture(gameBorder);
+    UnloadTexture(gameBackground);
+
     ResetGameObjects();
     
-
+    CloseAudioDevice();
     // De-Initialization 
     CloseWindow();
 }
@@ -152,7 +160,7 @@ void Game::StartGame(int index) {
     player->IncreasePlayerSize(20);
 
     // Create starting ball
-    Ball* ball = new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9 - 30);
+    new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9 - 30);
 
 
 }
@@ -184,11 +192,16 @@ void Game::TogglePauseMenu() {
     }
 }
 
+
 void Game::Update(float DeltaTime) {
     
     // Update objects in world
     for (int i = 0; i < objects.size(); i++) {
         objects[i]->Update(DeltaTime);
+
+        if (CloseGame) {
+            return;
+        }
         // If the update reslts in a reset in objects
         if (i >= objects.size()) { break; }
 
@@ -209,11 +222,11 @@ void Game::Update(float DeltaTime) {
         if (HasGameStarted) {
             PhysicsComponent::GlobalCollisionCheck(DeltaTime);
 
-            if (IsKeyDown(KEY_A))
+            if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
             {
                 player->physics->Accelerate(-1);
             }
-            if (IsKeyDown(KEY_D))
+            if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
             {
                 player->physics->Accelerate(1);
             }
@@ -228,14 +241,28 @@ void Game::Update(float DeltaTime) {
                     }
                     else {
                         StartMainMenu();
+                        return;
                     }
                     
                 }
                 else {
                     StartMainMenu();
+                    return;
                 }
             }
+            if (ActiveBalls == 0) {
+                player->lives--;
+                // Gameover
+                if (player->lives == -1) {
+                    StartMainMenu();
+                    return;
+                }
 
+                // Spawn new ball
+                HasGameStarted = false;
+                player->physics->SetPosition(GetScreenWidth() / 2, GetScreenHeight() - 100);
+                new Ball(player->physics->globalTransform.m8, player->physics->globalTransform.m9 - 30);
+            }
         }
         
         
@@ -257,37 +284,49 @@ void Game::Update(float DeltaTime) {
 }
 void Game::Draw()
 {
+    if (CloseGame) {
+        return;
+    }
     // Draw
     BeginDrawing();
 
     ClearBackground(BLACK);
+
     
     DrawTexture(gameBackground, 33, 33, GetColor(backgroundColour));
     DrawTexture(gameBorder, 0, 0, WHITE);
 
     if (!IsGamePaused && !IsEditing) {
-        DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 10, GetScreenHeight() - 30, 20, BLUE);
-        DrawText("Pause: Q", GetScreenWidth() - MeasureText("Pause: Q", 20) - 10, GetScreenHeight() - 30, 20, BLUE);
+        DrawText(("fps: " + std::to_string(timer->fps)).c_str(), 100, 5, 20, BLACK);
+        DrawText("Pause: Q", GetScreenWidth() - MeasureText("Pause: Q", 20) - 100 , 5, 20, BLACK);
+    }
+
+    
+
+    // Draw each object that has a sprite
+    for (int i = 0; i < objects.size(); i++) {
+        objects[i]->Draw();
     }
 
     if (!HasGameStarted && !IsGamePaused && !IsEditing) {
         float m = MeasureText("Press Space to begin.", 40);
         DrawText("Press Space to begin.", GetScreenWidth() / 2 - (m / 2), (GetScreenHeight() / 2) + 10, 42, BLACK);
-        DrawText("Press Space to begin.", GetScreenWidth()/2 - (m/2), GetScreenHeight()/2, 40, WHITE);
-        
+        DrawText("Press Space to begin.", GetScreenWidth() / 2 - (m / 2), GetScreenHeight() / 2, 40, WHITE);
+
         Map map = Map();
         std::string mapName = map.GetMapName(currentMapIndex);
         float m2 = MeasureText(mapName.c_str(), 40);
         DrawText(mapName.c_str(), (GetScreenWidth() / 2) - (m2 / 2), (GetScreenHeight() / 2) + 10 + 76, 42, BLACK);
-        DrawText(mapName.c_str(), (GetScreenWidth() / 2) - (m2 / 2), (GetScreenHeight() / 2 ) + 75, 40, WHITE);
-        
+        DrawText(mapName.c_str(), (GetScreenWidth() / 2) - (m2 / 2), (GetScreenHeight() / 2) + 75, 40, WHITE);
+
     }
 
-    // Draw each object that has a sprite
-    for (int i = 0; i < objects.size(); i++) {
-        objects[i]->Draw();
-        
+    if (player != nullptr) {
+        for (int i = 0; i < player->lives; i++) {
+            DrawTexture(paddleLife, WorldBorders.x + 16 + (80 * i), WorldBorders.w - 32, WHITE);
+        }
     }
+    
 
 
     EndDrawing();

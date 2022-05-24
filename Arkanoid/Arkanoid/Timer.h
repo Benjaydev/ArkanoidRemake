@@ -1,4 +1,6 @@
 #pragma once
+#include <chrono>
+using namespace std;
 class Timer
 {
 
@@ -12,14 +14,15 @@ public:
 	float frameTimer = 0;
 
 	float totalRunTimeSeconds = 0;
-	float lastTimeSeconds = 0;
+	std::chrono::time_point<std::chrono::system_clock> lastTime;
+	std::chrono::time_point<std::chrono::system_clock> currentTime;
 	float DeltaTime = 0;
 
 
 	float RecordNewTime();
 
 protected:
-	float GetCurrentTimeSeconds();
+	float GetCurrentTimeMilliseconds();
 
 
 private:

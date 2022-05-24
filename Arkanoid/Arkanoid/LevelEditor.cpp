@@ -2,6 +2,7 @@
 #include "Game.h"
 LevelEditor::LevelEditor()
 {
+	cooldown = 1;
 	cursorBrick = new UIObject();
 	LoadSprite((char*)"TestBackground2.png");
 	physics->SetPosition(Game::WorldBorders.x, Game::WorldBorders.y);
@@ -32,6 +33,8 @@ LevelEditor::LevelEditor()
 	
 	mainMenuButton = new UIButton(310, GetScreenHeight() - 50, 100, 40, 0x585858FF, ColorToInt(BLUE), new UIText(0, 0, "Main Menu", 16, 0xFFFFFFFF));
 
+
+	new UIText(70, GetScreenHeight() - 320, "Left Mouse Button: Place Brick | Right Mouse Button: Erase Brick | Middle Mouse Button: Color picker", 16, 0xFFFFFFFF);
 
 
 	// Background colour choose
@@ -156,10 +159,11 @@ void LevelEditor::Update(float DeltaTime)
 	cooldown -= DeltaTime;
 	if (!levelSelectOpen && cooldown <= 0) {
 		Vector2 mp = GetMousePosition();
-		Vector2 bp = { fminf(66 * ((int)mp.x / 66), 66 * 12), fminf(33 * ((int)mp.y / 33), 33 * 12) };
-		if (mp.y < 33 * 13 && mp.y >= 0 && mp.x < 66 * 13 && mp.x >= 0) {
+		Vector2 bp = { fminf(66 * ((int)(mp.x- Game::WorldBorders.x) / 66), 66 * 12), fminf(33 * ((int)(mp.y - Game::WorldBorders.y) / 33), 33 * 12) };
+
+		if (mp.y < Game::WorldBorders.y + (33*13) && mp.y >= Game::WorldBorders.y && mp.x < Game::WorldBorders.z && mp.x >= Game::WorldBorders.x) {
 			cursorBrick->hasSprite = true;
-			cursorBrick->physics->SetPosition(bp.x, bp.y);
+			cursorBrick->physics->SetPosition(bp.x+ Game::WorldBorders.x, bp.y+ Game::WorldBorders.y);
 			// Create new bricks
 			if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 				int index = ((bp.y / 33) * 13) + (bp.x / 66);
@@ -170,16 +174,15 @@ void LevelEditor::Update(float DeltaTime)
 				delete bricks[index];
 				bricks[index] = nullptr;
 
-				// Create new dispaly brick
+				// Create new display brick
 				bricks[index] = new UIObject();
-				bricks[index]->physics->SetPosition(bp.x, bp.y);
+				bricks[index]->physics->SetPosition(bp.x + Game::WorldBorders.x, bp.y + Game::WorldBorders.y);
 				bricks[index]->CopySpriteByReference(cursorBrick->sprite);
 				bricks[index]->sprite->colour = GetColor(currentBrickStruct.colour);
 			}
 
 			// Erase bricks
 			if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
-				cursorBrick->hasSprite = false;
 				int index = ((bp.y / 33) * 13) + (bp.x / 66);
 
 				map.AddBrick(BrickStruct(), index);
@@ -190,7 +193,6 @@ void LevelEditor::Update(float DeltaTime)
 			}
 
 			if (IsMouseButtonDown(MOUSE_MIDDLE_BUTTON)) {
-				cursorBrick->hasSprite = false;
 				int index = ((bp.y / 33) * 13) + (bp.x / 66);
 
 				Color c = GetColor(map.mapStruct.bricks[index].colour);
@@ -200,9 +202,6 @@ void LevelEditor::Update(float DeltaTime)
 			}
 
 
-		}
-		else {
-			cursorBrick->hasSprite = false;
 		}
 		// Keep cursor dispaly brick on top
 		cursorBrick->AddToGameWorld();
@@ -312,7 +311,7 @@ void LevelEditor::OpenLevel() {
 			
 			// Create new display brick
 			UIObject* b = new UIObject();
-			b->physics->SetPosition(j*66, i*33);
+			b->physics->SetPosition((j*66) + Game::WorldBorders.x, (i*33) + Game::WorldBorders.y);
 			b->CopySpriteByReference(cursorBrick->sprite);
 			b->sprite->colour = GetColor(map.mapStruct.bricks[index].colour);
 			bricks[index] = b;

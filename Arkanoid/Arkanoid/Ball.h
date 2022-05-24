@@ -20,5 +20,8 @@ public:
 	void CollideEvent(Hit hit, Object* other) override;
 
 	void CalculateDirection(float speed);
+
+	static Sound BrickHitSound;
+	static Sound PaddleHitSound;
 };
 

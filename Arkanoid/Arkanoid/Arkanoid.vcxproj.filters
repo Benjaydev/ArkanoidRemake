@@ -111,6 +111,9 @@
     <ClCompile Include="LevelSelectMenu.cpp">
       <Filter>Source Files\UI\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Powerup.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -173,6 +176,9 @@
     <ClInclude Include="LevelSelectMenu.h">
       <Filter>Header Files\UI\Menu</Filter>
     </ClInclude>
+    <ClInclude Include="Powerup.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="CenterSegment.png">
@@ -205,5 +211,22 @@
     <Image Include="Border.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Paddle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Powerup.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="BrickHit.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="PaddleHit.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Powerup.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

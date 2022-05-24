@@ -212,9 +212,6 @@ Vector3 PhysicsComponent::Vector3FloatDivision(Vector3 v1, float f){
 
 void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 {
-	if (DeltaTime == 0) {
-		return;
-	}
 	for (int i = 0; i < Game::objects.size(); i++) {
 		Object* check = Game::objects[i];
 		if (check->physics->collider == nullptr || !check->physics->hasPhysicsCheck) {
@@ -227,7 +224,7 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 			check->physics->velocity->x = wallResult.OutVel.x / DeltaTime;
 			check->physics->velocity->y = wallResult.OutVel.y / DeltaTime;
 
-			if (check->tag == "Ball") {
+			if (check->tag == "Ball" || check->tag == "Powerup") {
 				wallResult.otherTag = "Wall";
 				check->CollideEvent(wallResult, nullptr);
 			}
@@ -273,6 +270,16 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 					against->CollideEvent(result, check);
 				}
 			
+				if (against->tag == "Powerup" && (check->tag == "Player" || check->tag == "LeftPlayerEnd" || check->tag == "RightPlayerEnd")) {
+					against->CollideEvent(result, check);
+					continue;
+				}
+				if (check->tag == "Powerup" && (against->tag == "Player" || against->tag == "LeftPlayerEnd" || against->tag == "RightPlayerEnd")) {
+					check->CollideEvent(result, against);
+					continue;
+				}
+
+
 				/*
 				if (check->tag == "Ball" && against->tag == "Ball") {
 					result.otherTag = "Ball";

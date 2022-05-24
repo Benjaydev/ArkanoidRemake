@@ -166,6 +166,7 @@
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Powerup.cpp" />
     <ClCompile Include="RayCollider.cpp" />
     <ClCompile Include="RectangleCollider.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Powerup.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UIButton.h" />
@@ -220,6 +222,12 @@
     <Image Include="LeftEnd.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
+    <Image Include="Paddle.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Powerup.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="RightEnd.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
@@ -229,6 +237,17 @@
     <Image Include="WhitePixel.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="BrickHit.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="PaddleHit.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="Powerup.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

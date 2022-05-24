@@ -31,9 +31,9 @@ Player::Player(float x, float y)
 
     AddToGameWorld();
 
-    physics->moveSpeed = 200;
+    physics->moveSpeed = 10;
     physics->maxSpeed = 800;
-    physics->deceleration = 5;
+    physics->deceleration = 7.5;
 }
 
 Player::~Player()
@@ -45,15 +45,24 @@ Player::~Player()
 
 void Player::Update(float DeltaTime)
 {
-   
-
     Object::Update(DeltaTime);
+
+    // Decrase size until back to default
+    if (size > 20) {
+        sizeCooldown -= DeltaTime;
+        if (sizeCooldown <= 0) {
+          IncreasePlayerSize(-20);
+        }
+    }
+    
 
 }
 
 
 void Player::IncreasePlayerSize(float amount)
 {
+    size += amount;
+    sizeCooldown = 15;
     centerSegment->sprite->texture->width += amount;
     CalculateSpritesAndColliders();
 

@@ -1,5 +1,7 @@
 #include "Brick.h"
 #include "Game.h"
+#include "Powerup.h"
+
 
 
 Brick::Brick(float x, float y, int Health, int colour)
@@ -35,10 +37,19 @@ Brick::~Brick()
 
 void Brick::DamageBrick()
 {
+   
+    
+
     health--;
 
     if (health <= 0) {
         isWaitingDestroy = true;
+
+        // Random chance to spawn powerup
+        if (rand() % 15 + 1 == 1) {
+            new Powerup(physics->globalTransform.m8, physics->globalTransform.m9);
+         }
+
         return;
     }
 

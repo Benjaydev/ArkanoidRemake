@@ -39,13 +39,14 @@ public:
 
 	Texture2D gameBackground;
 	Texture2D gameBorder;
+	Texture2D paddleLife;
 	int backgroundColour = 0x333333FF;
 	
 	
 
 
 
-	Player* player;
+	static Player* player;
 
 	PauseMenu* pauseMenu;
 	MainMenu* mainMenu;
@@ -76,11 +77,18 @@ public:
 
 	static void TogglePause() { IsGamePaused = !IsGamePaused; }
 
+	static void CloseGameWindow() { 
+		CloseGame = true;
+		CloseWindow();
+
+	}
+
 	static bool DebugActive;
 	static bool IsGamePaused;
 	static bool IsEditing;
 	static bool HasGameStarted;
 	static bool IsStoryMode;
+	static bool CloseGame;
 
 
 

@@ -1,6 +1,10 @@
 #include "Ball.h"
 #include "Hit.h"
 #include "Game.h"
+
+Sound Ball::BrickHitSound = LoadSound((char*)"BrickHit.wav");
+Sound Ball::PaddleHitSound = LoadSound((char*)"PaddleHit.wav");
+
 Ball::Ball(float x, float y)
 {
     tag = "Ball";
@@ -82,6 +86,7 @@ void Ball::ReturnBall(Hit hit)
 void Ball::CollideEvent(Hit hit, Object* other)
 {
     if (hit.otherTag == "Brick") {
+        PlaySound(BrickHitSound);
         ReflectBall(hit);
         CalculateDirection(physics->maxSpeed);
 
@@ -106,9 +111,10 @@ void Ball::CollideEvent(Hit hit, Object* other)
         return;
     }
 
+
+    PlaySound(PaddleHitSound);
+
     float facePos = hit.percentDistanceAlongHitFace;
-
-
     float speedMultiplier = 1;
 
     // If ball is moving left
@@ -118,7 +124,7 @@ void Ball::CollideEvent(Hit hit, Object* other)
             if (hit.otherTag == "Player") {
                 // Convert facePos range from 0-0.5 to 0.5-1 to use for speed multiplier
                 speedMultiplier = ((facePos - 0.5f) / (1.0f - 0.5f)) * (1.2f - 0.8f) + 0.8f;
-                movementDirection.y *= speedMultiplier;
+                movementDirection.x = -1 * speedMultiplier;
             }
             
             ReturnBall(hit);
@@ -128,7 +134,7 @@ void Ball::CollideEvent(Hit hit, Object* other)
             if (hit.otherTag == "Player") {
                 // Convert facePos range from 0-0.5 to 0.5-1 to use for speed multiplier
                 speedMultiplier = ((facePos - 0) / (0.5f - 0)) * (1.2f - 0.8f) + 0.8f;
-                movementDirection.y *= speedMultiplier;
+                movementDirection.x = -1 * speedMultiplier;
             }
             
             ReflectBall(hit);
@@ -143,7 +149,7 @@ void Ball::CollideEvent(Hit hit, Object* other)
             if (hit.otherTag == "Player") {
                 // Convert facePos range from 0-0.5 to 0.5-1 to use for speed multiplier
                 speedMultiplier = ((facePos - 0) / (0.5f - 0)) * (1.2f - 0.8f) + 0.8f;
-                movementDirection.y *= speedMultiplier;
+                movementDirection.x = 1 * speedMultiplier;
             }
             ReturnBall(hit);
         }
@@ -154,7 +160,7 @@ void Ball::CollideEvent(Hit hit, Object* other)
                 speedMultiplier = ((facePos - 0.5f) / (1.0f - 0.5f)) * (1.2f - 0.8f) + 0.8f;
 
 
-                movementDirection.y *= speedMultiplier;
+                movementDirection.x = 1 * speedMultiplier;
             }
             ReflectBall(hit);
         }

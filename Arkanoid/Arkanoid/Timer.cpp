@@ -1,11 +1,10 @@
 #pragma once
 #include "Timer.h"
-#include <chrono>
-using namespace std;
 
 Timer::Timer()
 {
-    lastTimeSeconds = GetCurrentTimeSeconds();
+    GetCurrentTimeMilliseconds();
+    lastTime = currentTime;
 }
 
 Timer::~Timer()
@@ -17,10 +16,13 @@ Timer::~Timer()
 
 float Timer::RecordNewTime()
 {
-    float newTimeSeconds = GetCurrentTimeSeconds();
-    DeltaTime = newTimeSeconds - lastTimeSeconds;
+    GetCurrentTimeMilliseconds();
+    std::chrono::duration<float> difference = currentTime - lastTime;
+    DeltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(difference).count();
     // Keep track of this time until next method call
-    lastTimeSeconds = newTimeSeconds;
+    lastTime = currentTime;
+
+    //DeltaTime /= 1000.0f;
 
     totalRunTimeSeconds += DeltaTime;
 
@@ -44,11 +46,10 @@ void Timer::CalculateFrames(float DeltaTime)
 
 
 
-float Timer::GetCurrentTimeSeconds()
+float Timer::GetCurrentTimeMilliseconds()
 {
-    auto time = std::chrono::high_resolution_clock::now();
-    auto timeMilliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(time.time_since_epoch()).count();
+    currentTime = std::chrono::system_clock::now();
 
-    return (timeMilliseconds / 1000.0f);
+    return 0.0f;
 }
 
