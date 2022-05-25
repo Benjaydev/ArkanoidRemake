@@ -156,12 +156,13 @@ LevelEditor::~LevelEditor()
 
 void LevelEditor::Update(float DeltaTime)
 {
-	cooldown -= DeltaTime;
+	cooldown -= DeltaTime; 
+	cursorBrick->hasSprite = false;
 	if (!levelSelectOpen && cooldown <= 0) {
 		Vector2 mp = GetMousePosition();
 		Vector2 bp = { fminf(66 * ((int)(mp.x- Game::WorldBorders.x) / 66), 66 * 12), fminf(33 * ((int)(mp.y - Game::WorldBorders.y) / 33), 33 * 12) };
 		
-		cursorBrick->hasSprite = true;
+		
 
 		if (mp.y < Game::WorldBorders.y + (33*13) && mp.y >= Game::WorldBorders.y && mp.x < Game::WorldBorders.z && mp.x >= Game::WorldBorders.x) {
 			cursorBrick->hasSprite = true;
