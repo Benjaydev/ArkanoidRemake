@@ -99,21 +99,14 @@ public:
 
 	void DrawDebug() override;
 
-
-	bool IsEmpty();
-	void Empty();
-
 	void Fit(std::vector<Vector3> points);
 	void Fit(Vector3 points[]);
 
 	bool Overlaps(Vector2 point) override;
 	bool Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result) override;
 
-	void Inflate(Collider* other) override;
-
 	void Translate(float x, float y) override;
 
-	Vector2 ClosestPoint(Vector2 point) override;
 };
 
 class RayCollider : public Collider
