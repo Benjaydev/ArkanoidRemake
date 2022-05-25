@@ -4,10 +4,10 @@ LevelEditor::LevelEditor()
 {
 	cooldown = 1;
 	cursorBrick = new UIObject();
-	LoadSprite((char*)"TestBackground2.png");
+	LoadSprite((char*)"Images/GridBackground.png");
 	physics->SetPosition(Game::WorldBorders.x, Game::WorldBorders.y);
 	sprite->colour = GetColor((int)0xFFFFFF66);
-	cursorBrick->LoadSprite((char*)"Brick.png");
+	cursorBrick->LoadSprite((char*)"Images/Brick.png");
 
 	
 	optionsPanel = new UIPanel(0, GetScreenHeight()-300, GetScreenWidth(), 300, 0xFAEBD7DD);

@@ -201,51 +201,54 @@
     <ClInclude Include="UIText.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Background.png">
+    <Image Include="Images\Background.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="Ball.png">
+    <Image Include="Images\Ball.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="Ball2.png">
+    <Image Include="Images\Ball2.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="Border.png">
+    <Image Include="Images\Border.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="Brick.png">
+    <Image Include="Images\Brick.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="CenterSegment.png">
+    <Image Include="Images\CenterSegment.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="LeftEnd.png">
+    <Image Include="Images\GridBackground.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="Paddle.png">
+    <Image Include="Images\LeftEnd.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="Powerup.png">
+    <Image Include="Images\Paddle.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="RightEnd.png">
+    <Image Include="Images\Powerup.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="TestBackground2.png">
+    <Image Include="Images\RightEnd.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="WhitePixel.png">
+    <Image Include="Images\WhitePixel.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="GridBackground">
       <DeploymentContent>true</DeploymentContent>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="BrickHit.wav">
+    <Media Include="Sounds\BrickHit.wav">
       <DeploymentContent>true</DeploymentContent>
     </Media>
-    <Media Include="PaddleHit.wav">
+    <Media Include="Sounds\PaddleHit.wav">
       <DeploymentContent>true</DeploymentContent>
     </Media>
-    <Media Include="Powerup.wav">
+    <Media Include="Sounds\Powerup.wav">
       <DeploymentContent>true</DeploymentContent>
     </Media>
   </ItemGroup>

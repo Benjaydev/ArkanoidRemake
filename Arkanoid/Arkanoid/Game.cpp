@@ -49,9 +49,9 @@ Game::Game() {
 
     
 
-    gameBackground = LoadTexture("Background.png");
-    gameBorder = LoadTexture("Border.png");
-    paddleLife = LoadTexture("Paddle.png");
+    gameBackground = LoadTexture("Images/Background.png");
+    gameBorder = LoadTexture("Images/Border.png");
+    paddleLife = LoadTexture("Images/Paddle.png");
     StartMainMenu();
 
     // Main game loop

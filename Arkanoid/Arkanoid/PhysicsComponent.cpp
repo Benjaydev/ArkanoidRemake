@@ -12,21 +12,26 @@ PhysicsComponent::PhysicsComponent()
 
 PhysicsComponent::~PhysicsComponent()
 {
+	// Delete collider if valid
 	if (collider != nullptr) {
 		delete collider;
 	}
+	// Delete movement values
 	delete velocity;
 	velocity = nullptr;
 	delete acceleration;
 	acceleration = nullptr;
 
+	// Remove parent physics
 	delete parentPhysics;
 
+	// Clear children physics vector
 	childrenPhysics.clear();
 }
 
 void PhysicsComponent::SetCollider(cType type)
 {
+	// Set collider type of this physics component
 	if (type == cType::Rectangle) {
 		collider = new RectangleCollider();
 	}
@@ -35,6 +40,7 @@ void PhysicsComponent::SetCollider(cType type)
 	}
 }
 
+// Fit attached collider to width and height (Usually used with sprites)
 void PhysicsComponent::FitColliderWH(float width, float height, Vector2 pos)
 {
 	if (collider != nullptr) {
@@ -70,6 +76,7 @@ void PhysicsComponent::UpdateTransform()
 
 	// Update collider position
 	if (collider != nullptr) {
+		// Translate by difference between points
 		collider->Translate(globalTransform.m8- lastpos.x,  globalTransform.m9- lastpos.y);
 	}
 	

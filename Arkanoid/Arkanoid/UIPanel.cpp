@@ -4,7 +4,7 @@
 UIPanel::UIPanel(float x, float y, float width, float height, int colour)
 {
 	physics->SetPosition(x, y);
-	LoadSprite((char*)"WhitePixel.png");
+	LoadSprite((char*)"Images/WhitePixel.png");
 	sprite->texture->width = width;
 	sprite->texture->height = height;
 	sprite->colour = GetColor(colour);

@@ -181,51 +181,54 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="CenterSegment.png">
+    <Image Include="GridBackground">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="LeftEnd.png">
+    <Image Include="Images\Background.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="RightEnd.png">
+    <Image Include="Images\Ball.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Ball.png">
+    <Image Include="Images\Ball2.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Brick.png">
+    <Image Include="Images\Border.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Ball2.png">
+    <Image Include="Images\Brick.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Background.png">
+    <Image Include="Images\CenterSegment.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="WhitePixel.png">
+    <Image Include="Images\GridBackground.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="TestBackground2.png">
+    <Image Include="Images\LeftEnd.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Border.png">
+    <Image Include="Images\Paddle.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Paddle.png">
+    <Image Include="Images\Powerup.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Powerup.png">
+    <Image Include="Images\RightEnd.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\WhitePixel.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="BrickHit.wav">
+    <Media Include="Sounds\BrickHit.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="PaddleHit.wav">
+    <Media Include="Sounds\PaddleHit.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="Powerup.wav">
+    <Media Include="Sounds\Powerup.wav">
       <Filter>Resource Files</Filter>
     </Media>
   </ItemGroup>
