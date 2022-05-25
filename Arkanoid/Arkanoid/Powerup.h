@@ -4,7 +4,6 @@ class Powerup : public Object
 {
 public:
 	Powerup(float x, float y);
-	virtual ~Powerup();
 
 	int powerupType = 1;
 	bool hasBeenActivated = false;

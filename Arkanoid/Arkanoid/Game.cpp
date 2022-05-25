@@ -38,7 +38,7 @@ Game::Game() {
     int screenWidth = 924;
     int screenHeight = 883;
     InitWindow(screenWidth, screenHeight, "Arkanoid - Ben Wharton");
-    InitAudioDevice();
+    //InitAudioDevice();
 
     //SetTargetFPS(30);
     ThisGame = this;
@@ -56,7 +56,7 @@ Game::Game() {
 
     // Main game loop
     // Detect window close button or ESC key
-    while (!WindowShouldClose() || CloseGame)    
+    while (!WindowShouldClose() && !CloseGame)    
     {
         DeltaTime = timer->RecordNewTime();
         
@@ -69,11 +69,17 @@ Game::Game() {
     UnloadTexture(gameBorder);
     UnloadTexture(gameBackground);
 
+    UnloadSound(Powerup::PowerupSound);
+    UnloadSound(Ball::BrickHitSound);
+    UnloadSound(Ball::PaddleHitSound);
+
     ResetGameObjects();
     
     CloseAudioDevice();
+
     // De-Initialization 
     CloseWindow();
+    
 }
 
 
@@ -270,15 +276,16 @@ void Game::Update(float DeltaTime) {
             if (!HasGameStarted) {
                 HasGameStarted = true;
             }
-
         }
     }
 
 
-
-    if (IsKeyPressed(KEY_Q)) {
-        TogglePauseMenu();
+    if (mainMenu == nullptr) {
+        if (IsKeyPressed(KEY_Q)) {
+            TogglePauseMenu();
+        }
     }
+    
 
   
 }
@@ -321,7 +328,7 @@ void Game::Draw()
 
     }
 
-    if (player != nullptr) {
+    if (player != nullptr && !IsGamePaused && !IsEditing) {
         for (int i = 0; i < player->lives; i++) {
             DrawTexture(paddleLife, WorldBorders.x + 16 + (80 * i), WorldBorders.w - 32, WHITE);
         }

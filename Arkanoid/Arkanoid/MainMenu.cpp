@@ -3,7 +3,7 @@
 
 MainMenu::MainMenu()
 {
-	backgroundPanel = new UIPanel(0, 0, GetScreenWidth(), GetScreenHeight(), 0xAAEEFFAA);
+	backgroundPanel = new UIPanel(0, 0, GetScreenWidth(), GetScreenHeight(), 0xEEEEFFAA);
 	AddChild(backgroundPanel);
 
 
@@ -65,16 +65,21 @@ void MainMenu::ToggleLoadMenu() {
 	levelSelectOpen = !levelSelectOpen;
 
 	if (!levelSelectOpen) {
+		loadSaveButton->isActive = true;
+		storyModeButton->isActive = true;
 		levelSelectMenu->isWaitingDestroy = true;
 		return;
 	}
-
-	levelSelectMenu = new LevelSelectMenu(GetScreenWidth() / 2, GetScreenHeight() / 2);
+	loadSaveButton->isActive = false;
+	storyModeButton->isActive = false;
+	levelSelectMenu = new LevelSelectMenu((GetScreenWidth() / 2), GetScreenHeight() / 2);
 	levelSelectMenu->confirmButton->AssignCallMethod(std::bind(&MainMenu::ChooseLevel, this));
 }
 
 void MainMenu::ChooseLevel() {
 	if (levelSelectMenu->chosenIndex != -1) {
+		loadSaveButton->isActive = true;
+		storyModeButton->isActive = true;
 		levelSelectOpen = !levelSelectOpen;
 		levelSelectMenu->isWaitingDestroy = true;
 		startGameButton->isActive = true;

@@ -79,8 +79,6 @@ public:
 
 	static void CloseGameWindow() { 
 		CloseGame = true;
-		CloseWindow();
-
 	}
 
 	static bool DebugActive;

@@ -87,6 +87,7 @@ void Ball::CollideEvent(Hit hit, Object* other)
 {
     if (hit.otherTag == "Brick") {
         PlaySound(BrickHitSound);
+
         ReflectBall(hit);
         CalculateDirection(physics->maxSpeed);
 
@@ -116,6 +117,8 @@ void Ball::CollideEvent(Hit hit, Object* other)
 
     float facePos = hit.percentDistanceAlongHitFace;
     float speedMultiplier = 1;
+
+   
 
     // If ball is moving left
     if (movementDirection.x < 0) {
@@ -171,6 +174,7 @@ void Ball::CollideEvent(Hit hit, Object* other)
 
 
     ReflectBall(hit);
+    movementDirection.y = -1;
     CalculateDirection(physics->maxSpeed);
 }
 

@@ -160,6 +160,8 @@ void LevelEditor::Update(float DeltaTime)
 	if (!levelSelectOpen && cooldown <= 0) {
 		Vector2 mp = GetMousePosition();
 		Vector2 bp = { fminf(66 * ((int)(mp.x- Game::WorldBorders.x) / 66), 66 * 12), fminf(33 * ((int)(mp.y - Game::WorldBorders.y) / 33), 33 * 12) };
+		
+		cursorBrick->hasSprite = true;
 
 		if (mp.y < Game::WorldBorders.y + (33*13) && mp.y >= Game::WorldBorders.y && mp.x < Game::WorldBorders.z && mp.x >= Game::WorldBorders.x) {
 			cursorBrick->hasSprite = true;
@@ -183,6 +185,7 @@ void LevelEditor::Update(float DeltaTime)
 
 			// Erase bricks
 			if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
+				cursorBrick->hasSprite = false;
 				int index = ((bp.y / 33) * 13) + (bp.x / 66);
 
 				map.AddBrick(BrickStruct(), index);
@@ -192,6 +195,7 @@ void LevelEditor::Update(float DeltaTime)
 				bricks[index] = nullptr;
 			}
 
+			// Copy colour from hovered brick
 			if (IsMouseButtonDown(MOUSE_MIDDLE_BUTTON)) {
 				int index = ((bp.y / 33) * 13) + (bp.x / 66);
 

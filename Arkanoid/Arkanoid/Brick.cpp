@@ -47,7 +47,7 @@ void Brick::DamageBrick()
 
         // Random chance to spawn powerup
         if (rand() % 15 + 1 == 1) {
-            new Powerup(physics->globalTransform.m8, physics->globalTransform.m9);
+           new Powerup(physics->globalTransform.m8, physics->globalTransform.m9);
          }
 
         return;

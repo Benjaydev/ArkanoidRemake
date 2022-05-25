@@ -27,9 +27,6 @@ Powerup::Powerup(float x, float y)
 	AddToGameWorld();
 }
 
-Powerup::~Powerup()
-{
-}
 
 void Powerup::CollideEvent(Hit hit, Object* other)
 {
@@ -75,6 +72,7 @@ void Powerup::TriggerPowerup()
 
 				ball = nullptr;
 				ball2 = nullptr;
+				b = nullptr;
 			}
 		}
 	}
@@ -96,5 +94,6 @@ void Powerup::TriggerPowerup()
 void Powerup::Update(float DeltaTime)
 {
 	startingCooldown -= DeltaTime;
-	physics->velocity = new Vector3({ 0, 100, 0 });
+	physics->velocity->y = 100;
+	physics->velocity->x = 0;
 }
