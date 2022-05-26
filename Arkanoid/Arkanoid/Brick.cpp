@@ -18,7 +18,7 @@ Brick::Brick(float x, float y, int Health, int colour)
 
     // Create collider for object based on sprite
     physics->SetCollider(cType::Rectangle);
-    physics->FitColliderWH(sprite->GetWidth(), sprite->GetHeight(), { physics->globalTransform.m8 + sprite->GetWidth() / 2,physics->globalTransform.m9 + sprite->GetHeight() / 2 });
+    physics->FitColliderWH(sprite->GetWidth(), sprite->GetHeight(), { physics->globalTransform.m8 + sprite->GetWidth() / 2.0f, physics->globalTransform.m9 + sprite->GetHeight() / 2.0f });
 
     // Add to game
     AddToGameWorld();
@@ -59,7 +59,7 @@ void Brick::DamageBrick()
     }
 
     // Change opacity based on health
-    sprite->colour.a = 255 * ((float)health / (float)maxHealth); 
+    sprite->colour.a = (int) ( 255 * ((float)health / (float)maxHealth)); 
 
 }
 

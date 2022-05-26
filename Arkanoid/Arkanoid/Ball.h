@@ -9,14 +9,11 @@ public:
 	Object* ballSprite = new Object();
 	Vector2 movementDirection = {1, -1};
 
-
 	void Update(float DeltaTime) override;
 
-
+	// Collisions
 	void ReflectBall(Hit hit);
-
 	void ReturnBall(Hit hit);
-
 	void CollideEvent(Hit hit, Object* other) override;
 
 	void CalculateDirection(float speed);

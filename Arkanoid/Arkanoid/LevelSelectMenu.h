@@ -9,7 +9,6 @@ public:
 	virtual ~LevelSelectMenu();
 
 	UIPanel* backPanel;
-	UIText* title;
 
 	UIButton* confirmButton;
 	UIText* controlsText;

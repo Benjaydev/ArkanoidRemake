@@ -85,28 +85,31 @@ void PhysicsComponent::UpdateTransform()
 
 void PhysicsComponent::Accelerate(float direction)
 {
-	Vector3 facing;
+	Vector3 facing = { localTransform.m0, localTransform.m1, 1};
 	
-	facing.x = localTransform.m0;
-	facing.y = localTransform.m1;
-	facing.z = 1;
+	// Get travel distance fowards
 	facing = Vector3FloatMultiply(facing, moveSpeed * direction);
 
+	// Add to acceleration
 	*acceleration = Vector3Add(*acceleration, facing);
 }
 
 void PhysicsComponent::Decelerate(float DeltaTime)
 {
+	// Lower velocity
 	*velocity = Vector3FloatMultiply(*velocity, 1-(deceleration * DeltaTime));
 }
 
 void PhysicsComponent::CalculateVelocity(float DeltaTime)
 {
+	// Add the acceleration to the veocity
 	*velocity = Vector3Add(*velocity, *acceleration);
+
+	// Decelerate velocity for this frame
 	Decelerate(DeltaTime);
 
 
-	// Keep velocity within max speed
+	// Keep velocity within max speed //
 	float mag = Vector3Length(*velocity);
 	if (mag != 0) {
 		// Normalise direction
@@ -124,58 +127,68 @@ void PhysicsComponent::CalculateVelocity(float DeltaTime)
 
 }
 
+// Move the transform
 void PhysicsComponent::Move(float DeltaTime)
 {
 	// If collider has a parent, apply the forces to the parent instead
 	if (parentPhysics != nullptr) {
 		if (parentPhysics->velocity != nullptr) {
+
+			// Add forces to parent
 			parentPhysics->velocity->x += velocity->x;
 			parentPhysics->velocity->y += velocity->y;
 
+			// Remove forces from this
 			velocity->x = 0;
 			velocity->y = 0;
 			return;
 		}
 	}
 
-
+	// If axes are locked, do not move
 	if (LockAxis.x && LockAxis.y) {
 		return;
 	}
 
-	velocity->x = fminf(velocity->x, maxSpeed);
-	velocity->y = fminf(velocity->y, maxSpeed);
+	// Get velocity capped at max speed
+	//velocity->x = fminf(velocity->x, maxSpeed);
+	//velocity->y = fminf(velocity->y, maxSpeed);
 
-	if (LockAxis.x && !LockAxis.y) {
+	// Locked x axis
+	if (!LockAxis.x && LockAxis.y) {
 		Translate(velocity->x * DeltaTime,0);
 		return;
 	}
-	if (!LockAxis.x && LockAxis.y) {
+	// Locked y axis
+	if (LockAxis.x && !LockAxis.y) {
 		Translate(0, velocity->y * DeltaTime);
 		return;
 	}
 
-
+	// Translate on both axes
 	Translate(velocity->x * DeltaTime, velocity->y * DeltaTime);
 }
 
 
 void PhysicsComponent::Translate(float x, float y) {
+	// Add values to global transform position
 	localTransform.m8 += x;
 	localTransform.m9 += y;
 	
-
+	// Apply changes
 	UpdateTransform();
 }
 
+// Translate using Vector2
 void PhysicsComponent::Translate(Vector2 v)
 {
 	Translate(v.x, v.y);
 }
 
-
+// Set position using differences instead of directly so that children or parent physics can be updated correctly
 void PhysicsComponent::SetPosition(float x, float y)
 {
+	// Find the difference between locations and translate along that
 	float diffx = x - localTransform.m8;
 	float diffy = y - localTransform.m9;
 	Translate(diffx, diffy);
@@ -183,111 +196,119 @@ void PhysicsComponent::SetPosition(float x, float y)
 
 void PhysicsComponent::SetPosition(Vector2 v)
 {
-	localTransform.m8 = v.x;
-	localTransform.m9 = v.y;
-	UpdateTransform();
+	// Find the difference between locations and translate along that
+	float diffx = v.x - localTransform.m8;
+	float diffy = v.y - localTransform.m9;
+	Translate(diffx, diffy);
 }
 
 void PhysicsComponent::SetRotation(float zRad)
 {
+	// Create new matrix equal to the new rotation
 	Matrix m = MatrixMultiply(MatrixIdentity(), MatrixRotateZ(zRad));
+	// Set the transform to the new matrix
 	localTransform = m;
 	UpdateTransform();
 }
 
 void PhysicsComponent::Rotate(float rad) {
+	// Rotate current transform
 	localTransform = MatrixMultiply(MatrixRotateZ(rad), localTransform);
 	UpdateTransform();
 }
 
 
 Vector3 PhysicsComponent::Vector3FloatMultiply(Vector3 v1, float f){
-	Vector3 v3;
-	v3.x = v1.x * f;
-	v3.y = v1.y * f;
-	v3.z = v1.z * f;
+	Vector3 v3 = { v1.x * f, v1.y * f, v1.z * f };
 	return v3;
 }
 
 Vector3 PhysicsComponent::Vector3FloatDivision(Vector3 v1, float f){
-	Vector3 v3;
-	v3.x = v1.x / f;
-	v3.y = v1.y / f;
-	v3.z = v1.z / f;
+	Vector3 v3 = { v1.x/ f, v1.y / f, v1.z / f };
 	return v3;
 }
 
 void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 {
 	for (int i = 0; i < Game::objects.size(); i++) {
+		// Get the first object to check against the next 
 		Object* check = Game::objects[i];
+		// If it has no collider or shouldn't check physics, ignore collisions and move
 		if (check->physics->collider == nullptr || !check->physics->hasPhysicsCheck) {
 			check->physics->Move(DeltaTime);
 			continue;
 		}
 		
 		Hit wallResult;
+		// Check if object is colliding with screen boundries
 		if (check->physics->collider->OverlapsScreen(check->physics->deltaVelocity(DeltaTime), wallResult)) {
+			// Set velocity to the adjusted velocity (Removes DeltaTime as it will be applied again during Move(DeltaTime)
 			check->physics->velocity->x = wallResult.OutVel.x / DeltaTime;
 			check->physics->velocity->y = wallResult.OutVel.y / DeltaTime;
 
+			// If it's a ball or powerup, call their collide events as they have unique collision results
 			if (check->tag == "Ball" || check->tag == "Powerup") {
 				wallResult.otherTag = "Wall";
 				check->CollideEvent(wallResult, nullptr);
 			}
 		}
 
+
 		for (int j = i+1; j < Game::objects.size(); j++) {
+			// Get second object to check against the previous object
 			Object* against = Game::objects[j];
 
-			// Don't check collision if object does not have physics checks, is child of the other object, if object is null, or if both objects have no velocity
-			if (!against->physics->hasPhysicsCheck && against->parent == check || against->physics->collider == nullptr || ((check->physics->velocity->x == 0.0f && check->physics->velocity->y == 0.0f) && (against->physics->velocity->x == 0.0f && against->physics->velocity->y == 0.0f))) {
+			// Don't check collision if object does not have physics checks, is child of the other object, if object collider is null, or if both objects have no velocity
+			if (!against->physics->hasPhysicsCheck || against->parent == check || against->physics->collider == nullptr || ((check->physics->velocity->x == 0.0f && check->physics->velocity->y == 0.0f) && (against->physics->velocity->x == 0.0f && against->physics->velocity->y == 0.0f))) {
 				continue;
 			}
 
 			// Do base collision check
 			Hit result;
-
-
-			
-			//*check->physics->velocity = check->physics->deltaVelocity(DeltaTime);
 			bool collided = check->physics->collider->Overlaps(against->physics->collider, check->physics->deltaVelocity(DeltaTime), against->physics->deltaVelocity(DeltaTime), result);
 
-			
-
-
+			// If collision is detected
 			if (collided) {
+				// If the first object is a ball and the second object is a player or brick
 				if (check->tag == "Ball" && (against->tag == "Player" || against->tag == "LeftPlayerEnd" || against->tag == "RightPlayerEnd" || against->tag == "Brick")) {
+					// Save tag of other object
 					result.otherTag = against->tag;
 
+					// Set velocity to the collision adjusted velocity (Removes DeltaTime as it will be applied again during Move(DeltaTime)
 					check->physics->velocity->x = result.OutVel.x / DeltaTime;
 					check->physics->velocity->y = result.OutVel.y / DeltaTime;
 					check->physics->Move(DeltaTime);
 
+					// Call collide event for first object (The ball)
 					check->CollideEvent(result, against);
 
 				}
+				// If the second object is a ball and the first object is a player or brick
 				if (against->tag == "Ball" && (check->tag == "Player" || check->tag == "LeftPlayerEnd" || check->tag == "RightPlayerEnd" || check->tag == "Brick")) {
+					// Save tag of other object
 					result.otherTag = check->tag;
 
+					// Set velocity to the collision adjusted velocity (Removes DeltaTime as it will be applied again during Move(DeltaTime)
 					against->physics->velocity->x = result.OutVel.x / DeltaTime;
 					against->physics->velocity->y = result.OutVel.y / DeltaTime;
 					against->physics->Move(DeltaTime);
 
+					// Call collide event for second object (The ball)
 					against->CollideEvent(result, check);
 				}
 			
-				if (against->tag == "Powerup" && (check->tag == "Player" || check->tag == "LeftPlayerEnd" || check->tag == "RightPlayerEnd")) {
-					against->CollideEvent(result, check);
-					continue;
-				}
+				// If the first object is a powerup and the second object is the player
 				if (check->tag == "Powerup" && (against->tag == "Player" || against->tag == "LeftPlayerEnd" || against->tag == "RightPlayerEnd")) {
 					check->CollideEvent(result, against);
 					continue;
 				}
-
-
-				/*
+				// If the second object is a powerup and the first object is the player
+				if (against->tag == "Powerup" && (check->tag == "Player" || check->tag == "LeftPlayerEnd" || check->tag == "RightPlayerEnd")) {
+					against->CollideEvent(result, check);
+					continue;
+				}
+				
+				/* Ball against ball collision
 				if (check->tag == "Ball" && against->tag == "Ball") {
 					result.otherTag = "Ball";
 					check->CollideEvent(result, against);
@@ -297,10 +318,6 @@ void PhysicsComponent::GlobalCollisionCheck(float DeltaTime)
 				}*/
 
 			}
-			
-			// Set colliding if has collided atleast once
-			check->physics->isColliding = check->physics->isColliding ? true : collided;
-			against->physics->isColliding = against->physics->isColliding ? true : collided;
 		}
 		check->physics->Move(DeltaTime);
 		

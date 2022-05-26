@@ -5,8 +5,7 @@
 class PauseMenu : public UIObject
 {
 public:
-	PauseMenu(float x, float y);
-	PauseMenu(){};
+	PauseMenu(int x, int y);
 	virtual ~PauseMenu();
 
 	

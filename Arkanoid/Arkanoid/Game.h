@@ -14,40 +14,18 @@ public:
 	Game();
 	~Game();
 
-	void Draw();
-
-	void Update(float DeltaTime);
-
-	void StartMainMenu();
-	void StartLevelEditor();
-	void StartGame(int mapIndex);
-	void StartGameChoice(int mapIndex);
-	void StartGameStory();
-
-
-	void ResetGameObjects();
-
-	void TogglePauseMenu();
-
-
-
 	Timer* timer = new Timer();
 	float DeltaTime = 0;
 
 	int currentMapIndex;
-
 
 	Texture2D gameBackground;
 	Texture2D gameBorder;
 	Texture2D paddleLife;
 	int backgroundColour = 0x333333FF;
 	
-	
 
-
-
-	static Player* player;
-
+	// Menus
 	PauseMenu* pauseMenu;
 	MainMenu* mainMenu;
 	LevelEditor* levelEditor;
@@ -56,14 +34,29 @@ public:
 	void DestroyStoredAwaiting();
 
 
-	static Game* ThisGame;
+	void Draw();
 
+	void Update(float DeltaTime);
+
+	void StartMainMenu();
+	void StartLevelEditor();
+	void StartGame(int mapIndex);
+	void StartGameStory();
+	void TogglePauseMenu();
+
+	void ResetGameObjects();
+
+
+	// STATICS
+	static Player* player;
+	static Game* ThisGame;
 	static Vector4 WorldBorders;
 
-	static std::vector<Object*> objects;
-
 	static int lifetimeObjectCount;
+	static int ActiveBalls;
+	static int BrickCount;
 
+	static std::vector<Object*> objects;
 	static int AddObjectToGame(Object* obj) {
 		objects.push_back(obj);
 		lifetimeObjectCount++;
@@ -71,16 +64,11 @@ public:
 		return lifetimeObjectCount;
 	}
 
-	static int ActiveBalls;
-	static int BrickCount;
-
 
 	static void TogglePause() { IsGamePaused = !IsGamePaused; }
+	static void CloseGameWindow() { CloseGame = true; }
 
-	static void CloseGameWindow() { 
-		CloseGame = true;
-	}
-
+	// Flags
 	static bool DebugActive;
 	static bool IsGamePaused;
 	static bool IsEditing;

@@ -3,22 +3,23 @@
 #include "raymath.h"
 #include <vector>
 #include "Hit.h"
-enum class cType { None, Rectangle, Circle, Ray };
+// ALL COLLIDERS ARE FOUND IN THIS HEADER
 
+// Collider type
+enum class cType { None, Rectangle, Circle };
 
+// Child colliders will override the majority of functionality of the base collider class
 class Collider
 {
 public:
 	Collider();
-	Collider(Collider* copy);
 	~Collider();
 
 	Collider* Copy(Collider* copy);
 
 	cType type = cType::None;
 
-
-
+	// Overlap functions
 	virtual bool Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result) { return false;  };
 	virtual bool Overlaps(Vector2 point) { return false; };
 	bool OverlapsScreen(Vector3 velocity, Hit& result);;
@@ -27,6 +28,7 @@ public:
 
 	virtual bool IsEmpty() { return false; };
 
+	// Fit colliders
 	virtual void Fit(Vector3 points[]) {};
 	virtual void Fit(std::vector<Vector3> points) {};
 
@@ -38,7 +40,7 @@ public:
 
 };
 
-
+// CIRCLE COLLIDER
 class RectangleCollider : public Collider
 {
 public:
@@ -51,6 +53,7 @@ public:
 	Vector3& min = boundries[0];
 	Vector3& max = boundries[1];
 
+	// Get the corners of the rectangle
 	std::vector<Vector3> GetCorners() {
 		std::vector<Vector3> corners;
 		corners.push_back(min);
@@ -65,13 +68,13 @@ public:
 
 	void DrawDebug() override;
 
-
 	bool IsEmpty();
 	void Empty();
 
 	void Fit(std::vector<Vector3> points);
 	void Fit(Vector3 points[]);
 
+	// Override overlap functions
 	bool Overlaps(Vector2 point) override;
 	bool Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result) override;
 
@@ -82,10 +85,12 @@ public:
 	void Translate(float x, float y) override;
 
 protected:
-	Vector3 boundries[2];
+	Vector3 boundries[2] = { { -std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity() }, { std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity() } };
 
 };
 
+
+// CIRCLE COLLIDER
 class CircleCollider : public Collider
 {
 public:
@@ -102,26 +107,10 @@ public:
 	void Fit(std::vector<Vector3> points);
 	void Fit(Vector3 points[]);
 
+	// Override overlap functions
 	bool Overlaps(Vector2 point) override;
 	bool Overlaps(Collider* other, Vector3 thisVel, Vector3 otherVel, Hit& result) override;
 
 	void Translate(float x, float y) override;
 
 };
-
-class RayCollider : public Collider
-{
-public:
-	RayCollider(Vector3 start, Vector3 dir, float len = FLT_MAX);
-	~RayCollider();
-
-	Vector3 origin = Vector3();
-	Vector3 direction = Vector3();
-	float length;
-
-
-	Vector2 ClosestPoint(Vector2 point) override;
-
-	bool Intersects(Collider* other, Vector3& Intersection);
-};
-

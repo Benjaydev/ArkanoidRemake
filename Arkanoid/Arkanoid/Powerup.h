@@ -14,8 +14,8 @@ public:
 
 	void Update(float DeltaTime);
 
+	// Statics
 	static int colours[3];
-
 	static Sound PowerupSound;
 
 };

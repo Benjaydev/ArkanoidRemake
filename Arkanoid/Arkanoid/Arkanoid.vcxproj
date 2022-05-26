@@ -167,7 +167,6 @@
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Powerup.cpp" />
-    <ClCompile Include="RayCollider.cpp" />
     <ClCompile Include="RectangleCollider.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Timer.cpp" />

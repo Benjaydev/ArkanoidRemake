@@ -9,11 +9,14 @@ public:
 	Timer();
 	~Timer();
 
+	// FPS
 	int fps = 0;
 	int frames = 0;
 	float frameTimer = 0;
 
 	float totalRunTimeSeconds = 0;
+
+	// Timer
 	std::chrono::time_point<std::chrono::system_clock> lastTime;
 	std::chrono::time_point<std::chrono::system_clock> currentTime;
 	float DeltaTime = 0;
@@ -22,7 +25,7 @@ public:
 	float RecordNewTime();
 
 protected:
-	float GetCurrentTimeMilliseconds();
+	void GetCurrentTimeMilliseconds();
 
 
 private:

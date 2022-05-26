@@ -15,14 +15,14 @@ Ball::Ball(float x, float y)
     // Setup sprite object
     physics->SetPosition(x, y);
     ballSprite->LoadSprite((char*)"Images/Ball2.png");
-    ballSprite->sprite->SetScale(1.1);
+    ballSprite->sprite->SetScale(1.1f);
     
     // Add sprite
     AddChild(ballSprite);
 
     // Create collider fit to the sprite
     physics->SetCollider(cType::Circle);
-    physics->FitColliderWH(ballSprite->sprite->GetWidth()/2, ballSprite->sprite->GetHeight()/2, { physics->globalTransform.m8,physics->globalTransform.m9 });
+    physics->FitColliderWH(ballSprite->sprite->GetWidth()/2.0f, ballSprite->sprite->GetHeight()/ 2.0f, { physics->globalTransform.m8,physics->globalTransform.m9 });
 
 
     // Offset sprite to center of object

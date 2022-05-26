@@ -2,15 +2,15 @@
 #include "raylib.h"
 #include "Brick.h"
 
+// The struct that brick data is stored in
 struct BrickStruct
 {
-
 	int colour = (int)0xFFFFFFFF;
 	int health = 1;
 	bool isEmpty = true;
 };
 
-
+// The struct that map data is stored in
 struct MapStruct
 {
 	int backgroundColour = (int)0x333333FF;

@@ -10,10 +10,8 @@ public:
 
     Color colour = WHITE;
 
-    float GetWidth() { return texture->width; }
-
-    float GetHeight() { return texture->height; }
-
+    float GetWidth() { return (float)texture->width; }
+    float GetHeight() { return (float)texture->height; }
     float defaultWidth = 0;
     float defaultHeight = 0;
 

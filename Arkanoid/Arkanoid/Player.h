@@ -6,7 +6,7 @@ public:
 	Player(float x, float y);
 	virtual ~Player();
 
-
+	// Sprite pieces
 	Object* centerSegment = new Object();
 	Object* rightEnd = new Object();
 	Object* leftEnd = new Object();

@@ -66,9 +66,6 @@
     <ClCompile Include="CircleCollider.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="RayCollider.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="RectangleCollider.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>

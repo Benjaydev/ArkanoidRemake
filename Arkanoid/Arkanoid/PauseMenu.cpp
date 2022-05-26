@@ -1,6 +1,6 @@
 #pragma once
 #include "PauseMenu.h"
-PauseMenu::PauseMenu(float x, float y)
+PauseMenu::PauseMenu(int x, int y)
 {
 	physics->SetPosition(x, y);
 
@@ -34,6 +34,7 @@ PauseMenu::PauseMenu(float x, float y)
 
 PauseMenu::~PauseMenu()
 {
+	// Destroy all
 	mainPanel->isWaitingDestroy = true;
 	headerText->isWaitingDestroy = true;
 	resumeButton->isWaitingDestroy = true;
