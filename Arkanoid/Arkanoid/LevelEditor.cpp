@@ -174,10 +174,8 @@ void LevelEditor::Update(float DeltaTime)
 	if (!levelSelectOpen && cooldown <= 0) {
 		// Mouse position
 		Vector2 mp = GetMousePosition();
-
 		// Get mouse position in grid form. Each axis is rounded down to the nearest grid position
 		Vector2 bp = { fminf(66 * ((int)(mp.x- Game::WorldBorders.x) / 66), 66 * 12), fminf(33 * ((int)(mp.y - Game::WorldBorders.y) / 33), 33 * 12) };
-		
 		
 		// If mouse position is within the grid
 		if (mp.y < Game::WorldBorders.y + (33*13) && mp.y >= Game::WorldBorders.y && mp.x < Game::WorldBorders.z && mp.x >= Game::WorldBorders.x) {
