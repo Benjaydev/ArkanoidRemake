@@ -95,7 +95,7 @@ LevelEditor::LevelEditor()
 
 	// Create brick image that shows the colour of the brick
 	brickSettingDisplay = new UIObject();
-	brickSettingDisplay->LoadSprite((char*)"Brick.png");
+	brickSettingDisplay->LoadSprite((char*)"Images/Brick.png");
 	brickSettingDisplay->physics->SetPosition(brickCCPos.x + 100, brickCCPos.y - 10 + 50);
 	brickSettingDisplay->AddToGameWorld();
 
