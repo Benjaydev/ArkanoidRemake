@@ -35,6 +35,9 @@ Ball::Ball(float x, float y)
     physics->maxSpeed = 800;
     physics->deceleration = 0.01f;
 
+
+    SetSoundVolume(BrickHitSound, 0.1f);
+    SetSoundVolume(PaddleHitSound, 0.1f);
 }
 
 Ball::~Ball()

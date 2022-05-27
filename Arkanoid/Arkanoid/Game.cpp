@@ -36,7 +36,7 @@ Game::Game() {
     InitWindow(screenWidth, screenHeight, "Arkanoid - Ben Wharton");
    
     // Setup audio
-    //InitAudioDevice();
+    InitAudioDevice();
 
     // Store this game
     ThisGame = this;

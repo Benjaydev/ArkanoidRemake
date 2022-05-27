@@ -29,6 +29,8 @@ Powerup::Powerup(float x, float y)
 	sprite->colour = GetColor(colours[powerupType-1]);
 
 
+	SetSoundVolume(PowerupSound, 0.1f);
+
 	// Add to game world
 	AddToGameWorld();
 }
