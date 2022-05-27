@@ -1,4 +1,4 @@
-### ArkanoidRemake
+### Arkanoid Remake
 ## Table of contents
 * [General info](#general-info)
 * [Sources](#sources)
